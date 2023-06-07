@@ -1,6 +1,6 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
-const notAuthed = () => {
+const loading = () => {
   return (
     <div className="flex mt-3">
       <p className="font-semibold  text-gray-600">GoogleDrive Authing...</p>
@@ -27,6 +27,21 @@ const notAuthed = () => {
   );
 };
 
+const authFailed = () => {
+  return(
+    <div className="flex mt-3">
+      <p className="font-semibold  text-gray-600">GoogleDrive Auth Error...</p>
+      <div role="status" className="mt-1 ml-3">
+      <svg className="w-5 h-5 mr-2 text-red-500 font-bold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
+  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+</svg>
+
+        <span className="sr-only">Loading...</span>
+      </div>
+    </div>
+
+  )
+}
 const authed = () => {
     return(
         <div className="flex mt-3">
@@ -51,13 +66,20 @@ const authed = () => {
     )
 };
 
-export const Overlay = ({ isAuthed }: { isAuthed: boolean }) => {
+export const Overlay = () => {
+
+  const [isAuthed,setIsAuthed] = useState<boolean | undefined>(undefined);
+
+  window.app.on("gdrive:isAuthed",(_e:any,d:any) => {
+    setIsAuthed(d);
+  });
+
   return (
     <div className="m-6 max-w-sm p-6 border-gray-200 bg-white border rounded-lg shadow">
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
         Overlay Element Update from Google-Drive
       </h5>
-      {isAuthed ? authed() : notAuthed()}
+      {isAuthed !== undefined ? (isAuthed ? authed() : authFailed()) : loading()}
       <button
         onClick={async () => {
           const d = await window.app.getDrive();

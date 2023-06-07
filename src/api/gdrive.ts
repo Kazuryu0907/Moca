@@ -19,8 +19,8 @@ console.log(CREDENTIAL_PATH);
 export class DriveService{
     drive:drive_v3.Drive | undefined;
     isAuthed:boolean = false;
-    mainWindow:BrowserWindow | undefined;
-    constructor(mainWindow?:BrowserWindow){
+    mainWindow:BrowserWindow;
+    constructor(mainWindow:BrowserWindow){
         this.mainWindow = mainWindow;
         this.drive = undefined;
     }
@@ -29,7 +29,17 @@ export class DriveService{
     */
     async init(){
         const client:any = await this.authorize().catch(console.error);
-        if(client)this.isAuthed = true;
+        
+        if(client){
+            this.isAuthed = true;
+            this.mainWindow.webContents.on("did-finish-load",() => {
+                this.mainWindow.webContents.send("gdrive:isAuthed",true);
+            })
+        }else{
+            this.mainWindow.webContents.on("did-finish-load",() => {
+                this.mainWindow.webContents.send("gdrive:isAuthed",false);
+            })
+        }
         this.drive = client ? google.drive({version:"v3",auth:client}) : undefined;
     }
     /*
@@ -125,24 +135,24 @@ export class DriveService{
 
 }
 
-if(require.main === module)(async ()=>{
-    const FOLDER_ID = "1OzMEBHzkxbodHRL2rRVopIEh2B0c1JJu";
-    // const FOLDER_ID = "1z-o8afoaVzdJXgbuaoNBxxkTDT1TF0Q8";
-    const SAVE_DIR = "./graphics";
+// if(require.main === module)(async ()=>{
+//     const FOLDER_ID = "1OzMEBHzkxbodHRL2rRVopIEh2B0c1JJu";
+//     // const FOLDER_ID = "1z-o8afoaVzdJXgbuaoNBxxkTDT1TF0Q8";
+//     const SAVE_DIR = "./graphics";
 
-    const ds = new DriveService();await ds.init();
-    const dsFiles = await ds.filesFromFolderID(FOLDER_ID);
-    const dsHashes = ds.getHash(dsFiles);
+//     const ds = new DriveService();await ds.init();
+//     const dsFiles = await ds.filesFromFolderID(FOLDER_ID);
+//     const dsHashes = ds.getHash(dsFiles);
     
-    const localHashes = await getHashesFromFolder(SAVE_DIR,/.*\.jpg$/);
-    if(dsFiles === undefined)return;
-    const diffFiles = dsHashes.filter(f => f.hash !== localHashes.get(f.name));
-    console.log(diffFiles);
-    diffFiles.forEach(f => {
-        if(f.id === undefined)return;
-        // ds.downloadFileFromID(f.id,path.join(SAVE_DIR,f.name));
-    })
+//     const localHashes = await getHashesFromFolder(SAVE_DIR,/.*\.jpg$/);
+//     if(dsFiles === undefined)return;
+//     const diffFiles = dsHashes.filter(f => f.hash !== localHashes.get(f.name));
+//     console.log(diffFiles);
+//     diffFiles.forEach(f => {
+//         if(f.id === undefined)return;
+//         // ds.downloadFileFromID(f.id,path.join(SAVE_DIR,f.name));
+//     })
     
-    // console.log(await md5("./41.jpg") === f?.hash);
-    // if(files)ds.downloadFileFromID(f!.id ?? "",f!.name ?? "")
-})();
+//     // console.log(await md5("./41.jpg") === f?.hash);
+//     // if(files)ds.downloadFileFromID(f!.id ?? "",f!.name ?? "")
+// })();

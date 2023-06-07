@@ -7,6 +7,7 @@ import { DriveService } from "./api/gdrive";
 const ss = new SheetService();
 let ds:DriveService;
 await ss.init();
+
 const createWindow = async() => {
   const mainWindow = new BrowserWindow({
     webPreferences: {
@@ -17,9 +18,9 @@ const createWindow = async() => {
   mainWindow.loadFile("dist/index.html");
 
   socketComm(mainWindow);//
-  // ds = new DriveService(mainWindow);
-  // ds.init();
-  // mainWindow.webContents.openDevTools({ mode: "detach" });
+  ds = new DriveService(mainWindow);
+  await ds.init();
+  mainWindow.webContents.openDevTools({ mode: "detach" });
 };
 
 
@@ -39,7 +40,7 @@ ipcMain.handle("getDrive",async (e,d) => {
   const FOLDER_ID = "1OzMEBHzkxbodHRL2rRVopIEh2B0c1JJu";
   const SAVE_DIR = "./graphics";
   console.log("clicked");
-  return ds.isAuthed;
+  // return ds.isAuthed;
   return await ds.filesFromFolderID(FOLDER_ID).catch(console.error);
 })
 
