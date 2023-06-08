@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld(
             if(data)ipcRenderer.send(cmd,data);
             else ipcRenderer.send(cmd);
         },
-        getDrive: () => ipcRenderer.invoke("getDrive"),
+        getDrive: (id:string) => ipcRenderer.invoke("getDrive",id),
         getTeam: () => ipcRenderer.invoke("getTeam"),
     }
 );

@@ -24,7 +24,15 @@ const common: Configuration = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader",
+        {
+          loader:"postcss-loader",
+          options:{
+            postcssOptions:{
+              plugins:[require("tailwindcss")]
+            }
+          }
+        }],
       },
       {
         test: /\.(ico|png|svg|eot|woff?2?)$/,
