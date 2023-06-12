@@ -17,5 +17,10 @@ contextBridge.exposeInMainWorld(
         },
         getDrive: (id:string) => ipcRenderer.invoke("getDrive",id),
         getTeam: () => ipcRenderer.invoke("getTeam"),
+        glob: () => ipcRenderer.invoke("glob"),
+        download: (data:string[]) => ipcRenderer.invoke("download",data),
+        path_join: (...data:string[]) => ipcRenderer.invoke("path.join",data),
+        encodeString: (data:string) => ipcRenderer.invoke("iconv",data),
+        removeFile: (data:string) => ipcRenderer.invoke("removeFile",data),
     }
 );

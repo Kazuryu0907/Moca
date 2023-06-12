@@ -94,8 +94,7 @@ export class DriveService{
         //フォルダ特定
         const params:drive_v3.Params$Resource$Files$List = {
             //フォルダ除外
-            q:`\'${folderID}\' in parents and mimeType != 'application/vnd.google-apps.folder'`,
-            pageSize:100,
+            q:`\'${folderID}\' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false`,
             fields: "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)"
         };
         if(this.drive === undefined)return [];

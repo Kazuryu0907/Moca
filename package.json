@@ -29,6 +29,7 @@
 		"google-spreadsheet": "^3.3.0",
 		"googleapis": "^118.0.0",
 		"googleapis-common": "^6.0.4",
+		"iconv-lite": "^0.6.3",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"ws": "^8.13.0"

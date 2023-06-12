@@ -37,7 +37,6 @@ function md5(filePath:PathLike) : Promise<string>{
 function glob(filePath:PathLike,patt:RegExp) {
     let filesArray:GlobType[] = [];
     const files = fs.readdirSync(filePath,{withFileTypes:true,encoding:"utf-8"});
-    
     files.forEach(f => {
         if(f.isFile() && patt.test(f.name))filesArray.push({name:f.name,dir:path.join(filePath.toString(),f.name)});
         // else if(f.isDirectory())filesArray.push(glob(path.join(filePath,f.name),patt));
