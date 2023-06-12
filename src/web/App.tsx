@@ -11,10 +11,10 @@ export const App = () => {
   return (
     <div className="flex">
       {/* Browserは内部にupdateもってるよ */}
-      <Browser />
-      <Overlay />
+        <Browser />
+        <Teams />
+        <Overlay />
       {/* Teamは内部にupdateもってるよ */}
-      <Teams />
     </div>
   );
 };
