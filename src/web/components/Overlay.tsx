@@ -161,6 +161,7 @@ export const Overlay = () => {
     setProps({ ...props, inputError: "success", isLoading: false });
     //localFileh取得するよ
     //Error処理しつぉいて console.errorのところを独自関数にして，pタグとかで表示させるのはどうでしょう
+    //これは再帰あり
     const localFiles = await window.app.glob().catch(console.error);
     //Diff計算するよ
     const [diffPlusFiles, diffMinusFiles, name2IdTable] = calcFilesDiff(
@@ -188,7 +189,8 @@ export const Overlay = () => {
         String.raw`C:\Users\kazum\Desktop\programings\GBC_dev\graphics\images`,
         fileName
       );
-      removePromise.push(window.app.removeFile(path));
+      //削除はちょいまち
+      // removePromise.push(window.app.removeFile(path));
     });
     await Promise.all(removePromise);
 

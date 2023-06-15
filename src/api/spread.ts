@@ -20,15 +20,24 @@ export class SheetService{
         this.doc = new GoogleSpreadsheet(sheetId);
         this.isAuthed = false;
     }
+    hasPrivateKey(){
+        return privateKey ? true : false;
+    }
+
+    setSheetID(id:string){
+        this.doc = new GoogleSpreadsheet(id);
+        this.isAuthed = false;
+    }
     //auth Run this first.
-    async init(){
+    async auth(){
         await this.doc.useServiceAccountAuth({
             client_email: clientEmail ?? "",
             private_key: privateKey ?? "",
-        }).catch(e => console.warn(e));
+        });
         this.isAuthed = true;
         await this.doc.loadInfo();
     }
+
     async getTeamName(){
         this.sheet = this.doc.sheetsByTitle["進行管理"];
         await this.sheet.loadCells();
@@ -84,7 +93,7 @@ export class SheetService{
         console.log(teamData);
     }
 }
-if(require.main === module){
-    const ss = new SheetService();
-    ss.init().then(_ => ss.getTeam());
-}
+// if(require.main === module){
+//     const ss = new SheetService();
+//     ss.init().then(_ => ss.getTeam());
+// }

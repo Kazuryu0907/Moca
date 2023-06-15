@@ -44,12 +44,33 @@ function glob(filePath:PathLike,patt:RegExp) {
     return filesArray;
 }
 
+
+//glob (再帰あり)
+function glob2(filePath:string,patt:RegExp) {
+    let filesArray:string[] = [];
+    const files = fs.readdirSync(filePath,{withFileTypes:true,encoding:"utf-8"});
+    files.forEach(f => {
+        if(f.isFile() && patt.test(f.name)){
+            filesArray.push(path.join(filePath.toString(),f.name));
+        }else if(f.isDirectory()){
+            const p = path.join(filePath,f.name)
+            filesArray.push(...glob2(p,patt));
+        }
+    });
+    return filesArray.flat();
+}
+
     //run this.
-export async function getHashesFromFolder(filePath:PathLike,patt:RegExp){
-    const filesArray = glob(filePath,patt);
-    const hashesPromis = filesArray.map(f => md5(f.dir));
+export async function getHashesFromFolder(filePath:string,patt:RegExp){
+    const filesArray = glob2(filePath,patt);
+    const hashesPromis = filesArray.map(f => md5(f));
     const hashes = await Promise.all(hashesPromis);
     let id2HashTable = new Map<string,string>();
-    hashes.map((h,i) => id2HashTable.set(filesArray[i].name,h));
+    //ファイル名 to hash
+    hashes.map((h,i) => id2HashTable.set(path.basename(filesArray[i]),h));
     return id2HashTable;
+}
+
+if(require.main === module){
+    console.log(glob2(String.raw`C:\Users\kazum\Desktop\programings\GBC_dev\graphics`,/.*\.(jpg|png)$/));
 }

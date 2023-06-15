@@ -34,8 +34,7 @@ export const Browser = () => {
         OBS Browser Source Connection States.
       </h5>
       <p className="font-normal text-gray-700 mb-4">
-        Here are the biggest enterprise technology acquisitions of 2021 so far,
-        in reverse chronological order.
+        OBS is good software.
       </p>
         {badges.map(p => {return <BrowserBands {...p} key={p.path}/>})}
     </div>

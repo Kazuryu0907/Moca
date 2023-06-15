@@ -1,11 +1,11 @@
+import {readFile,writeFile} from "fs/promises";
 import * as fs from "fs";
 import * as path from "path";
-import * as process from "process";
 import {authenticate} from "@google-cloud/local-auth";
 import {google,drive_v3} from "googleapis";
 import {BrowserWindow} from "electron";
 import{
-    OAuth2Client
+    OAuth2Client,JWT
 } from "googleapis-common"
 
 
@@ -16,10 +16,15 @@ const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,"token.json");
 const CREDENTIAL_PATH = path.resolve(__dirname,"./../src","credentials.json");
 console.log(CREDENTIAL_PATH);
+const CLIENT_ID = "921210788426-nu1mqnluukhvas4gkqffktahj877uj0h.apps.googleusercontent.com";
+const CLIENT_SECRET = "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";
+const REDIRECT_URL = "urn:ietf:wg:oauth:2.0:oob";
+
 export class DriveService{
     drive:drive_v3.Drive | undefined;
     isAuthed:boolean = false;
     mainWindow:BrowserWindow;
+
     constructor(mainWindow:BrowserWindow){
         this.mainWindow = mainWindow;
         this.drive = undefined;
@@ -28,7 +33,7 @@ export class DriveService{
     init this class. Run this function first.
     */
     async init(){
-        const client:any = await this.authorize().catch(console.error);
+        const client:any = await this.authorize();
         
         if(client){
             this.isAuthed = true;
@@ -50,7 +55,7 @@ export class DriveService{
     */
     async loadSavedCredentialsIfExist(){
         try{
-            const token = fs.readFileSync(TOKEN_PATH,"utf8");
+            const token = await readFile(TOKEN_PATH,"utf8");
             const credentials = JSON.parse(token);
             return google.auth.fromJSON(credentials);
         }catch(err){
@@ -59,7 +64,7 @@ export class DriveService{
     }
 
     async saveCredentials(client:OAuth2Client) {
-        const credentials = await fs.readFileSync(CREDENTIAL_PATH,"utf-8");
+        const credentials = await readFile(CREDENTIAL_PATH,"utf-8");
         const keys = JSON.parse(credentials);
         const key = keys.installed || keys.web;
         const payload = JSON.stringify({
@@ -68,7 +73,7 @@ export class DriveService{
             client_secret: key.client_secret,
             refresh_token: client.credentials.refresh_token,
         });
-        await fs.writeFileSync(TOKEN_PATH,payload);
+        await writeFile(TOKEN_PATH,payload);
     }
 
 
@@ -79,6 +84,7 @@ export class DriveService{
         if(loadedClient){
             return loadedClient;
         }
+        console.log(CREDENTIAL_PATH)
         let client = await authenticate({
             scopes:SCOPES,
             keyfilePath: CREDENTIAL_PATH,
@@ -87,18 +93,22 @@ export class DriveService{
             await this.saveCredentials(client);
         }
         return client;
-
     }
 
+    //再帰なし
     async filesFromFolderID(folderID:string) {
         //フォルダ特定
+        //and mimeType != 'application/vnd.google-apps.folder'
+        //\'${folderID}\' in parents and 
         const params:drive_v3.Params$Resource$Files$List = {
             //フォルダ除外
-            q:`\'${folderID}\' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false`,
+            q:`\'${folderID}\' in parents and trashed = false`,
             fields: "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)"
         };
         if(this.drive === undefined)return [];
+        console.log(1);
         const res = await this.drive.files.list(params);
+        console.log(2);
         return res.data.files
     }
 
@@ -135,22 +145,23 @@ export class DriveService{
 }
 
 // if(require.main === module)(async ()=>{
-//     const FOLDER_ID = "1OzMEBHzkxbodHRL2rRVopIEh2B0c1JJu";
+//     const FOLDER_ID = "1ztwAvNoRlXkou-GuAUaqBWM69bW_Z771";
 //     // const FOLDER_ID = "1z-o8afoaVzdJXgbuaoNBxxkTDT1TF0Q8";
 //     const SAVE_DIR = "./graphics";
 
 //     const ds = new DriveService();await ds.init();
 //     const dsFiles = await ds.filesFromFolderID(FOLDER_ID);
-//     const dsHashes = ds.getHash(dsFiles);
+//     console.log(dsFiles);
+//     // const dsHashes = ds.getHash(dsFiles);
     
-//     const localHashes = await getHashesFromFolder(SAVE_DIR,/.*\.jpg$/);
-//     if(dsFiles === undefined)return;
-//     const diffFiles = dsHashes.filter(f => f.hash !== localHashes.get(f.name));
-//     console.log(diffFiles);
-//     diffFiles.forEach(f => {
-//         if(f.id === undefined)return;
-//         // ds.downloadFileFromID(f.id,path.join(SAVE_DIR,f.name));
-//     })
+//     // const localHashes = await getHashesFromFolder(SAVE_DIR,/.*\.jpg$/);
+//     // if(dsFiles === undefined)return;
+//     // const diffFiles = dsHashes.filter(f => f.hash !== localHashes.get(f.name));
+//     // console.log(diffFiles);
+//     // diffFiles.forEach(f => {
+//     //     if(f.id === undefined)return;
+//     //     // ds.downloadFileFromID(f.id,path.join(SAVE_DIR,f.name));
+//     // })
     
 //     // console.log(await md5("./41.jpg") === f?.hash);
 //     // if(files)ds.downloadFileFromID(f!.id ?? "",f!.name ?? "")

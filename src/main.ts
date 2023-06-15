@@ -8,9 +8,9 @@ import { getHashesFromFolder } from "./api/hash";
 import {encode,decode} from "iconv-lite";
 
 (async ()=>{
-const ss = new SheetService();
+let ss:SheetService;
 let ds:DriveService;
-await ss.init();
+// await ss.init();
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -24,8 +24,10 @@ const createWindow = () => {
   socketComm(mainWindow);//
   ds = new DriveService(mainWindow);
   ds.init();
+  ss = new SheetService();
   mainWindow.webContents.openDevTools({ mode: "detach" });
 };
+
 
 
 app.whenReady().then(() => {
@@ -58,4 +60,7 @@ ipcMain.handle("download",(e,data:string[]) => {
 ipcMain.handle("path.join",(e,data:string[]) => path.join(...data));
 ipcMain.handle("iconv",(e,d:string) => decode(encode(d,"utf8"), "utf8"));
 ipcMain.handle("removeFile",(e,d:string) => unlink(d,(e) => console.error(e)));
+ipcMain.handle("spread:setSheetID",(e,d:string) => ss.setSheetID(d));
+ipcMain.handle("spread:auth",() => ss.auth());
+ipcMain.handle("spread:hasPrivateKey",() => ss.hasPrivateKey());
 })();

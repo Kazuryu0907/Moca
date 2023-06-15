@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import {CheckIcon} from "@heroicons/react/24/outline";
+import {CheckIcon,XMarkIcon} from "@heroicons/react/24/outline";
 import {Loading,Checked} from "./Loading";
 export type teamNameType = {
   blue: string;
@@ -7,12 +7,12 @@ export type teamNameType = {
 };
 
 export type Props = {
-  isGetting: boolean | undefined;
+  authStatus: "loading" | "success" | "failed" | "none";
   teamNames: teamNameType;
 };
 
 const defaultProps = (): Props => ({
-  isGetting: undefined,
+  authStatus: "none",
   teamNames: {
     blue: "None",
     orange: "None",
@@ -34,14 +34,31 @@ const checked = () => {
       </div>
     );
 }
-
+const failed = () => {
+  return (
+    <div className="mt-7 ml-5">
+        <XMarkIcon className="w-6 h-6 mr-1.5 text-red-500 dark:text-red-400 flex-shrink-0"/>
+    </div>
+  );
+};
 export const Teams = () => {
   const [team, setTeam] = useState(defaultProps());
   const onclick = async () => {
     //ロードのフラグを立てる
-    setTeam({ ...team, isGetting: true });
-    const teamName: teamNameType = await window.app.getTeam();
-    setTeam({ ...team, teamNames: teamName, isGetting: false });
+    setTeam({ ...team, authStatus: "loading" });
+    const idElm = document.getElementById("spread_id") as HTMLInputElement;
+    const id = idElm.value;
+    //SpreadSheetのIDセット
+    await window.app.setSheetID(id);
+    //Auth
+    try{
+      await window.app.spreadAuth();
+      const teamName: teamNameType = await window.app.getTeam();
+      setTeam({ ...team, teamNames: teamName, authStatus: "success" });
+    }catch{
+      setTeam({ ...team, authStatus: "failed" });
+    }
+
   };
 
   return (
@@ -52,6 +69,19 @@ export const Teams = () => {
       <p className="mt-3 font-semibold text-gray-600">
         GoogleSpreadSheet Authing...
       </p>
+      <label
+          className="block mt-5 text-sm font-medium text-gray-900"
+          htmlFor="spread_id"
+        >
+          SpreadSheetID
+        </label>
+      <input
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 mt-2"
+          type="text"
+          id="spread_id"
+          placeholder="1OzMEBHzkxbodHRL2rRVopIEh2B0c1JJu"
+          defaultValue="1BzcoT83ptJwytQEvcxkaVR-1VDbYG7JDudhNLC5WJ3g"
+        />
       <div className="flex">
         <button
           id="getTeam"
@@ -60,7 +90,7 @@ export const Teams = () => {
         >
           Get Team
         </button>
-        {team.isGetting !== undefined && (team.isGetting ? loading() : checked())}
+        {team.authStatus !== "none" && (team.authStatus === "loading" ? loading() : (team.authStatus === "success" ? checked() : failed()))}
       </div>
       <div className="mt-5 grid grid-cols-3 gap-y-2 gap-x-2 border border-gray-200 rounded-lg p-2">
         <p className="my-auto text-center text-blue-800 font-bold ">

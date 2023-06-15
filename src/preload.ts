@@ -22,5 +22,8 @@ contextBridge.exposeInMainWorld(
         path_join: (...data:string[]) => ipcRenderer.invoke("path.join",data),
         encodeString: (data:string) => ipcRenderer.invoke("iconv",data),
         removeFile: (data:string) => ipcRenderer.invoke("removeFile",data),
+        setSheetID: (data:string) => ipcRenderer.invoke("spread:setSheetID",data),
+        spreadAuth: () => ipcRenderer.invoke("spread:auth"),
+        spreadHasPrivateKey: () => ipcRenderer.invoke("spread:hasPrivateKey"),
     }
 );

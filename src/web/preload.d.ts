@@ -3,6 +3,7 @@ declare global {
         app: IMainProcess;
     }
 }
+declare module "*.json"
 
 export interface IMainProcess {
     on: (channel:string,callback:any) => void;
@@ -16,5 +17,8 @@ export interface IMainProcess {
     path_join: (...data:string[]) => Promise<any>;
     encodeString: (data:string) => Promise<string>;
     removeFile: (data:string) => Promise<void>,
+    setSheetID: (data:string) => Promise<void>,
+    spreadAuth: () => Promise<void>,
+    spreadHasPrivateKey: () => Promise<void>,
 
 } 
