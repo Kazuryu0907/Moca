@@ -6,6 +6,7 @@ import { SheetService } from "./api/spread";
 import { DriveService } from "./api/gdrive";
 import { getHashesFromFolder } from "./api/hash";
 import {encode,decode} from "iconv-lite";
+require("dotenv").config({path:path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env")});
 
 (async ()=>{
 let ss:SheetService;
@@ -48,7 +49,7 @@ ipcMain.handle("getDrive",async (e,d:string) => {
 });
 
 ipcMain.handle("glob",async () => {
-  return await getHashesFromFolder(String.raw`D:\github\GBC-S2Ws\graphics`,/.*\.(jpg|png)$/);
+  return await getHashesFromFolder(process.env.GRAPHICS_DIR!,/.*\.(jpg|png)$/);
 });
 
 ipcMain.handle("download",(e,data:string[]) => {
@@ -63,4 +64,5 @@ ipcMain.handle("removeFile",(e,d:string) => unlink(d,(e) => console.error(e)));
 ipcMain.handle("spread:setSheetID",(e,d:string) => ss.setSheetID(d));
 ipcMain.handle("spread:auth",() => ss.auth());
 ipcMain.handle("spread:hasPrivateKey",() => ss.hasPrivateKey());
+ipcMain.handle("graphics_dir",() => process.env.GRAPHICS_DIR!);
 })();

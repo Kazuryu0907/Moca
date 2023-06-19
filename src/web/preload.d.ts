@@ -20,5 +20,5 @@ export interface IMainProcess {
     setSheetID: (data:string) => Promise<void>,
     spreadAuth: () => Promise<void>,
     spreadHasPrivateKey: () => Promise<void>,
-
+    graphicsDir: () => Promise<string>,
 } 

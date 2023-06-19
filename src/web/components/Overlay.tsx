@@ -153,6 +153,8 @@ export const Overlay = () => {
       return;
     }
     const folders = await window.app.getDrive(folderID);
+    console.log("getDrive");
+    console.log(folders);
     //Error処理だよ
     if (!folders) {
       setProps({ ...props, inputError: "error", isLoading: false });
@@ -173,14 +175,16 @@ export const Overlay = () => {
     console.log(diffPlusFiles, diffMinusFiles);
 
     let downloadPromise: Promise<any>[] = [];
+    const graphicsDir = await window.app.graphicsDir();
     diffPlusFiles.forEach(async (fileName) => {
       //[]じゃなかったらDL
       const path = await window.app.path_join(
-        String.raw`D:\github\GBC-S2Ws\graphics`,
+        graphicsDir,
         fileName
       );
       const id = name2IdTable.get(fileName);
-      downloadPromise.push(window.app.download([id, path]));
+      //DLちょいまち
+      // downloadPromise.push(window.app.download([id, path]));
     });
     //DLは終わらせてから処理終了したほうがいい気がするため
     await Promise.all(downloadPromise);
