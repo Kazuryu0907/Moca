@@ -48,7 +48,7 @@ ipcMain.handle("getDrive",async (e,d:string) => {
 });
 
 ipcMain.handle("glob",async () => {
-  return await getHashesFromFolder(String.raw`C:\Users\kazum\Desktop\programings\GBC_dev\graphics\images`,/.*\.(jpg|png)$/);
+  return await getHashesFromFolder(String.raw`D:\github\GBC-S2Ws\graphics`,/.*\.(jpg|png)$/);
 });
 
 ipcMain.handle("download",(e,data:string[]) => {

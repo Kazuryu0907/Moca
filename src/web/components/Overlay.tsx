@@ -99,9 +99,11 @@ const calcFilesDiff = (
   drive: DriveFileType[],
   localFiles: Map<string, string>
 ): [string[], string[], Map<string, string>] => {
+  console.log(drive,localFiles);
   let diffPlusFiles = drive
     .filter((d) => !localFiles.has(d.name))
     .map((d) => d.name);
+  console.log(diffPlusFiles);
   //local && drive
   const existedFiles = drive.filter((d) => localFiles.has(d.name));
   //ハッシュが違うname取得
@@ -174,7 +176,7 @@ export const Overlay = () => {
     diffPlusFiles.forEach(async (fileName) => {
       //[]じゃなかったらDL
       const path = await window.app.path_join(
-        String.raw`C:\Users\kazum\Desktop\programings\GBC_dev\graphics\images`,
+        String.raw`D:\github\GBC-S2Ws\graphics`,
         fileName
       );
       const id = name2IdTable.get(fileName);

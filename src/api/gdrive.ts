@@ -1,11 +1,11 @@
 import {readFile,writeFile} from "fs/promises";
 import * as fs from "fs";
 import * as path from "path";
-import {authenticate} from "@google-cloud/local-auth";
+import {authenticate} from "./local_auth";
 import {google,drive_v3} from "googleapis";
 import {BrowserWindow} from "electron";
 import{
-    OAuth2Client,JWT
+    OAuth2Client
 } from "googleapis-common"
 
 
@@ -13,12 +13,9 @@ import {getHashesFromFolder,HashType} from "./hash";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
-const TOKEN_PATH = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,"token.json");
+const TOKEN_PATH = path.resolve(__dirname,"./../src","token.json");
 const CREDENTIAL_PATH = path.resolve(__dirname,"./../src","credentials.json");
-console.log(CREDENTIAL_PATH);
-const CLIENT_ID = "921210788426-nu1mqnluukhvas4gkqffktahj877uj0h.apps.googleusercontent.com";
-const CLIENT_SECRET = "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";
-const REDIRECT_URL = "urn:ietf:wg:oauth:2.0:oob";
+
 
 export class DriveService{
     drive:drive_v3.Drive | undefined;
@@ -102,13 +99,11 @@ export class DriveService{
         //\'${folderID}\' in parents and 
         const params:drive_v3.Params$Resource$Files$List = {
             //フォルダ除外
-            q:`\'${folderID}\' in parents and trashed = false`,
+            q:`\'${folderID}\' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false`,
             fields: "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)"
         };
         if(this.drive === undefined)return [];
-        console.log(1);
         const res = await this.drive.files.list(params);
-        console.log(2);
         return res.data.files
     }
 
