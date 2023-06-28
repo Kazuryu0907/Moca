@@ -96,7 +96,7 @@ export class DriveService {
     //\'${folderID}\' in parents and
     type globType = {
       dir: string;
-      files: drive_v3.Schema$File[] | globType[];
+      files: drive_v3.Schema$File[];
     };
     let filesArray: globType[] = [];
     const params: drive_v3.Params$Resource$Files$List = {

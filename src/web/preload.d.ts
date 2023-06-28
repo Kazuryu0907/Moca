@@ -21,4 +21,6 @@ export interface IMainProcess {
     spreadAuth: () => Promise<void>,
     spreadHasPrivateKey: () => Promise<void>,
     graphicsDir: () => Promise<string>,
+    mkdir: (path:string) => Promise<void>;
+
 } 

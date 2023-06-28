@@ -1,5 +1,6 @@
 import { Component, useEffect, useMemo, useState } from "react";
 import { Loading, Checked } from "./Loading";
+import {gdriveFile, gdriveGlobType, localGlobType} from "./types";
 
 // import {} from "@heroicons/react/solid";
 const loading = () => {
@@ -72,14 +73,6 @@ type PropsType = {
   inputError: InputErrorType;
   isLoading: boolean;
 };
-type DriveFileType = {
-  id: string;
-  kind: string;
-  md5Checksum: string;
-  mimeType: string;
-  modifiedTime: string;
-  name: string;
-};
 
 const renderAuthStatus = (isAuthed: isAuthedType) => {
   if (isAuthed === undefined) return loading();
@@ -95,33 +88,20 @@ const renderFolderIDError = (inputError: InputErrorType) => {
     return <p className="mt-2 text-sm text-green-600">Well Done!</p>;
 };
 
-const calcFilesDiff = (
-  drive: DriveFileType[],
-  localFiles: Map<string, string>
-): [string[], string[], Map<string, string>] => {
-  console.log(drive,localFiles);
-  let diffPlusFiles = drive
-    .filter((d) => !localFiles.has(d.name))
-    .map((d) => d.name);
-  console.log(diffPlusFiles);
+
+const calcFilesDiff = (drive: gdriveFile[],localFiles: Map<string, string>): [string[], string[], Map<string, string>] => {
+  let diffPlusFiles = drive.filter((d) => !localFiles.has(d.name)).map((d) => d.name);
   //local && drive
   const existedFiles = drive.filter((d) => localFiles.has(d.name));
   //ハッシュが違うname取得
-  const changedHashes = existedFiles
-    .filter((d) => d.md5Checksum !== localFiles.get(d.name))
-    .map((d) => d.name);
+  const changedHashes = existedFiles.filter((d) => d.md5Checksum !== localFiles.get(d.name)).map((d) => d.name);
   //name => idテーブル
   let name2IdTable: Map<string, string> = new Map();
   drive.map((d) => name2IdTable.set(d.name, d.id));
   //drive && localFiles(ベン図) からname取り出したやつ
-  const localAndDriveNames = drive
-    .filter((d) => localFiles.has(d.name))
-    .map((d) => d.name);
+  const localAndDriveNames = drive.filter((d) => localFiles.has(d.name)).map((d) => d.name);
   //localFilesと↑のdiff（計算済み）
-  const diffMinusFiles = Array.from(localFiles.keys()).filter(
-    (lf) => localAndDriveNames.indexOf(lf) === -1
-  );
-
+  const diffMinusFiles = Array.from(localFiles.keys()).filter(lf => localAndDriveNames.indexOf(lf) === -1);
   diffPlusFiles = diffPlusFiles.concat(changedHashes);
   return [diffPlusFiles, diffMinusFiles, name2IdTable];
 };
@@ -152,11 +132,11 @@ export const Overlay = () => {
       setProps({ ...props, inputError: "empty", isLoading: false });
       return;
     }
-    const folders = await window.app.getDrive(folderID);
+    const gdriveFolders:gdriveGlobType[] = await window.app.getDrive(folderID);
     console.log("getDrive");
-    console.log(folders);
+    console.log(gdriveFolders);
     //Error処理だよ
-    if (!folders) {
+    if (!gdriveFolders) {
       setProps({ ...props, inputError: "error", isLoading: false });
       return;
     }
@@ -166,43 +146,56 @@ export const Overlay = () => {
     //localFileh取得するよ
     //Error処理しつぉいて console.errorのところを独自関数にして，pタグとかで表示させるのはどうでしょう
     //これは再帰あり
-    const localFiles = await window.app.glob().catch(console.error);
-    //Diff計算するよ
-    const [diffPlusFiles, diffMinusFiles, name2IdTable] = calcFilesDiff(
-      folders,
-      localFiles
-    );
-    console.log(diffPlusFiles, diffMinusFiles);
-
+    const localFiles:localGlobType[] = await window.app.glob().catch(console.error);
+    console.log("glob");
+    console.log(localFiles);
     let downloadPromise: Promise<any>[] = [];
-    const graphicsDir = await window.app.graphicsDir();
-    diffPlusFiles.forEach(async (fileName) => {
-      //[]じゃなかったらDL
-      const path = await window.app.path_join(
-        graphicsDir,
-        fileName
-      );
-      const id = name2IdTable.get(fileName);
-      //DLちょいまち
-      // downloadPromise.push(window.app.download([id, path]));
-    });
-    //DLは終わらせてから処理終了したほうがいい気がするため
+    let removePromise:Promise<void>[] = [];
+    let allDiffPlusFiles:string[] = [];
+    let allDiffMinusFiles:string[] = [];
+    const graphicsPath = await window.app.graphicsDir();
+    //Diff計算するよ
+    for(const dg of gdriveFolders){
+      let map:Map<string,string>;
+      const dir = dg.dir;
+      const local = localFiles.filter(f => f.dir === dir);
+      
+      if(local.length > 0){//存在したら
+        map = local[0].map;
+      }else{//localにフォルダが存在しなかったら
+        const dirPath = await window.app.path_join(graphicsPath,dir);
+        //ファイル作成
+        await window.app.mkdir(dirPath);
+        //空Map
+        map = new Map<string,string>();
+      }
+
+      const [diffPlusFiles, diffMinusFiles, name2IdTable] = calcFilesDiff(dg.files,map);
+      //Display用
+      //to Relative Path
+      allDiffPlusFiles.push(...diffPlusFiles.map(name => `${dir}/${name}`));
+      allDiffMinusFiles.push(...diffMinusFiles.map(name => `${dir}/${name}`));
+      //-----------Plus
+      diffPlusFiles.forEach(async fileName => {
+        const savePath = await window.app.path_join(graphicsPath,dir,fileName);
+        const id = name2IdTable.get(fileName);
+        //DLのPromiseをArrayに入れる
+        downloadPromise.push(window.app.download([id,savePath]));
+      });
+      //----------Minus
+      diffMinusFiles.forEach(async fileName => {
+        const graphicsPath = await window.app.graphicsDir();
+        const rmPath = await window.app.path_join(graphicsPath,dir,fileName);
+        removePromise.push(window.app.removeFile(rmPath));
+      });
+    }
+    //並列処理
     await Promise.all(downloadPromise);
-    let removePromise: Promise<void>[] = [];
-    diffMinusFiles.forEach(async (fileName) => {
-      //[]じゃなかったらrm
-      const path = await window.app.path_join(
-        String.raw`C:\Users\kazum\Desktop\programings\GBC_dev\graphics\images`,
-        fileName
-      );
-      //削除はちょいまち
-      // removePromise.push(window.app.removeFile(path));
-    });
-    await Promise.all(removePromise);
+    await Promise.all(removePromise);    
 
     //state更新
-    setDiffPlusState(diffPlusFiles);
-    setDiffMinusState(diffMinusFiles);
+    setDiffPlusState(allDiffPlusFiles);
+    setDiffMinusState(allDiffMinusFiles);
   };
 
   return (

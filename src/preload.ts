@@ -25,6 +25,7 @@ contextBridge.exposeInMainWorld(
         setSheetID: (data:string) => ipcRenderer.invoke("spread:setSheetID",data),
         spreadAuth: () => ipcRenderer.invoke("spread:auth"),
         spreadHasPrivateKey: () => ipcRenderer.invoke("spread:hasPrivateKey"),
-        graphicsDir: () => ipcRenderer.invoke("graphics_dir")
+        graphicsDir: () => ipcRenderer.invoke("graphics_dir"),
+        mkdir: (path:string) => ipcRenderer.invoke("mkdir",path),
     }
 );

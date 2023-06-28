@@ -44,31 +44,54 @@ function glob(filePath:PathLike,patt:RegExp) {
     return filesArray;
 }
 
+type globType = {
+    dir:string,
+    files:string[]
+}
 
 //glob (再帰あり)
-function glob2(filePath:string,patt:RegExp) {
-    let filesArray:string[] = [];
-    const files = fs.readdirSync(filePath,{withFileTypes:true,encoding:"utf-8"});
-    files.forEach(f => {
-        if(f.isFile() && patt.test(f.name)){
-            filesArray.push(path.join(filePath.toString(),f.name));
-        }else if(f.isDirectory()){
-            const p = path.join(filePath,f.name)
-            filesArray.push(...glob2(p,patt));
+function glob2(filePath:string,patt:RegExp,base="") {
+    let filesArray:globType[] = [];
+    const dir = fs.readdirSync(filePath,{withFileTypes:true,encoding:"utf-8"});
+    const files = dir.filter(f => f.isFile()).filter(f => patt.test(f.name));
+    const folders = dir.filter(f => f.isDirectory());
+    //確定したのを格納
+    if(files)filesArray.push({dir:base,files:files.map(f=>f.name)});
+    //再帰
+    if(folders){
+        for(const f of folders){
+            const dir = base + "/" + f.name;
+            const subFiles = glob2(path.join(filePath,f.name),patt,dir);
+            if(subFiles)filesArray.push(...subFiles);
         }
-    });
+    }
+
     return filesArray.flat();
 }
 
+type FileType = {
+    name:string,
+    hash:string
+}
+export type HFFType = {
+    dir: string,
+    map: Map<string,string>
+}
     //run this.
-export async function getHashesFromFolder(filePath:string,patt:RegExp){
-    const filesArray = glob2(filePath,patt);
-    const hashesPromis = filesArray.map(f => md5(f));
-    const hashes = await Promise.all(hashesPromis);
-    let id2HashTable = new Map<string,string>();
-    //ファイル名 to hash
-    hashes.map((h,i) => id2HashTable.set(path.basename(filesArray[i]),h));
-    return id2HashTable;
+export async function getHashesFromFolder(basePath:string,patt:RegExp){
+    const filesArray = glob2(basePath,patt);
+    let outArray:HFFType[] = [];
+    for(const files of filesArray){
+        let fileHashMap = new Map<string,string>();
+        for(const f of files.files){
+            const fullPath = path.join(basePath,files.dir,f);
+            const hash = await md5(fullPath);
+            //file名 to hash 
+            fileHashMap.set(f,hash);
+        }
+        outArray.push({dir:files.dir,map:fileHashMap});
+    }
+    return outArray;
 }
 
 if(require.main === module){

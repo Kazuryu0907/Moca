@@ -1,5 +1,5 @@
 import path from "path";
-import {unlink} from "fs";
+import {unlink,mkdirSync, PathLike} from "fs";
 import { BrowserWindow, app, ipcMain } from "electron";
 import { socketComm } from "./api/socketComm";
 import { SheetService } from "./api/spread";
@@ -57,6 +57,7 @@ ipcMain.handle("download",(e,data:string[]) => {
   console.log(id,path);
   return ds.downloadFileFromID(id,path).catch(console.error);
 });
+ipcMain.handle("mkdir",(e,path:PathLike) => mkdirSync(path));
 
 ipcMain.handle("path.join",(e,data:string[]) => path.join(...data));
 ipcMain.handle("iconv",(e,d:string) => decode(encode(d,"utf8"), "utf8"));
