@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>a</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- <link rel="stylesheet" href="./stats.css"> -->
+        <style type="text/tailwindcss">
+            @layer utilities {
+                .stats-score{
+                    @apply text-gray-200 col-span-2 border border-red-800 my-auto;
+                }
+                .stats-name{
+                    @apply col-span-3 text-[40px] border border-red-800 text-gray-500;
+                }
+                .stats-blue-progress{
+                    @apply bg-blue-500 h-2.5;
+                }
+                .stats-orange-progress{
+                    @apply w-full bg-orange-500 h-2.5 bottom-0;
+                }
+            }
+          </style>
+
+    </head>
+    <body class="font-sans" style="background-image: url(0stats.png);;">
+        <div class="h-[310px] border border-red-800 mb-[50px]">
+        </div>
+        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+            <div class="stats-score">41</div>
+            <div class="stats-score">82</div>
+            <div class="stats-score">102</div>
+            <div class="stats-name relative">
+                <div class="mx-auto mt-4">SCORE</div>
+                <div class="absolute stats-orange-progress">
+                    <div class="stats-blue-progress" style="width:45%"></div>
+                </div>
+            </div>
+            <!--　n vs n -->
+            <div class="stats-score">5</div>
+            <div class="stats-score">9</div>
+            <div class="stats-score">0</div>
+        </div>
+        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+            <div class="stats-score">41</div>
+            <div class="stats-score">82</div>
+            <div class="stats-score">102</div>
+            <div class="stats-name relative">
+                <div class="mx-auto mt-4">GOALS</div>
+                <div class="absolute stats-orange-progress">
+                    <div class="stats-blue-progress" style="width:45%"></div>
+                </div>
+            </div>
+            <!--　n vs n -->
+            <div class="stats-score">5</div>
+            <div class="stats-score">9</div>
+            <div class="stats-score">0</div>
+        </div>
+        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+            <div class="stats-score">41</div>
+            <div class="stats-score">82</div>
+            <div class="stats-score">102</div>
+            <div class="stats-name relative">
+                <div class="mx-auto mt-4">ASSISTS</div>
+                <div class="absolute stats-orange-progress">
+                    <div class="stats-blue-progress" style="width:45%"></div>
+                </div>
+            </div>
+            <!--　n vs n -->
+            <div class="stats-score">5</div>
+            <div class="stats-score">9</div>
+            <div class="stats-score">0</div>
+        </div>
+        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+            <div class="stats-score">41</div>
+            <div class="stats-score">82</div>
+            <div class="stats-score">102</div>
+            <div class="stats-name relative">
+                <div class="mx-auto mt-4">SHOTS</div>
+                <div class="absolute stats-orange-progress">
+                    <div class="stats-blue-progress" style="width:45%"></div>
+                </div>
+            </div>
+            <!--　n vs n -->
+            <div class="stats-score">5</div>
+            <div class="stats-score">9</div>
+            <div class="stats-score">0</div>
+        </div>
+        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+            <div class="stats-score">41</div>
+            <div class="stats-score">82</div>
+            <div class="stats-score">102</div>
+            <div class="stats-name relative">
+                <div class="mx-auto mt-4">SAVES</div>
+                <div class="absolute stats-orange-progress">
+                    <div class="stats-blue-progress" style="width:45%"></div>
+                </div>
+            </div>
+            <!--　n vs n -->
+            <div class="stats-score">5</div>
+            <div class="stats-score">9</div>
+            <div class="stats-score">0</div>
+        </div>
+        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+            <div class="stats-score">41</div>
+            <div class="stats-score">82</div>
+            <div class="stats-score">102</div>
+            <div class="stats-name relative">
+                <div class="mx-auto mt-4">DEMOS</div>
+                <div class="absolute stats-orange-progress">
+                    <div class="stats-blue-progress" style="width:45%"></div>
+                </div>
+            </div>
+            <!--　n vs n -->
+            <div class="stats-score">5</div>
+            <div class="stats-score">9</div>
+            <div class="stats-score">0</div>
+        </div>
+    </body>
+</html>

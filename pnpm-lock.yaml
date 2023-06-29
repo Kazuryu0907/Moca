@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -17,6 +17,9 @@ dependencies:
   dotenv:
     specifier: ^16.1.4
     version: 16.1.4
+  dseg:
+    specifier: ^0.46.0
+    version: 0.46.0
   google-auth-library:
     specifier: ^8.8.0
     version: 8.8.0
@@ -1432,6 +1435,11 @@ packages:
   /dotenv@16.1.4:
     resolution: {integrity: sha512-m55RtE8AsPeJBpOIFKihEmqUcoVncQIwo7x9U8ZwLEZw9ZpXboz2c+rvog+jUaJvVrZ5kBOeYQBX5+8Aa/OZQw==}
     engines: {node: '>=12'}
+    dev: false
+
+  /dseg@0.46.0:
+    resolution: {integrity: sha512-+wigrEmU4uJ75jtg26BFRoQdPXn8IVltzwI1ZDNsSoNdeO4vLpOssS/XNZNo8e3x5tBUBZd2aU0XeGhWniH8FA==}
+    engines: {node: '>=0.10.3'}
     dev: false
 
   /eastasianwidth@0.2.0:

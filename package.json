@@ -27,6 +27,7 @@
 		"@heroicons/react": "^2.0.18",
 		"arrify": "^3.0.0",
 		"dotenv": "^16.1.4",
+		"dseg": "^0.46.0",
 		"google-auth-library": "^8.8.0",
 		"google-spreadsheet": "^3.3.0",
 		"googleapis": "^118.0.0",
