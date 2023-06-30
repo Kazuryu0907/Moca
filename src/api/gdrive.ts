@@ -6,8 +6,6 @@ import { google, drive_v3 } from "googleapis";
 import { BrowserWindow } from "electron";
 import { OAuth2Client } from "googleapis-common";
 
-import { getHashesFromFolder, HashType } from "./hash";
-
 // If modifying these scopes, delete token.json.
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
 const TOKEN_PATH = path.resolve(__dirname, "./../src", "token.json");
@@ -143,27 +141,6 @@ export class DriveService {
     res.data.on("end", () => dest.end());
   }
 
-  getHash(files: drive_v3.Schema$File[] | undefined) {
-    if (files === undefined) return [];
-    //drive_v3.Schema$File[]からHashType[]へ変換
-    else
-      return files.map((d) => {
-        let h: HashType = {
-          id: d?.id ?? "",
-          name: d?.name ?? "",
-          hash: d?.md5Checksum ?? "",
-        };
-        return h;
-      });
-  }
-  //
-  getmodifiedTime(files: drive_v3.Schema$File[] | undefined) {
-    if (files === undefined) return [];
-    else
-      return files.map((d) => {
-        return { id: d.id, name: d.name, modifiedTime: d.modifiedTime };
-      });
-  }
 }
 
 // if(require.main === module)(async ()=>{

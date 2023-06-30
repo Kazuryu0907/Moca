@@ -4,17 +4,6 @@ import * as path from "path";
 import {createHash} from "crypto";
 import { PathLike } from "fs";
 
-interface GlobType {
-    name: string,
-    dir: PathLike
-}
-
-export interface HashType{
-    name: string,
-    id?: string,
-    dir?: PathLike,
-    hash:string,
-}
 
 //classじゃなくて，getHashesFromFolderだけexportしたほうがいい？
     //calc md5 hash using stream.
@@ -31,17 +20,6 @@ function md5(filePath:PathLike) : Promise<string>{
             reject(e);
         });
     })
-}
-
-    //glob（再帰なし）
-function glob(filePath:PathLike,patt:RegExp) {
-    let filesArray:GlobType[] = [];
-    const files = fs.readdirSync(filePath,{withFileTypes:true,encoding:"utf-8"});
-    files.forEach(f => {
-        if(f.isFile() && patt.test(f.name))filesArray.push({name:f.name,dir:path.join(filePath.toString(),f.name)});
-        // else if(f.isDirectory())filesArray.push(glob(path.join(filePath,f.name),patt));
-    });
-    return filesArray;
 }
 
 type globType = {
@@ -69,10 +47,7 @@ function glob2(filePath:string,patt:RegExp,base="") {
     return filesArray.flat();
 }
 
-type FileType = {
-    name:string,
-    hash:string
-}
+//HashesFromFolder Type
 export type HFFType = {
     dir: string,
     map: Map<string,string>

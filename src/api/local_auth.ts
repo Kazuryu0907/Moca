@@ -20,7 +20,7 @@ import * as http from 'http';
 import {URL} from 'url';
 import * as opn from 'open';
 import * as arrify from 'arrify';
-import * as destroyer from 'server-destroy';
+import destroyer from 'server-destroy';
 import {AddressInfo} from 'net';
 import fs from "fs/promises";
 
