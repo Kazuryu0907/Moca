@@ -30,6 +30,7 @@ export const socketComm = (mainWindow: BrowserWindow) => {
   socket.on("message",(msg,remote) => {
       console.log(`${remote.address}:${remote.port} - ${msg}`);
       const data = msg.toString();
+      console.log(data);
   });
 
   socket.bind(port, host);

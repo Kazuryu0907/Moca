@@ -2,44 +2,60 @@
 <html>
     <head>
         <script src="https://cdn.tailwindcss.com"></script>
+        <style type="text/tailwindcss">
+            @layer utilities{
+                .player-name{
+                    @apply text-gray-100 font-bold text-[50px] mt-1 text-center;
+                }
+                .player-icon{
+                    @apply w-[280px] h-[280px] object-cover object-top border rounded-2xl;
+                }
+                .w-team{
+                    @apply w-[900px];
+                }
+            }
+        </style>
     </head>
-    <body class="bg-black ">
-        <div class="font-bold text-gray-100 text-[80px] text-center">Grand Final</div>
-        <div class="font-bold text-gray-100 text-[80px] flex mt-[250px] mx-10">
-            <div class="border w-[840px] text-center">幽宮義賊団</div>
-            <div class="flex-auto"></div>
-            <div class="border w-[840px] text-center">総プレイ40時間</div>
+    <body class="bg-gray-700 ">
+        <div class="relative w-full h-[200px] border">
+            <div class="absolute font-bold text-gray-100 text-[50px] text-center inset-0 top-[50px]">bo3</div>
+            <div class="absolute font-bold text-gray-100 text-[100px] text-center inset-0 top-[100px]">Grand Final</div>
         </div>
-        <div class="mt-[100px] mx-10">
+        <div class="font-bold text-gray-100 text-[100px] flex mt-[150px] mx-10">
+            <div class="border w-team text-center">幽宮義賊団</div>
+            <div class="flex-auto"></div>
+            <div class="border w-team text-center">総プレイ40時間</div>
+        </div>
+        <div class="mt-[80px] mx-7">
             <div class="flex">
-                <!-- 840px -->
+                <!-- 900px -->
                 <div class="flex gap-[30px] border">
                     <div>
-                        <img class="w-[260px] border rounded-2xl" src="download20230603150951.png" >
-                        <div class="text-gray-100 font-bold text-[50px] ml-5 text-center">KAFKA</div>
+                        <img class="player-icon" src="assets/0.png" >
+                        <div class="player-name">宮古ミヤ</div>
                     </div>
                     <div>
-                        <img class="w-[260px] border rounded-2xl" src="download20230603150951.png" >
-                        <div class="text-gray-100 font-bold text-[50px] ml-5 text-center">KAFKA</div>
+                        <img class="player-icon" src="assets/1.png" >
+                        <div class="player-name">幽鬼シオン</div>
                     </div>
                     <div>
-                        <img class="w-[260px] border rounded-2xl" src="download20230603150951.png" >
-                        <div class="text-gray-100 font-bold text-[50px] ml-5 text-center">KAFKA</div>
+                        <img class="player-icon" src="assets/2.png" >
+                        <div class="player-name">早波八雲</div>
                     </div>
                 </div>
                 <div class="flex-auto"></div>
                 <div class="flex gap-[30px]">
                     <div>
-                        <img class="w-[260px] border rounded-2xl" src="download20230603150951.png" >
-                        <div class="text-gray-100 font-bold text-[50px] ml-5 text-center">KAFKA</div>
+                        <img class="player-icon" src="assets/3.png" >
+                        <div class="player-name">鳴海小波音</div>
                     </div>
                     <div>
-                        <img class="w-[260px] border rounded-2xl" src="download20230603150951.png" >
-                        <div class="text-gray-100 font-bold text-[50px] ml-5 text-center">KAFKA</div>
+                        <img class="player-icon" src="assets/4.png" >
+                        <div class="player-name">ちゃんひな</div>
                     </div>
                     <div>
-                        <img class="w-[260px] border rounded-2xl" src="download20230603150951.png" >
-                        <div class="text-gray-100 font-bold text-[50px] ml-5 text-center">KAFKA</div>
+                        <img class="player-icon" src="assets/5.png" >
+                        <div class="player-name">石蕗なのは</div>
                     </div>
                 </div>
             </div>

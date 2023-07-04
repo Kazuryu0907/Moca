@@ -41,7 +41,7 @@ app.once("window-all-closed", () => app.quit());
 
 //handles
 ipcMain.handle("getTeam",async (event,data) => {
-  return await ss.getTeamName();
+  return await ss.getTeamName().catch(console.error);
 });
 
 ipcMain.handle("getDrive",async (e,d:string) => {

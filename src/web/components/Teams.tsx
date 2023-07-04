@@ -1,14 +1,15 @@
 import { FC, useState } from "react";
 import {CheckIcon,XMarkIcon} from "@heroicons/react/24/outline";
 import {Loading,Checked} from "./Loading";
-export type teamNameType = {
-  blue: string;
-  orange: string;
-};
+import {spreadTeamType as teamNameType} from "./types";
+// export type teamNameType = {
+//   blue: string;
+//   orange: string;
+// };
 
 export type Props = {
   authStatus: "loading" | "success" | "failed" | "none";
-  teamNames: teamNameType;
+  teamNames: Pick<teamNameType,"blue" | "orange">;
 };
 
 const defaultProps = (): Props => ({
@@ -54,8 +55,9 @@ export const Teams = () => {
     try{
       await window.app.spreadAuth();
       const teamName: teamNameType = await window.app.getTeam();
+      console.log(teamName);
       setTeam({ ...team, teamNames: teamName, authStatus: "success" });
-    }catch{
+    }catch(e){
       setTeam({ ...team, authStatus: "failed" });
     }
 

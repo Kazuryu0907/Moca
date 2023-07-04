@@ -7,6 +7,23 @@ export type gdriveFile = {
   name:string
 }
 
+// export class spreadTeamType{
+//   teamName: string = "";
+//   teamAbbrevitation: string = "";
+//   playerNames: string[] = [];
+//   accountIds: string[] = [];
+// }
+
+export type spreadTeamType = {
+  blue:string,
+  orange:string,
+  name:string,
+  bo:string,
+  blueMembers:string[],
+  orangeMembers:string[]
+};
+
+
 export type gdriveGlobType = {
     dir: string;
     files: gdriveFile[];

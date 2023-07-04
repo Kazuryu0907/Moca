@@ -3,22 +3,30 @@ import type {
     GoogleSpreadsheetWorksheet as GoogleSpreadsheetWorksheetType,
     GoogleSpreadsheet as GoogleSpreadsheetType
 } from "google-spreadsheet";
+import {spreadTeamType as teamNameType} from "../web/components/types";
 import * as path from "path";
-
 require("dotenv").config({path:path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env")});
 
 const sheetId = process.env.SHEET_ID;
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 const privateKey = process.env.GOOGLE_PRIVATE_KEY;
 
+export class TeamType{
+  teamName: string = "";
+  teamAbbrevitation: string = "";
+  playerNames: string[] = [];
+  accountIds: string[] = [];
+}
+
 export class SheetService{
     doc:GoogleSpreadsheetType;
     sheet:GoogleSpreadsheetWorksheetType | undefined;
     isAuthed: boolean;
-
+    teamData: TeamType[];
     constructor(){
         this.doc = new GoogleSpreadsheet(sheetId);
         this.isAuthed = false;
+        this.teamData = [];
     }
     hasPrivateKey(){
         return privateKey ? true : false;
@@ -39,14 +47,42 @@ export class SheetService{
     }
 
     async getTeamName(){
+        let teamName:teamNameType; 
         this.sheet = this.doc.sheetsByTitle["進行管理"];
         await this.sheet.loadCells();
-        const blueTeam = this.sheet.getCellByA1("A3");
-        const orangeTeam = this.sheet.getCellByA1("C3");
-        return {blue:blueTeam.formattedValue,orange:orangeTeam.formattedValue};
-        // console.log(`blue:${blueTeam.formattedValue} orange:${orangeTeam.formattedValue}`);
+        const blueTeam:string = this.sheet.getCellByA1("A3").formattedValue;
+        const orangeTeam:string = this.sheet.getCellByA1("C3").formattedValue;
+        const matchName:string = this.sheet.getCellByA1("B2").formattedValue;
+        const bo:string = this.sheet.getCellByA1("B4").formattedValue;
+        if(!this.teamData.length)await this.getStaticTeam().catch(console.error);
+        //多分自明なはず...
+        // console.log(this.teamData)
+        const blueMembers = this.teamData.filter(t => t.teamName === blueTeam)[0].playerNames;
+        const orangeMembers = this.teamData.filter(t => t.teamName === orangeTeam)[0].playerNames;
+        teamName = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo,blueMembers:blueMembers,orangeMembers:orangeMembers};
+        return teamName;
     }
 
+    async getStaticTeam(){
+        this.sheet = this.doc.sheetsByIndex[0];
+        await this.sheet.loadCells();
+
+        let teamData:TeamType[] = [];
+        let sheetIndex = 2;
+        while(1){
+            if(!this.sheet.getCellByA1(`B${sheetIndex}`).formattedValue)break;
+            let teamOb:TeamType = new TeamType();
+            teamOb.teamName = this.sheet.getCellByA1(`B${sheetIndex}`).formattedValue;
+            teamOb.teamAbbrevitation = this.sheet.getCellByA1(`C${sheetIndex}`).formattedValue;
+            for(let i = 0;i<3;i++){
+                teamOb.playerNames.push(this.sheet.getCellByA1(`D${sheetIndex+i}`).formattedValue);
+                teamOb.accountIds.push(this.sheet.getCellByA1(`I${sheetIndex+i}`).formattedValue);
+            }
+            teamData.push(teamOb);
+            sheetIndex += 4;
+        }
+        this.teamData = teamData;
+    }
     async getTeam(){
         this.sheet = this.doc.sheetsByIndex[0];
         await this.sheet.loadCells();
@@ -93,7 +129,4 @@ export class SheetService{
         console.log(teamData);
     }
 }
-// if(require.main === module){
-//     const ss = new SheetService();
-//     ss.init().then(_ => ss.getTeam());
-// }
+
