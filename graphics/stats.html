@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>a</title>
+        <title>Moca stats</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <!-- <link rel="stylesheet" href="./stats.css"> -->
         <style type="text/tailwindcss">
@@ -47,13 +47,13 @@
                 </div>
             </div>
             <div class="absolute right-0 left-0 bottom-0 grid border mx-[150px] h-[95px] text-center font-bold text-[30px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-                <div class="text-gray-100 col-span-2 mt-8">Player1</div>
-                <div class="text-gray-100 col-span-2 mt-8">Player2</div>
-                <div class="text-gray-100 col-span-2 mt-8">Player3</div>
+                <div id="names_0" class="text-gray-100 col-span-2 mt-8">Player1</div>
+                <div id="names_1" class="text-gray-100 col-span-2 mt-8">Player2</div>
+                <div id="names_2" class="text-gray-100 col-span-2 mt-8">Player3</div>
                 <div class="stats-name"></div>
-                <div class="text-gray-100 col-span-2 mt-8">Player4</div>
-                <div class="text-gray-100 col-span-2 mt-8">Player5</div>
-                <div class="text-gray-100 col-span-2 mt-8">Player6</div>
+                <div id="names_3" class="text-gray-100 col-span-2 mt-8">Player4</div>
+                <div id="names_4" class="text-gray-100 col-span-2 mt-8">Player5</div>
+                <div id="names_5" class="text-gray-100 col-span-2 mt-8">Player6</div>
             </div>
             <!-- <div class="h-[95px] right-0 left-0 flex absolute bottom-0">
                 <div class="flex-auto"></div>
@@ -69,9 +69,9 @@
         </div>
 
         <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div class="stats-score">41</div>
-            <div class="stats-score">82</div>
-            <div class="stats-score">102</div>
+            <div id="scores_0" class="stats-score">41</div>
+            <div id="scores_1" class="stats-score">82</div>
+            <div id="scores_2" class="stats-score">102</div>
             <div class="stats-name relative">
                 <div class="mx-auto mt-4">SCORE</div>
                 <div class="absolute stats-orange-progress">
@@ -79,14 +79,14 @@
                 </div>
             </div>
             <!--　n vs n -->
-            <div class="stats-score">5</div>
-            <div class="stats-score">9</div>
-            <div class="stats-score">0</div>
+            <div id="scores_3" class="stats-score">5</div>
+            <div id="scores_4" class="stats-score">9</div>
+            <div id="scores_5" class="stats-score">0</div>
         </div>
         <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div class="stats-score">41</div>
-            <div class="stats-score">82</div>
-            <div class="stats-score">102</div>
+            <div id="goals_0" class="stats-score">41</div>
+            <div id="goals_1" class="stats-score">82</div>
+            <div id="goals_2" class="stats-score">102</div>
             <div class="stats-name relative">
                 <div class="mx-auto mt-4">GOALS</div>
                 <div class="absolute stats-orange-progress">
@@ -94,14 +94,14 @@
                 </div>
             </div>
             <!--　n vs n -->
-            <div class="stats-score">5</div>
-            <div class="stats-score">9</div>
-            <div class="stats-score">0</div>
+            <div id="goals_3" class="stats-score">5</div>
+            <div id="goals_4" class="stats-score">9</div>
+            <div id="goals_5" class="stats-score">0</div>
         </div>
         <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div class="stats-score">41</div>
-            <div class="stats-score">82</div>
-            <div class="stats-score">102</div>
+            <div id="assists_0" class="stats-score">41</div>
+            <div id="assists_1" class="stats-score">82</div>
+            <div id="assists_2" class="stats-score">102</div>
             <div class="stats-name relative">
                 <div class="mx-auto mt-4">ASSISTS</div>
                 <div class="absolute stats-orange-progress">
@@ -109,14 +109,14 @@
                 </div>
             </div>
             <!--　n vs n -->
-            <div class="stats-score">5</div>
-            <div class="stats-score">9</div>
-            <div class="stats-score">0</div>
+            <div id="assists_3" class="stats-score">5</div>
+            <div id="assists_4" class="stats-score">9</div>
+            <div id="assists_5" class="stats-score">0</div>
         </div>
         <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div class="stats-score">41</div>
-            <div class="stats-score">82</div>
-            <div class="stats-score">102</div>
+            <div id="shots_0" class="stats-score">41</div>
+            <div id="shots_1" class="stats-score">82</div>
+            <div id="shots_2" class="stats-score">102</div>
             <div class="stats-name relative">
                 <div class="mx-auto mt-4">SHOTS</div>
                 <div class="absolute stats-orange-progress">
@@ -124,14 +124,14 @@
                 </div>
             </div>
             <!--　n vs n -->
-            <div class="stats-score">5</div>
-            <div class="stats-score">9</div>
-            <div class="stats-score">0</div>
+            <div id="shots_3" class="stats-score">5</div>
+            <div id="shots_4" class="stats-score">9</div>
+            <div id="shots_5" class="stats-score">0</div>
         </div>
         <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div class="stats-score">41</div>
-            <div class="stats-score">82</div>
-            <div class="stats-score">102</div>
+            <div id="saves_0" class="stats-score">41</div>
+            <div id="saves_1" class="stats-score">82</div>
+            <div id="saves_2" class="stats-score">102</div>
             <div class="stats-name relative">
                 <div class="mx-auto mt-4">SAVES</div>
                 <div class="absolute stats-orange-progress">
@@ -139,24 +139,47 @@
                 </div>
             </div>
             <!--　n vs n -->
-            <div class="stats-score">5</div>
-            <div class="stats-score">9</div>
-            <div class="stats-score">0</div>
+            <div id="saves_3" class="stats-score">5</div>
+            <div id="saves_4" class="stats-score">9</div>
+            <div id="saves_5" class="stats-score">0</div>
         </div>
         <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div class="stats-score">41</div>
-            <div class="stats-score">82</div>
-            <div class="stats-score">102</div>
+            <div id="demos_0" class="stats-score">41</div>
+            <div id="demos_1" class="stats-score">82</div>
+            <div id="demos_2" class="stats-score">102</div>
             <div class="stats-name relative">
-                <div class="mx-auto mt-4">DEMOS</div>
+                <div class="mx-auto mt-4">demosS</div>
                 <div class="absolute stats-orange-progress">
                     <div class="stats-blue-progress" style="width:45%"></div>
                 </div>
             </div>
             <!--　n vs n -->
-            <div class="stats-score">5</div>
-            <div class="stats-score">9</div>
-            <div class="stats-score">0</div>
+            <div id="demos_3" class="stats-score">5</div>
+            <div id="demos_4" class="stats-score">9</div>
+            <div id="demos_5" class="stats-score">0</div>
         </div>
+        <script>
+            let webSocket = new WebSocket("ws://localhost:8001/stats");
+            webSocket.onmessage = function(message){
+                const msg = JSON.parse(message.data);
+                const {cmd,data} = msg;
+                console.log(msg);
+                if(cmd == "playerTable"){
+                    for(let i = 0;i<6;i++){
+                        const players = data;
+                        document.getElementById(`names${i}`).textContent = players[i];
+                    }
+                }else if(cmd == "stats"){
+                    //data array
+                    const table = ["names","scores","goals","assists","shots","saves","demos"];
+                    table.forEach((t) => {
+                        for(let i = 0;i<6;i++){
+                            console.log(`${t}_${i}`);
+                            document.getElementById(`${t}_${i}`).textContent = data[i][t];
+                        }
+                    })
+                }
+            }
+        </script>
     </body>
 </html>

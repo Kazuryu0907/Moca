@@ -6,7 +6,8 @@ import { SheetService } from "./api/spread";
 import { DriveService } from "./api/gdrive";
 import { getHashesFromFolder } from "./api/hash";
 import {encode,decode} from "iconv-lite";
-require("dotenv").config({path:path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env")});
+//`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
+require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")});
 
 (async ()=>{
 let ss:SheetService;
@@ -19,13 +20,17 @@ const createWindow = () => {
       preload: path.resolve(__dirname, "preload.js"),
     },
   });
-
+  const socket = new socketComm(mainWindow);
   mainWindow.loadFile("dist/index.html");
 
-  socketComm(mainWindow);//
   ds = new DriveService(mainWindow);
   ds.init();
   ss = new SheetService();
+  socket.bind();
+  ipcMain.handle("sendSocket",(e,input) => {
+    const {path,data} = input;
+    return socket.sendData(path,data);
+  })
   mainWindow.webContents.openDevTools({ mode: "detach" });
 };
 
@@ -40,6 +45,8 @@ app.once("window-all-closed", () => app.quit());
 
 
 //handles
+
+
 ipcMain.handle("getTeam",async (event,data) => {
   return await ss.getTeamName().catch(console.error);
 });
@@ -66,4 +73,5 @@ ipcMain.handle("spread:setSheetID",(e,d:string) => ss.setSheetID(d));
 ipcMain.handle("spread:auth",() => ss.auth());
 ipcMain.handle("spread:hasPrivateKey",() => ss.hasPrivateKey());
 ipcMain.handle("graphics_dir",() => process.env.GRAPHICS_DIR!);
+
 })();

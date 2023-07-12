@@ -14,6 +14,15 @@ export type gdriveFile = {
 //   accountIds: string[] = [];
 // }
 
+export const Browsers = ["/icon","/playerName","/score","/nextMatch","/transition","/boost","/stats"] as const;
+export type BrowserType = typeof Browsers[number];
+
+
+export type dataType = {
+  cmd:string,
+  data:any
+}
+
 export type spreadTeamType = {
   blue:string,
   orange:string,

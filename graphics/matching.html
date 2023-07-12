@@ -141,11 +141,12 @@
             webSocket = new WebSocket("ws://localhost:8001/boost");
 
             webSocket.onmessage = function(message){
-                
-                // let msg = message.data.slice(0,-1);//null文字除去
-                let msg = message.data;
-                let cmd = msg[0];
-                let splitedMsg = msg.slice(1).split(":");
+                console.log(message.data);
+                const msg = JSON.parse(message.data);
+
+                const cmd = msg["cmd"];
+                const data = msg["data"];
+                 
                 if(msg == "hidden"){//reset
                     // document.getElementById("boosts").style.visibility = "hidden";
                 }
@@ -155,9 +156,9 @@
                 else if(msg == "reset"){
                     // scoreEle.textContent = "";
                 }
-                else if(cmd == "b"){// Boost
+                else if(cmd == "boost"){// Boost
                     // document.getElementById("boosts").style.visibility = "visible";
-                    const [boost,index] = splitedMsg;
+                    const {boost,index} = data;
                     document.getElementById("boost"+index).textContent = boost;
                     document.getElementById("boost_bar"+index).style.width = boost+"%";
                     // document.getElementById("boost_"+index).value = parseInt(boost);
@@ -171,9 +172,9 @@
                         document.getElementById("point_orange").textContent = name;
                     }
                 }
-                else if(cmd == "t"){// teamTable
-                    const [id,index] = splitedMsg;
-                    document.getElementById("player_name"+index).textContent = id;
+                else if(cmd == "playerTable"){// teamTable
+                    const players = data;
+                    for(let i = 0;i<6;i++)document.getElementById("player_name"+i).textContent = players[i];
                 }
                 
             }

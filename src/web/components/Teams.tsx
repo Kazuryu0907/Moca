@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import {CheckIcon,XMarkIcon} from "@heroicons/react/24/outline";
 import {Loading,Checked} from "./Loading";
-import {spreadTeamType as teamNameType} from "./types";
+import {dataType, spreadTeamType as teamNameType} from "./types";
 // export type teamNameType = {
 //   blue: string;
 //   orange: string;
@@ -44,6 +44,11 @@ const failed = () => {
 };
 export const Teams = () => {
   const [team, setTeam] = useState(defaultProps());
+  const send2Overlay = () => {
+    //StateからTeam情報とってくる
+    let data:dataType = {cmd:"teamNames",data:team.teamNames};
+    window.app.sendSocket({path:"/NextMatch",data:data});
+  }
   const onclick = async () => {
     //ロードのフラグを立てる
     setTeam({ ...team, authStatus: "loading" });
@@ -109,7 +114,7 @@ export const Teams = () => {
           {team.teamNames.orange}
         </p>
       </div>
-      <button className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
+      <button onClick={send2Overlay} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
         Send To Overlay
       </button>
     </div>

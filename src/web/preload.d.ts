@@ -4,11 +4,13 @@ declare global {
     }
 }
 declare module "*.json"
+import {dataType} from "./components/types";
 
 export interface IMainProcess {
     on: (channel:string,callback:any) => void;
     index2render:(cmd:string,data?:any) => any;
     render2index:(cmd:string,data?:any) => any;
+    sendSocket:(data:{path:string,data:dataType}) => Promise<void>;
     getDrive:(id:string) => Promise<any>;
     getTeam:() => Promise<any>;
     glob: () => Promise<any>;

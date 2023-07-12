@@ -5,7 +5,8 @@ import type {
 } from "google-spreadsheet";
 import {spreadTeamType as teamNameType} from "../web/components/types";
 import * as path from "path";
-require("dotenv").config({path:path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env")});
+// `C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
+require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")});
 
 const sheetId = process.env.SHEET_ID;
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;

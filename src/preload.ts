@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld(
             if(data)ipcRenderer.send(cmd,data);
             else ipcRenderer.send(cmd);
         },
+        sendSocket:(data:any) => ipcRenderer.invoke("sendSocket",data),
         getDrive: (id:string) => ipcRenderer.invoke("getDrive",id),
         getTeam: () => ipcRenderer.invoke("getTeam"),
         glob: () => ipcRenderer.invoke("glob"),

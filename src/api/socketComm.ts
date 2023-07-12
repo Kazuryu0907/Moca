@@ -1,64 +1,102 @@
 import * as dgram from "dgram";
 import {WebSocketServer,WebSocket} from "ws";
 import {BrowserWindow} from "electron";
+import {Browsers,BrowserType} from "../web/components/types";
 
-export const socketComm = (mainWindow: BrowserWindow) => {
+type DataType = {
+  cmd:string,
+  data:any
+};
 
-  const port = 12345;
-  const host = "127.0.0.1";
-
-  const socket = dgram.createSocket("udp4");
-
-  socket.on("listening",() => {
-      const addr = socket.address();
-      console.log(`UDP socket listening on ${addr.address}:${addr.port}`);
-  })
-
-  const s = new WebSocketServer({port:8001});
-
-
-  const Browsers = ["/icon","/playerName","/score","/team","/transition"] as const;
-  type BrowserType = typeof Browsers[number];
-
-  let clients: Record<BrowserType,WebSocket|null>= {
-    "/icon":null,"/playerName":null,"/score":null,"/team":null,"/transition":null,
-  };
-  let connectedBrowsers:Record<BrowserType,boolean> = {
-    "/icon":false,"/playerName":false,"/score":false,"/team":false,"/transition":false,
-  };
-
-  socket.on("message",(msg,remote) => {
-      console.log(`${remote.address}:${remote.port} - ${msg}`);
-      const data = msg.toString();
-      console.log(data);
+//Record初期化
+function initRecord<Y>(arr:readonly string[],defaultVal:Y){
+  const toReturn:Record<string,Y> = {};
+  arr.forEach(keys => {
+    toReturn[keys] = defaultVal;
   });
+  return toReturn;
+}
 
-  socket.bind(port, host);
+export class socketComm{
+  mainWindow:BrowserWindow|undefined = undefined;
+  connectedBrowsers:Record<BrowserType,boolean> = initRecord<boolean>(Browsers,false);
+  clients: Record<BrowserType,WebSocket|null>= initRecord<null>(Browsers,null);
 
-  const isBrowser = (path:string): path is BrowserType => {
-    return Browsers.some((v) => v === path);
+
+  constructor(mainWindow: BrowserWindow){
+    this.mainWindow = mainWindow;
   }
 
-  //WebSocket
-  s.on("connection",(ws,req) => {
-    const path = req.url || "";
-    if(isBrowser(path)){
-      clients[path] = ws;
-      connectedBrowsers[path] = true;
-      mainWindow.webContents.send("connections",connectedBrowsers);
-      console.log(connectedBrowsers);
-    }
+  sendData(path:BrowserType,data:DataType){
+      this.clients[path]?.send(JSON.stringify(data));
+  }
 
-    ws.on("close",(s) => {
-      if(isBrowser(path)){
-        clients[path] = null;
-        connectedBrowsers[path] = false;
-        mainWindow.webContents.send("connections",connectedBrowsers);
-      }
-      // console.log(clients);
+  stream(data:DataType){
+    Browsers.forEach((path) => {
+      this.clients[path]?.send(JSON.stringify(data));
+    })
+  }
+
+  bind(){
+    const port = 12345;
+    const host = "127.0.0.1";
+
+    const socket = dgram.createSocket("udp4");
+
+    socket.on("listening",() => {
+        const addr = socket.address();
+        console.log(`UDP socket listening on ${addr.address}:${addr.port}`);
+    })
+
+    const s = new WebSocketServer({port:8001});
+
+
+    socket.on("message",(msg,remote) => {
+        // console.log(`${remote.address}:${remote.port} - ${msg}`);
+        const data = msg.toString();
+        console.log(data);
+        this.sortingData(JSON.parse(data));
     });
 
-    console.log(connectedBrowsers);
-  });
+    socket.bind(port, host);
 
+    const isBrowser = (path:string): path is BrowserType => {
+      return Browsers.some((v) => v === path);
+    }
+
+    //WebSocket
+    s.on("connection",(ws,req) => {
+      const path = req.url || "";
+      console.log(path);
+      if(isBrowser(path)){
+        this.clients[path] = ws;
+        this.connectedBrowsers[path] = true;
+        this.mainWindow!.webContents.send("connections",this.connectedBrowsers);
+        console.log(this.connectedBrowsers);
+      }
+
+      ws.on("close",(s) => {
+        if(isBrowser(path)){
+          this.clients[path] = null;
+          this.connectedBrowsers[path] = false;
+          this.mainWindow!.webContents.send("connections",this.connectedBrowsers);
+        }
+        // console.log(clients);
+      });
+
+      console.log(this.connectedBrowsers);
+    });
+  }
+
+  sortingData(input:{"cmd":string,"data":any}){
+    const cmd = input.cmd;
+    if(cmd == "playerTable"){
+      this.stream({cmd:"playerTable","data":input.data});
+    }else if(cmd == "boost"){
+      const data:{"boost":number,"index":number} = input.data;
+      this.sendData("/boost",{cmd:"boost",data:data});
+    }else if(cmd == "stats"){
+      this.sendData("/stats",{cmd:"stats",data:input.data});
+    }
+  }
 }
