@@ -48,12 +48,14 @@ export const Teams = () => {
     //StateからTeam情報とってくる
     let data:dataType = {cmd:"teamNames",data:team.teamNames};
     window.app.sendSocket({path:"/NextMatch",data:data});
+    window.app.getTeamInfo().then(console.log);
   }
   const onclick = async () => {
     //ロードのフラグを立てる
     setTeam({ ...team, authStatus: "loading" });
-    const idElm = document.getElementById("spread_id") as HTMLInputElement;
-    const id = idElm.value;
+    // const idElm = document.getElementById("spread_id") as HTMLInputElement;
+    // const id = idElm.value;
+    const id = await window.app.SPREADSHEET_ID() ?? "";
     //SpreadSheetのIDセット
     await window.app.setSheetID(id);
     //Auth
@@ -76,26 +78,14 @@ export const Teams = () => {
       <p className="mt-3 font-semibold text-gray-600">
         GoogleSpreadSheet Authing...
       </p>
-      <label
-          className="block mt-5 text-sm font-medium text-gray-900"
-          htmlFor="spread_id"
-        >
-          SpreadSheetID
-        </label>
-      <input
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 mt-2"
-          type="text"
-          id="spread_id"
-          placeholder="1OzMEBHzkxbodHRL2rRVopIEh2B0c1JJu"
-          defaultValue="1BzcoT83ptJwytQEvcxkaVR-1VDbYG7JDudhNLC5WJ3g"
-        />
+
       <div className="flex">
         <button
           id="getTeam"
           onClick={onclick}
           className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-lg"
         >
-          Get Team
+          チーム更新
         </button>
         {team.authStatus !== "none" && (team.authStatus === "loading" ? loading() : (team.authStatus === "success" ? checked() : failed()))}
       </div>

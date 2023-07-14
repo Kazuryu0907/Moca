@@ -125,8 +125,9 @@ export const Overlay = () => {
   const onclick = async () => {
     //Loading表示
     setProps({ ...props, isLoading: true });
-    const folderElm = document.getElementById("folder_id") as HTMLInputElement;
-    const folderID = folderElm.value as string | undefined;
+    // const folderElm = document.getElementById("folder_id") as HTMLInputElement;
+    // const folderID = folderElm.value as string | undefined;
+    const folderID = await window.app.GOOGLEDRIVE_ID();
     //Empty input
     if (!folderID) {
       setProps({ ...props, inputError: "empty", isLoading: false });
@@ -205,20 +206,6 @@ export const Overlay = () => {
       </h5>
       {renderAuthStatus(props.isAuthed)}
       <div>
-        <label
-          className="block mt-5 text-sm font-medium text-gray-900"
-          htmlFor="folder_id"
-        >
-          FolderID
-        </label>
-
-        <input
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 mt-2"
-          type="text"
-          id="folder_id"
-          placeholder="1OzMEBHzkxbodHRL2rRVopIEh2B0c1JJu"
-          defaultValue="1ztwAvNoRlXkou-GuAUaqBWM69bW_Z771"
-        />
         {renderFolderIDError(props.inputError)}
       </div>
       <div className="flex">

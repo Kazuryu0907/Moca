@@ -83,6 +83,7 @@ export class SheetService{
             sheetIndex += 4;
         }
         this.teamData = teamData;
+        return teamData;
     }
     async getTeam(){
         this.sheet = this.doc.sheetsByIndex[0];

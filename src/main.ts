@@ -31,6 +31,9 @@ const createWindow = () => {
     const {path,data} = input;
     return socket.sendData(path,data);
   })
+  ipcMain.handle("getTeamInfo",() => {
+    return ss.getStaticTeam();
+  })
   mainWindow.webContents.openDevTools({ mode: "detach" });
 };
 
@@ -46,6 +49,13 @@ app.once("window-all-closed", () => app.quit());
 
 //handles
 
+ipcMain.handle("SPREADSHEET_ID",() => {
+  return process.env.SPREADSHEET_ID;
+});
+
+ipcMain.handle("GOOGLEDRIVE_ID",() => {
+  return process.env.GOOGLEDRIVE_ID;
+})
 
 ipcMain.handle("getTeam",async (event,data) => {
   return await ss.getTeamName().catch(console.error);
