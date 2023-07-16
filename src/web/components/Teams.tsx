@@ -44,11 +44,14 @@ const failed = () => {
 };
 export const Teams = () => {
   const [team, setTeam] = useState(defaultProps());
-  const send2Overlay = () => {
+  const send2Overlay = async() => {
     //StateからTeam情報とってくる
     let data:dataType = {cmd:"teamNames",data:team.teamNames};
     window.app.sendSocket({path:"/NextMatch",data:data});
     window.app.getTeamInfo().then(console.log);
+    const idTable = await window.app.getIdTable();
+    console.log(idTable);
+    await window.app.stream({cmd:"idTable",data:idTable});
   }
   const onclick = async () => {
     //ロードのフラグを立てる
@@ -62,7 +65,6 @@ export const Teams = () => {
     try{
       await window.app.spreadAuth();
       const teamName: teamNameType = await window.app.getTeam();
-      console.log(teamName);
       setTeam({ ...team, teamNames: teamName, authStatus: "success" });
     }catch(e){
       setTeam({ ...team, authStatus: "failed" });
@@ -105,7 +107,7 @@ export const Teams = () => {
         </p>
       </div>
       <button onClick={send2Overlay} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
-        Send To Overlay
+        チーム一覧取得
       </button>
     </div>
   );

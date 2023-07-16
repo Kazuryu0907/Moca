@@ -8,6 +8,7 @@ type DataType = {
   data:any
 };
 
+type onConnectionType = (ws:WebSocket) => void;
 //Record初期化
 function initRecord<Y>(arr:readonly string[],defaultVal:Y){
   const toReturn:Record<string,Y> = {};
@@ -21,11 +22,13 @@ export class socketComm{
   mainWindow:BrowserWindow|undefined = undefined;
   connectedBrowsers:Record<BrowserType,boolean> = initRecord<boolean>(Browsers,false);
   clients: Record<BrowserType,WebSocket|null>= initRecord<null>(Browsers,null);
-
+  //接続時に実行するHook
+  onConnection:onConnectionType = (ws:WebSocket) => {};
 
   constructor(mainWindow: BrowserWindow){
     this.mainWindow = mainWindow;
   }
+  
 
   sendData(path:BrowserType,data:DataType){
       this.clients[path]?.send(JSON.stringify(data));

@@ -1,4 +1,5 @@
 import path from "path";
+import {WebSocket} from "ws";
 import {unlink,mkdirSync, PathLike} from "fs";
 import { BrowserWindow, app, ipcMain } from "electron";
 import { socketComm } from "./api/socketComm";
@@ -27,12 +28,24 @@ const createWindow = () => {
   ds.init();
   ss = new SheetService();
   socket.bind();
+  //idTableの自動取得
+  socket.onConnection = (ws:WebSocket) => {
+    const idTable = ss.idTable;
+    let root = {cmd:"idTable",data:idTable};
+    ws.send(JSON.stringify(root));
+  }
   ipcMain.handle("sendSocket",(e,input) => {
     const {path,data} = input;
     return socket.sendData(path,data);
   })
+  ipcMain.handle("stream",(e,input) => {
+    return socket.stream(input);
+  })
   ipcMain.handle("getTeamInfo",() => {
     return ss.getStaticTeam();
+  })
+  ipcMain.handle("getIdTable",() => {
+    return ss.getIds();
   })
   mainWindow.webContents.openDevTools({ mode: "detach" });
 };

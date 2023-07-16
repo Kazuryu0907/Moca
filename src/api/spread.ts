@@ -24,10 +24,12 @@ export class SheetService{
     sheet:GoogleSpreadsheetWorksheetType | undefined;
     isAuthed: boolean;
     teamData: TeamType[];
+    idTable: Record<string,string>;
     constructor(){
         this.doc = new GoogleSpreadsheet(sheetId);
         this.isAuthed = false;
         this.teamData = [];
+        this.idTable = {};
     }
     hasPrivateKey(){
         return privateKey ? true : false;
@@ -83,8 +85,21 @@ export class SheetService{
             sheetIndex += 4;
         }
         this.teamData = teamData;
+        this.getIds();
         return teamData;
     }
+
+    getIds(){
+        //それぞれ一次元
+        const accountIds = this.teamData.map((t) => t.accountIds).flat();
+        const vNames = this.teamData.map((t) => t.playerNames).flat();
+        console.log(accountIds,vNames)
+        for(let i = 0;i < accountIds.length;i++){
+            if(accountIds[i] != null)this.idTable[accountIds[i]] = vNames[i];
+        }
+        return this.idTable;
+    }
+
     async getTeam(){
         this.sheet = this.doc.sheetsByIndex[0];
         await this.sheet.loadCells();

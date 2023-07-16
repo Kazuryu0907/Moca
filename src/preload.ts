@@ -15,11 +15,12 @@ contextBridge.exposeInMainWorld(
             if(data)ipcRenderer.send(cmd,data);
             else ipcRenderer.send(cmd);
         },
-
+        getIdTable:() => ipcRenderer.invoke("getIdTable"),
         GOOGLEDRIVE_ID:() => ipcRenderer.invoke("GOOGLEDRIVE_ID"),
         SPREADSHEET_ID:() => ipcRenderer.invoke("SPREADSHEET_ID"),
         getTeamInfo:() => ipcRenderer.invoke("getTeamInfo"),
         sendSocket:(data:any) => ipcRenderer.invoke("sendSocket",data),
+        stream:(data:any) => ipcRenderer.invoke("stream",data),
         getDrive: (id:string) => ipcRenderer.invoke("getDrive",id),
         getTeam: () => ipcRenderer.invoke("getTeam"),
         glob: () => ipcRenderer.invoke("glob"),

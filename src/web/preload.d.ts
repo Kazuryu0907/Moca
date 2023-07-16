@@ -11,10 +11,10 @@ export interface IMainProcess {
     index2render:(cmd:string,data?:any) => any;
     render2index:(cmd:string,data?:any) => any;
     getTeamInfo:() => Promise<any>;
-
+    getIdTable:() => Promise<Record<string,string>>;
     GOOGLEDRIVE_ID:() => Promise<string|null>;
     SPREADSHEET_ID:() => Promise<string|null>;
-
+    stream:(data:any) => Promise<void>,
     sendSocket:(data:{path:string,data:dataType}) => Promise<void>;
     getDrive:(id:string) => Promise<any>;
     getTeam:() => Promise<any>;
