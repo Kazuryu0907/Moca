@@ -25,8 +25,9 @@ export interface IMainProcess {
     encodeString: (data:string) => Promise<string>;
     removeFile: (data:string) => Promise<void>,
     setSheetID: (data:string) => Promise<void>,
-    spreadAuth: () => Promise<void>,
+    spreadAuth: () => Promise<boolean>,
     spreadHasPrivateKey: () => Promise<void>,
+    driveAuth: (id:string) => Promise<boolean>,
     graphicsDir: () => Promise<string>,
     mkdir: (path:string) => Promise<void>;
 

@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
+import { contextBridge, ipcRenderer,  } from 'electron'
 
 contextBridge.exposeInMainWorld(
     "app", {
@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld(
         setSheetID: (data:string) => ipcRenderer.invoke("spread:setSheetID",data),
         spreadAuth: () => ipcRenderer.invoke("spread:auth"),
         spreadHasPrivateKey: () => ipcRenderer.invoke("spread:hasPrivateKey"),
+        driveAuth: (folderID:string) => ipcRenderer.invoke("gdrive:auth",folderID),
         graphicsDir: () => ipcRenderer.invoke("graphics_dir"),
         mkdir: (path:string) => ipcRenderer.invoke("mkdir",path),
     }

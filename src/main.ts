@@ -24,9 +24,9 @@ const createWindow = () => {
   const socket = new socketComm(mainWindow);
   mainWindow.loadFile("dist/index.html");
 
-  ds = new DriveService(mainWindow);
-  ds.init();
+  ds = new DriveService();
   ss = new SheetService();
+
   socket.bind();
   //idTableの自動取得
   socket.onConnection = (ws:WebSocket) => {
@@ -93,8 +93,12 @@ ipcMain.handle("path.join",(e,data:string[]) => path.join(...data));
 ipcMain.handle("iconv",(e,d:string) => decode(encode(d,"utf8"), "utf8"));
 ipcMain.handle("removeFile",(e,d:string) => unlink(d,(e) => console.error(e)));
 ipcMain.handle("spread:setSheetID",(e,d:string) => ss.setSheetID(d));
-ipcMain.handle("spread:auth",() => ss.auth());
+ipcMain.handle("spread:auth",() => ss.auth().catch(() => false));
 ipcMain.handle("spread:hasPrivateKey",() => ss.hasPrivateKey());
+ipcMain.handle("gdrive:auth",(e,d:string) => ds.clientCheck(d).catch((e) => {
+  console.log(e);
+  return false;
+}));
 ipcMain.handle("graphics_dir",() => process.env.GRAPHICS_DIR!);
 
 })();

@@ -14,32 +14,17 @@ const CREDENTIAL_PATH = path.resolve(__dirname, "./../src", "credentials.json");
 export class DriveService {
   drive: drive_v3.Drive | undefined;
   isAuthed: boolean = false;
-  mainWindow: BrowserWindow;
 
-  constructor(mainWindow: BrowserWindow) {
-    this.mainWindow = mainWindow;
+  constructor() {
     this.drive = undefined;
-  }
-  /*
-    init this class. Run this function first.
-    */
-  async init() {
-    const client: any = await this.authorize();
-
-    if (client) {
-      this.isAuthed = true;
-      this.mainWindow.webContents.on("did-finish-load", () => {
-        this.mainWindow.webContents.send("gdrive:isAuthed", true);
-      });
-    } else {
-      this.mainWindow.webContents.on("did-finish-load", () => {
-        this.mainWindow.webContents.send("gdrive:isAuthed", false);
-      });
-    }
-    this.drive = client
+    this.authorize().then(c => {
+      const client:any = c;
+      this.drive = client
       ? google.drive({ version: "v3", auth: client })
-      : undefined;
+      : undefined;    });
   }
+
+
   /*
         load saved credentials if exitst.
 
@@ -72,7 +57,6 @@ export class DriveService {
   async authorize() {
     let loadedClient = await this.loadSavedCredentialsIfExist();
     this.isAuthed = true;
-    this.mainWindow?.webContents.send("gdrive:isAuthed", this.isAuthed);
     if (loadedClient) {
       return loadedClient;
     }
@@ -87,7 +71,18 @@ export class DriveService {
     return client;
   }
 
-  //再帰なし
+  async clientCheck(folderID:string){
+    const params: drive_v3.Params$Resource$Files$List = {
+      pageSize:1,
+      //フォルダ除外
+      q: `\'${folderID}\' in parents and trashed = false`,
+      fields:
+        "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)",
+    };
+    await this.drive?.files.list(params);
+    return true;
+  }
+  //再帰あり
   async filesFromFolderID(folderID: string, base = "") {
     //フォルダ特定
     //and mimeType != 'application/vnd.google-apps.folder'

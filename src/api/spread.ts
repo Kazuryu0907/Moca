@@ -41,14 +41,20 @@ export class SheetService{
     }
     //auth Run this first.
     async auth(){
-        await this.doc.useServiceAccountAuth({
-            client_email: clientEmail ?? "",
-            private_key: privateKey ?? "",
-        });
-        this.isAuthed = true;
+        try{
+            await this.doc.useServiceAccountAuth({
+                client_email: clientEmail ?? "",
+                private_key: privateKey ?? "",
+            });
+            this.isAuthed = true;
+        }catch{
+            this.isAuthed = false;
+        }
         await this.doc.loadInfo();
+        return this.isAuthed;
     }
 
+    
     async getTeamName(){
         let teamName:teamNameType; 
         this.sheet = this.doc.sheetsByTitle["進行管理"];
