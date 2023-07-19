@@ -11,9 +11,9 @@ export const App = () => {
     <div className="flex flex-wrap">
       {/* Browserは内部にupdateもってるよ */}
         <Start />
-        <Browser />
+        {/* <Browser />
         <Teams />
-        <Overlay />
+        <Overlay /> */}
         
       {/* Teamは内部にupdateもってるよ */}
     </div>

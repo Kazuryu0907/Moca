@@ -25,11 +25,13 @@ export class SheetService{
     isAuthed: boolean;
     teamData: TeamType[];
     idTable: Record<string,string>;
+    teamInfo:teamNameType; 
     constructor(){
         this.doc = new GoogleSpreadsheet(sheetId);
         this.isAuthed = false;
         this.teamData = [];
         this.idTable = {};
+        this.teamInfo = {blue:"none",orange:"none",name:"",bo:"",blueMembers:[],orangeMembers:[]};
     }
     hasPrivateKey(){
         return privateKey ? true : false;
@@ -54,24 +56,25 @@ export class SheetService{
         return this.isAuthed;
     }
 
-    
+    //thisに残すようにした
+    //getStaticTeamが先
     async getTeamName(){
-        let teamName:teamNameType; 
+        await this.doc.loadInfo();
         this.sheet = this.doc.sheetsByTitle["進行管理"];
         await this.sheet.loadCells();
         const blueTeam:string = this.sheet.getCellByA1("A3").formattedValue;
         const orangeTeam:string = this.sheet.getCellByA1("C3").formattedValue;
         const matchName:string = this.sheet.getCellByA1("B2").formattedValue;
         const bo:string = this.sheet.getCellByA1("B4").formattedValue;
-        if(!this.teamData.length)await this.getStaticTeam().catch(console.error);
-        //多分自明なはず...
-        // console.log(this.teamData)
+        // if(!this.teamData.length)await this.getStaticTeam().catch(console.error);
+        // //多分自明なはず...
+        // console.log(this.teamData);
         const blueMembers = this.teamData.filter(t => t.teamName === blueTeam)[0].playerNames;
         const orangeMembers = this.teamData.filter(t => t.teamName === orangeTeam)[0].playerNames;
-        teamName = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo,blueMembers:blueMembers,orangeMembers:orangeMembers};
-        return teamName;
+        this.teamInfo = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo,blueMembers:blueMembers,orangeMembers:orangeMembers};
+        return this.teamInfo;
     }
-
+    //thisに残すようにした
     async getStaticTeam(){
         this.sheet = this.doc.sheetsByIndex[0];
         await this.sheet.loadCells();
@@ -99,7 +102,6 @@ export class SheetService{
         //それぞれ一次元
         const accountIds = this.teamData.map((t) => t.accountIds).flat();
         const vNames = this.teamData.map((t) => t.playerNames).flat();
-        console.log(accountIds,vNames)
         for(let i = 0;i < accountIds.length;i++){
             if(accountIds[i] != null)this.idTable[accountIds[i]] = vNames[i];
         }

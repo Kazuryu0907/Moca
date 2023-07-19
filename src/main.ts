@@ -71,7 +71,7 @@ ipcMain.handle("GOOGLEDRIVE_ID",() => {
 })
 
 ipcMain.handle("getTeam",async (event,data) => {
-  return await ss.getTeamName().catch(console.error);
+  return await ss.getTeamName();
 });
 
 ipcMain.handle("getDrive",async (e,d:string) => {
@@ -93,7 +93,10 @@ ipcMain.handle("path.join",(e,data:string[]) => path.join(...data));
 ipcMain.handle("iconv",(e,d:string) => decode(encode(d,"utf8"), "utf8"));
 ipcMain.handle("removeFile",(e,d:string) => unlink(d,(e) => console.error(e)));
 ipcMain.handle("spread:setSheetID",(e,d:string) => ss.setSheetID(d));
-ipcMain.handle("spread:auth",() => ss.auth().catch(() => false));
+ipcMain.handle("spread:auth",() => ss.auth().catch((e) =>{
+  console.log(e);
+  return false;
+}));
 ipcMain.handle("spread:hasPrivateKey",() => ss.hasPrivateKey());
 ipcMain.handle("gdrive:auth",(e,d:string) => ds.clientCheck(d).catch((e) => {
   console.log(e);
