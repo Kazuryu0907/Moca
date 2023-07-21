@@ -40,6 +40,7 @@
 		"ws": "^8.13.0"
 	},
 	"devDependencies": {
+		"@types/electron-load-devtool": "^1.2.1",
 		"@types/google-spreadsheet": "^3.3.2",
 		"@types/node": "^20.2.5",
 		"@types/react": "^18.2.8",
@@ -49,6 +50,7 @@
 		"cross-env": "^7.0.3",
 		"css-loader": "^6.8.1",
 		"electron": "^25.0.1",
+		"electron-load-devtool": "^1.2.0",
 		"electronmon": "^2.0.2",
 		"esbuild-loader": "^3.0.1",
 		"html-webpack-plugin": "^5.5.1",

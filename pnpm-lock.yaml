@@ -52,6 +52,9 @@ dependencies:
     version: 8.13.0
 
 devDependencies:
+  '@types/electron-load-devtool':
+    specifier: ^1.2.1
+    version: 1.2.1
   '@types/google-spreadsheet':
     specifier: ^3.3.2
     version: 3.3.2
@@ -79,6 +82,9 @@ devDependencies:
   electron:
     specifier: ^25.0.1
     version: 25.0.1
+  electron-load-devtool:
+    specifier: ^1.2.0
+    version: 1.2.0
   electronmon:
     specifier: ^2.0.2
     version: 2.0.2
@@ -556,6 +562,10 @@ packages:
       '@types/keyv': 3.1.4
       '@types/node': 20.2.5
       '@types/responselike': 1.0.0
+    dev: true
+
+  /@types/electron-load-devtool@1.2.1:
+    resolution: {integrity: sha512-zgFmZ8hrxYwo7AcQjwmslF1aR3cq+f9ZkRs6Ah9SzaOFCFvSHakUTIIjM6QvwMqfj8MVNUT0cDLmY1AGQfKiVw==}
     dev: true
 
   /@types/eslint-scope@3.7.4:
@@ -1460,6 +1470,17 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
     dev: false
+
+  /electron-is-dev@1.2.0:
+    resolution: {integrity: sha512-R1oD5gMBPS7PVU8gJwH6CtT0e6VSoD0+SzSnYpNm+dBkcijgA+K7VAMHDfnRq/lkKPZArpzplTW6jfiMYosdzw==}
+    dev: true
+
+  /electron-load-devtool@1.2.0:
+    resolution: {integrity: sha512-ify+P5BGvi13Qqs+tlgwRkbtyq/Llv06udbhAEdL9Iuux7i2FNU0gkD+BcsbdpgcGs5dmU9UlBSAb3CezuQwPg==}
+    engines: {node: '>=8'}
+    dependencies:
+      electron-is-dev: 1.2.0
+    dev: true
 
   /electron-to-chromium@1.4.423:
     resolution: {integrity: sha512-y4A7YfQcDGPAeSWM1IuoWzXpg9RY1nwHzHSwRtCSQFp9FgAVDgdWlFf0RbdWfLWQ2WUI+bddUgk5RgTjqRE6FQ==}

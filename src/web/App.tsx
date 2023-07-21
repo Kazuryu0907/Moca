@@ -8,7 +8,7 @@ export const App = () => {
   //Websocket更新時にState更新
 
   return (
-    <div className="flex flex-wrap">
+    <div>
       {/* Browserは内部にupdateもってるよ */}
         <Start />
         {/* <Browser />

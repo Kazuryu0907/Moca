@@ -7,6 +7,7 @@ import { SheetService } from "./api/spread";
 import { DriveService } from "./api/gdrive";
 import { getHashesFromFolder } from "./api/hash";
 import {encode,decode} from "iconv-lite";
+import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")});
 
@@ -14,6 +15,9 @@ require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")}
 let ss:SheetService;
 let ds:DriveService;
 // await ss.init();
+ds = new DriveService();
+ss = new SheetService();
+
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -23,10 +27,8 @@ const createWindow = () => {
   });
   const socket = new socketComm(mainWindow);
   mainWindow.loadFile("dist/index.html");
-
-  ds = new DriveService();
-  ss = new SheetService();
-
+  mainWindow.webContents.openDevTools({ mode: "detach" });
+  start(ss,ds,mainWindow);
   socket.bind();
   //idTableの自動取得
   socket.onConnection = (ws:WebSocket) => {
@@ -41,26 +43,27 @@ const createWindow = () => {
   ipcMain.handle("stream",(e,input) => {
     return socket.stream(input);
   })
-  ipcMain.handle("getTeamInfo",() => {
-    return ss.getStaticTeam();
-  })
-  ipcMain.handle("getIdTable",() => {
-    return ss.getIds();
-  })
-  mainWindow.webContents.openDevTools({ mode: "detach" });
+
 };
 
 
-
-app.whenReady().then(() => {
+app.whenReady().then(async() => {
   createWindow();
 });
 
-app.once("window-all-closed", () => app.quit());
 
+app.once("window-all-closed", () => app.quit());
+1
 
 
 //handles
+
+ipcMain.handle("getTeamInfo",() => {
+  return ss.getStaticTeam();
+})
+ipcMain.handle("getIdTable",() => {
+  return ss.getIds();
+})
 
 ipcMain.handle("SPREADSHEET_ID",() => {
   return process.env.SPREADSHEET_ID;
@@ -69,6 +72,7 @@ ipcMain.handle("SPREADSHEET_ID",() => {
 ipcMain.handle("GOOGLEDRIVE_ID",() => {
   return process.env.GOOGLEDRIVE_ID;
 })
+
 
 ipcMain.handle("getTeam",async (event,data) => {
   return await ss.getTeamName();

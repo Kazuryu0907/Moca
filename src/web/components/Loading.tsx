@@ -2,10 +2,11 @@ import {FC} from "react";
 
 type Props = {
     css:string
+    className?:string
 }
-export const Loading:FC<Props> = ({css}) => {
+export const Loading:FC<Props> = ({css,className}) => {
   return (
-    <div role="status">
+    <div role="status" className={className}>
       <svg
         aria-hidden="true"
         className={css}
@@ -27,9 +28,9 @@ export const Loading:FC<Props> = ({css}) => {
   );
 };
 
-export const Checked:FC<Props> = ({css}) => {
+export const Checked:FC<Props> = ({css,className}) => {
     return(
-        <div role="status">
+        <div role="status" className={className}>
         <svg
           aria-hidden="true"
           className={css}
