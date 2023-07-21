@@ -21,8 +21,7 @@ export const start = async (ss:SheetService,ds:DriveService,mainWindow:BrowserWi
     const setEnvStatus = (props:propsType) => {
         console.log(props);
         envStatus = {...props};
-        mainWindow.webContents.on('did-finish-load', ()=>mainWindow.webContents.send("startStepper",props)
-        );
+        mainWindow.webContents.send("startStepper",props);
     }
     
     if (spreadId == null) {

@@ -11,6 +11,7 @@ import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")});
 
+
 (async ()=>{
 let ss:SheetService;
 let ds:DriveService;
@@ -28,7 +29,8 @@ const createWindow = () => {
   const socket = new socketComm(mainWindow);
   mainWindow.loadFile("dist/index.html");
   mainWindow.webContents.openDevTools({ mode: "detach" });
-  start(ss,ds,mainWindow);
+  
+
   socket.bind();
   //idTableの自動取得
   socket.onConnection = (ws:WebSocket) => {
@@ -43,9 +45,8 @@ const createWindow = () => {
   ipcMain.handle("stream",(e,input) => {
     return socket.stream(input);
   })
-
+  mainWindow.webContents.on('did-finish-load',() => start(ss,ds,mainWindow));
 };
-
 
 app.whenReady().then(async() => {
   createWindow();
@@ -53,7 +54,7 @@ app.whenReady().then(async() => {
 
 
 app.once("window-all-closed", () => app.quit());
-1
+
 
 
 //handles

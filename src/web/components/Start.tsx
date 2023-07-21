@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { Loading, Checked } from "./Loading";
+import { Loading, Checked ,Failed} from "./Loading";
+import {useNavigate} from "react-router-dom";
 
 type stateType = "loading" | "success" | "fail" | "none";
 
@@ -13,7 +14,7 @@ type propsType = {
 
 const loadingCss = "w-7 h-7 text-gray-200 animate-spin fill-blue-600";
 const checkedCss = "w-7 h-7 text-green-500 flex-shrink-0";
-
+const failedCss = "w-7 h-7 text-red-500 font-bold";
 type stepProps = {
   title: string;
   description: string;
@@ -49,18 +50,19 @@ const Step: FC<stepProps> = ({ title, description, status, logo }) => {
       ) : (
         false
       )}
-      {/*  */}
+      {status === "fail" ? <Failed css={failedCss} className="my-auto"/> : false}
     </div>
   );
 };
 
-export const Start:FC = () => {
+export const Start = () => {
   const [envStatus, setEnvStatus] = useState<propsType>({
     env: "loading",
     auth: "none",
     fetch: "none",
     errorText: "",
   });
+  const navi = useNavigate();
   window.app.on(
     "startStepper",
     (e: Electron.IpcRendererEvent, data: propsType) => {
@@ -68,6 +70,9 @@ export const Start:FC = () => {
       setTimeout(function(){
         setEnvStatus(data);
       }, 1000);
+      if(data.fetch === "success"){
+        setTimeout(() => navi("/overlay"),2000);
+      }
     }
   );
 
@@ -130,6 +135,7 @@ export const Start:FC = () => {
       </svg>
     );
   };
+
   return (
     <div className="flex">
       <section className="text-gray-600 body-font w-full">
@@ -184,6 +190,7 @@ export const Start:FC = () => {
             </div>
           </div>
         </div>
+        <div className="ml-10 text-[30px] text-red-600">{envStatus.errorText}</div>
       </section>
     </div>
   );
