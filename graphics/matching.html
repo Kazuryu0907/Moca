@@ -144,7 +144,6 @@
             webSocket.onmessage = function(message){
                 
                 const msg = JSON.parse(message.data);
-
                 const cmd = msg["cmd"];
                 const data = msg["data"];
                 if(cmd != "boost")console.log(data);

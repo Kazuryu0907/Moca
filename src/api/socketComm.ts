@@ -76,6 +76,7 @@ export class socketComm{
         this.connectedBrowsers[path] = true;
         this.mainWindow!.webContents.send("connections",this.connectedBrowsers);
         console.log(this.connectedBrowsers);
+        this.onConnection(ws);
       }
 
       ws.on("close",(s) => {

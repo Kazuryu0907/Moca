@@ -29,7 +29,11 @@ const createWindow = () => {
   const socket = new socketComm(mainWindow);
   mainWindow.loadFile("dist/index.html");
   mainWindow.webContents.openDevTools({ mode: "detach" });
-  
+  socket.onConnection = (ws:WebSocket) => {
+    const idTable = ss.idTable;
+    const playerTable = {cmd:"playerTable",data:idTable};
+    ws.send(JSON.stringify(playerTable));
+  };
 
   socket.bind();
   //idTableの自動取得
@@ -45,7 +49,7 @@ const createWindow = () => {
   ipcMain.handle("stream",(e,input) => {
     return socket.stream(input);
   })
-  mainWindow.webContents.on('did-finish-load',() => start(ss,ds,mainWindow));
+  mainWindow.webContents.on('did-finish-load',() => start(ss,ds,socket,mainWindow));
 };
 
 app.whenReady().then(async() => {
@@ -54,7 +58,6 @@ app.whenReady().then(async() => {
 
 
 app.once("window-all-closed", () => app.quit());
-
 
 
 //handles

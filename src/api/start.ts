@@ -2,7 +2,7 @@ import {useState} from "react";
 import {BrowserWindow} from "electron"; 
 import { SheetService } from "./spread";
 import { DriveService } from "./gdrive";
-
+import {socketComm} from "./socketComm";
 type stateType = "loading" | "success" | "fail" | "none";
 
 type propsType = {
@@ -13,7 +13,7 @@ type propsType = {
 };
 
 
-export const start = async (ss:SheetService,ds:DriveService,mainWindow:BrowserWindow) => {
+export const start = async (ss:SheetService,ds:DriveService,socket:socketComm,mainWindow:BrowserWindow) => {
     //only run once!
     const spreadId = process.env.SPREADSHEET_ID;
     const driveId = process.env.GOOGLEDRIVE_ID;
@@ -76,6 +76,10 @@ export const start = async (ss:SheetService,ds:DriveService,mainWindow:BrowserWi
     const teamInfo = await ss.getStaticTeam();
     const matchInfo = await ss.getTeamName();
     const idTable = ss.getIds();
+    console.log(teamInfo,matchInfo);
+    console.log(idTable);
     //Succes!
     setEnvStatus({...envStatus,fetch:"success"});
+    const playerTable = {cmd:"playerTable",data:idTable};
+    socket.stream(playerTable);
   };
