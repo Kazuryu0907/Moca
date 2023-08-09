@@ -9,14 +9,7 @@ import { getHashesFromFolder } from "./api/hash";
 import {encode,decode} from "iconv-lite";
 import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
-//D:\github\Moca\src
-const envPath = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env");
-require("dotenv").config({path:envPath});
-console.log(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL)
-
-let mainWindow:BrowserWindow;
-let socket:socketComm;
-
+require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")});
 
 
 (async ()=>{
@@ -24,54 +17,50 @@ let ss:SheetService;
 let ds:DriveService;
 // await ss.init();
 ds = new DriveService();
-ss = new SheetService(process.env);
+ss = new SheetService();
 
-const socketInit = () => {
-  const _socket = new socketComm(mainWindow);
-  socket = _socket;
-  _socket.onConnection = (ws:WebSocket) => {
-    const idTable = ss.idTable;
-    const playerTable = {cmd:"playerTable",data:idTable};
-    ws.send(JSON.stringify(playerTable));
-  };
-  _socket.bind();
-  //idTableの自動取得
-  _socket.onConnection = (ws:WebSocket) => {
-    const idTable = ss.idTable;
-    let root = {cmd:"idTable",data:idTable};
-    ws.send(JSON.stringify(root));
-  }
-}
 
 const createWindow = () => {
-  const _mainWindow = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     webPreferences: {
       preload: path.resolve(__dirname, "preload.js"),
     },
   });
-  mainWindow = _mainWindow;
+  const socket = new socketComm(mainWindow);
   mainWindow.loadFile("dist/index.html");
   mainWindow.webContents.openDevTools({ mode: "detach" });
+  socket.onConnection = (ws:WebSocket) => {
+    const idTable = ss.idTable;
+    const playerTable = {cmd:"playerTable",data:idTable};
+    ws.send(JSON.stringify(playerTable));
+  };
+
+  socket.bind();
+  //idTableの自動取得
+  socket.onConnection = (ws:WebSocket) => {
+    const idTable = ss.idTable;
+    let root = {cmd:"idTable",data:idTable};
+    ws.send(JSON.stringify(root));
+  }
+  ipcMain.handle("sendSocket",(e,input) => {
+    const {path,data} = input;
+    return socket.sendData(path,data);
+  })
+  ipcMain.handle("stream",(e,input) => {
+    return socket.stream(input);
+  })
   mainWindow.webContents.on('did-finish-load',() => start(ss,ds,socket,mainWindow));
 };
 
 app.whenReady().then(async() => {
   createWindow();
-  socketInit();
 });
 
 
 app.once("window-all-closed", () => app.quit());
 
-//handles
 
-ipcMain.handle("sendSocket",(e,input) => {
-  const {path,data} = input;
-  return socket.sendData(path,data);
-})
-ipcMain.handle("stream",(e,input) => {
-  return socket.stream(input);
-})
+//handles
 
 ipcMain.handle("getTeamInfo",() => {
   return ss.getStaticTeam();

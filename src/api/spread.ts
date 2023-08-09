@@ -6,11 +6,6 @@ import type {
 import {spreadTeamType as teamNameType} from "../web/components/types";
 import * as path from "path";
 // `C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
-require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")});
-
-const sheetId = process.env.SHEET_ID;
-const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-const privateKey = process.env.GOOGLE_PRIVATE_KEY;
 
 export class TeamType{
   teamName: string = "";
@@ -26,15 +21,23 @@ export class SheetService{
     teamData: TeamType[];
     idTable: Record<string,string>;
     teamInfo:teamNameType; 
-    constructor(){
-        this.doc = new GoogleSpreadsheet(sheetId);
+    sheetId:string;
+    clientEmail:string;
+    privateKey:string;
+
+    constructor(env:any){
+        this.sheetId = env.SHEET_ID;
+        this.clientEmail = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+        this.privateKey = env.GOOGLE_PRIVATE_KEY;
+
+        this.doc = new GoogleSpreadsheet(this.sheetId);
         this.isAuthed = false;
         this.teamData = [];
         this.idTable = {};
         this.teamInfo = {blue:"none",orange:"none",name:"",bo:"",blueMembers:[],orangeMembers:[]};
     }
     hasPrivateKey(){
-        return privateKey ? true : false;
+        return this.privateKey ? true : false;
     }
 
     setSheetID(id:string){
@@ -45,8 +48,8 @@ export class SheetService{
     async auth(){
         try{
             await this.doc.useServiceAccountAuth({
-                client_email: clientEmail ?? "",
-                private_key: privateKey ?? "",
+                client_email: this.clientEmail ?? "",
+                private_key: this.privateKey ?? "",
             });
             this.isAuthed = true;
         }catch{
@@ -56,6 +59,7 @@ export class SheetService{
         return this.isAuthed;
     }
 
+    
     //thisに残すようにした
     //getStaticTeamが先
     async getTeamName(){
