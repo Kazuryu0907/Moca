@@ -58,9 +58,9 @@ export const Teams = () => {
     setTeam({ ...team, authStatus: "loading" });
     // const idElm = document.getElementById("spread_id") as HTMLInputElement;
     // const id = idElm.value;
-    const id = await window.app.SPREADSHEET_ID() ?? "";
-    //SpreadSheetのIDセット
-    await window.app.setSheetID(id);
+    // const id = await window.app.SPREADSHEET_ID() ?? "";
+    // //SpreadSheetのIDセット
+    // await window.app.setSheetID(id);
     //Auth
     try{
       // await window.app.spreadAuth();
@@ -91,20 +91,19 @@ export const Teams = () => {
         </button>
         {team.authStatus !== "none" && (team.authStatus === "loading" ? loading() : (team.authStatus === "success" ? checked() : failed()))}
       </div>
-      <div className="mt-5 grid grid-cols-3 gap-y-2 gap-x-2 border border-gray-200 rounded-lg p-2">
-        <p className="my-auto text-center text-blue-800 font-bold ">
-          Blue Team
-        </p>
-        <p className="col-span-2 text-center text-blue-800 font-bold bg-blue-200">
-          {team.teamNames.blue}
-        </p>
-        <hr className="col-span-3" />
-        <p className="my-auto text-center text-orange-800 font-bold">
-          Orange Team
-        </p>
-        <p className=" col-span-2 text-center text-orange-800 font-bold bg-orange-200">
-          {team.teamNames.orange}
-        </p>
+      <div className="mt-5 grid grid-cols-5 grid-rows-3 gap-y-2 gap-x-2 border border-gray-200 rounded-lg p-2">
+        <p className="col-start-3 text-center">Match 7</p>
+        <p className="col-auto"></p>
+
+          <p className="text-center col-span-2 text-blue-800 font-bold bg-blue-200">
+            {team.teamNames.blue}
+          </p>
+          <p className="col-span-1 text-center">VS</p>
+          <p className="text-center col-span-2 text-orange-800 font-bold bg-orange-200">
+            {team.teamNames.orange}
+          </p>
+
+        <p className="col-start-3 text-center">Bo7</p>
       </div>
       <button onClick={send2Overlay} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
         ユーザーID更新

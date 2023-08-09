@@ -12,7 +12,6 @@ import {start} from "./api/start";
 //D:\github\Moca\src
 const envPath = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env");
 require("dotenv").config({path:envPath});
-console.log(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL)
 
 let mainWindow:BrowserWindow;
 let socket:socketComm;

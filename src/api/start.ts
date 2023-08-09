@@ -44,9 +44,11 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
     let res = await ss.auth().catch((e) =>{
         console.log(e);
         return false;
-      })
+      });
+    // console.log(res);
+    const teamInfo = await ss.getStaticTeam().catch(e => {console.error(e);return false;});
     //Auth失敗
-    if (res === false) {
+    if (res === false || teamInfo === false) {
       setEnvStatus({
         ...envStatus,
         auth:"fail",
@@ -73,7 +75,6 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
     //first get data
     //spread
 
-    const teamInfo = await ss.getStaticTeam();
     const matchInfo = await ss.getTeamName();
     const idTable = ss.getIds();
     console.log(teamInfo,matchInfo);

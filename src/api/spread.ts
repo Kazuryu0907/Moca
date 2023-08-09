@@ -79,6 +79,7 @@ export class SheetService{
     }
     //thisに残すようにした
     async getStaticTeam(){
+        await this.doc.loadInfo();
         this.sheet = this.doc.sheetsByIndex[0];
         await this.sheet.loadCells();
 
