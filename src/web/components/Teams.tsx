@@ -9,15 +9,18 @@ import {dataType, spreadTeamType as teamNameType} from "./types";
 
 export type Props = {
   authStatus: "loading" | "success" | "failed" | "none";
-  teamNames: Pick<teamNameType,"blue" | "orange">;
+  teamNames: teamNameType;
 };
+
+let t:teamNameType;
+
+window.app.on("cachedMatchInfo",(e: Electron.IpcRendererEvent,d:teamNameType) => {
+  t = d;
+})
 
 const defaultProps = (): Props => ({
   authStatus: "none",
-  teamNames: {
-    blue: "None",
-    orange: "None",
-  },
+  teamNames: t
 });
 
 const loading = () => {
@@ -42,8 +45,13 @@ const failed = () => {
     </div>
   );
 };
+
+
+
 export const Teams = () => {
   const [team, setTeam] = useState(defaultProps());
+
+
   const send2Overlay = async() => {
     //StateからTeam情報とってくる
     let data:dataType = {cmd:"teamNames",data:team.teamNames};
@@ -73,27 +81,14 @@ export const Teams = () => {
   };
 
   return (
-    <div className="m-6 p-6 max-w-sm  bg-white border border-gray-200 rounded-lg shadow">
-      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-        Update Team from Google-SpreadSheet
-      </h5>
-      <p className="mt-3 font-semibold text-gray-600">
-        GoogleSpreadSheet Authing...
-      </p>
-
+    <div className="m-6 p-6 max-w-md  bg-white border border-gray-200 rounded-lg shadow">
       <div className="flex">
-        <button
-          id="getTeam"
-          onClick={onclick}
-          className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-lg"
-        >
-          チーム一覧更新
-        </button>
         {team.authStatus !== "none" && (team.authStatus === "loading" ? loading() : (team.authStatus === "success" ? checked() : failed()))}
       </div>
-      <div className="mt-5 grid grid-cols-5 grid-rows-3 gap-y-2 gap-x-2 border border-gray-200 rounded-lg p-2">
-        <p className="col-start-3 text-center">Match 7</p>
-        <p className="col-auto"></p>
+      <div className="mt-5 grid grid-cols-5 grid-rows-3 border border-gray-200 rounded-lg p-2">
+          <p className="col-span-2 bg-gray-400"></p>
+          <p className="col-start-3 text-center font-bold text-white bg-gray-400">{team.teamNames.name}</p>
+          <p className="col-span-2 bg-gray-400"></p>
 
           <p className="text-center col-span-2 text-blue-800 font-bold bg-blue-200">
             {team.teamNames.blue}
@@ -103,11 +98,18 @@ export const Teams = () => {
             {team.teamNames.orange}
           </p>
 
-        <p className="col-start-3 text-center">Bo7</p>
+        <p className="col-start-3 text-center font-bold">{team.teamNames.bo}</p>
       </div>
       <button onClick={send2Overlay} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
         ユーザーID更新
       </button>
+      <button
+          id="getTeam"
+          onClick={onclick}
+          className="ml-5 mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-lg"
+        >
+          チーム一覧更新
+        </button>
     </div>
   );
 };

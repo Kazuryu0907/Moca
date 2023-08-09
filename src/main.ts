@@ -10,7 +10,7 @@ import {encode,decode} from "iconv-lite";
 import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 //D:\github\Moca\src
-const envPath = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env");
+const envPath = path.join(String.raw`D:\github\Moca\src`,".env");
 require("dotenv").config({path:envPath});
 
 let mainWindow:BrowserWindow;
@@ -89,6 +89,9 @@ ipcMain.handle("GOOGLEDRIVE_ID",() => {
   return process.env.GOOGLEDRIVE_ID;
 })
 
+ipcMain.handle("cachedMatchInfo",() => {
+  return ss.teamInfo;
+})
 
 ipcMain.handle("getTeam",async (event,data) => {
   return await ss.getTeamName();

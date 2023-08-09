@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld(
             if(data)ipcRenderer.send(cmd,data);
             else ipcRenderer.send(cmd);
         },
+        cachedMatchInfo: () => ipcRenderer.invoke("cachedMatchInfo"),
         getIdTable:() => ipcRenderer.invoke("getIdTable"),
         GOOGLEDRIVE_ID:() => ipcRenderer.invoke("GOOGLEDRIVE_ID"),
         SPREADSHEET_ID:() => ipcRenderer.invoke("SPREADSHEET_ID"),

@@ -46,9 +46,8 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
         return false;
       });
     // console.log(res);
-    const teamInfo = await ss.getStaticTeam().catch(e => {console.error(e);return false;});
     //Auth失敗
-    if (res === false || teamInfo === false) {
+    if (res === false) {
       setEnvStatus({
         ...envStatus,
         auth:"fail",
@@ -74,7 +73,7 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
 
     //first get data
     //spread
-
+    const teamInfo = await ss.getStaticTeam();
     const matchInfo = await ss.getTeamName();
     const idTable = ss.getIds();
     console.log(teamInfo,matchInfo);
@@ -83,4 +82,5 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
     setEnvStatus({...envStatus,fetch:"success"});
     const playerTable = {cmd:"playerTable",data:idTable};
     socket.stream(playerTable);
+    mainWindow.webContents.send("cachedMatchInfo",matchInfo);
   };
