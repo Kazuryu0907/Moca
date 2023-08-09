@@ -63,7 +63,7 @@ export const Teams = () => {
     await window.app.setSheetID(id);
     //Auth
     try{
-      await window.app.spreadAuth();
+      // await window.app.spreadAuth();
       const teamName: teamNameType = await window.app.getTeam();
       setTeam({ ...team, teamNames: teamName, authStatus: "success" });
     }catch(e){
@@ -87,7 +87,7 @@ export const Teams = () => {
           onClick={onclick}
           className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-lg"
         >
-          チーム更新
+          チーム一覧更新
         </button>
         {team.authStatus !== "none" && (team.authStatus === "loading" ? loading() : (team.authStatus === "success" ? checked() : failed()))}
       </div>
@@ -107,7 +107,7 @@ export const Teams = () => {
         </p>
       </div>
       <button onClick={send2Overlay} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
-        チーム一覧取得
+        ユーザーID更新
       </button>
     </div>
   );

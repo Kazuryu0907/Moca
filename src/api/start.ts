@@ -13,10 +13,10 @@ type propsType = {
 };
 
 
-export const start = async (ss:SheetService,ds:DriveService,socket:socketComm,mainWindow:BrowserWindow) => {
+export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socketComm,mainWindow:BrowserWindow) => {
     //only run once!
-    const spreadId = process.env.SPREADSHEET_ID;
-    const driveId = process.env.GOOGLEDRIVE_ID;
+    const spreadId = env.SPREADSHEET_ID;
+    const driveId = env.GOOGLEDRIVE_ID;
     let envStatus:propsType = {env:"loading",auth:"none",fetch:"none",errorText:""};
     const setEnvStatus = (props:propsType) => {
         console.log(props);

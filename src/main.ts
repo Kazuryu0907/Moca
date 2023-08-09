@@ -40,6 +40,8 @@ const socketInit = () => {
     const idTable = ss.idTable;
     let root = {cmd:"idTable",data:idTable};
     ws.send(JSON.stringify(root));
+    const matchInfo = ss.teamInfo;
+    ws.send(JSON.stringify({cmd:"matchInfo",data:matchInfo}));
   }
 }
 
@@ -52,7 +54,7 @@ const createWindow = () => {
   mainWindow = _mainWindow;
   mainWindow.loadFile("dist/index.html");
   mainWindow.webContents.openDevTools({ mode: "detach" });
-  mainWindow.webContents.on('did-finish-load',() => start(ss,ds,socket,mainWindow));
+  mainWindow.webContents.on('did-finish-load',() => start(process.env,ss,ds,socket,mainWindow));
 };
 
 app.whenReady().then(async() => {

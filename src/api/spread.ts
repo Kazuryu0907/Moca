@@ -59,7 +59,7 @@ export class SheetService{
         return this.isAuthed;
     }
 
-    
+
     //thisに残すようにした
     //getStaticTeamが先
     async getTeamName(){
@@ -72,7 +72,6 @@ export class SheetService{
         const bo:string = this.sheet.getCellByA1("B4").formattedValue;
         // if(!this.teamData.length)await this.getStaticTeam().catch(console.error);
         // //多分自明なはず...
-        // console.log(this.teamData);
         const blueMembers = this.teamData.filter(t => t.teamName === blueTeam)[0].playerNames;
         const orangeMembers = this.teamData.filter(t => t.teamName === orangeTeam)[0].playerNames;
         this.teamInfo = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo,blueMembers:blueMembers,orangeMembers:orangeMembers};
