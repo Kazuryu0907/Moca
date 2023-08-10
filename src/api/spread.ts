@@ -3,8 +3,7 @@ import type {
     GoogleSpreadsheetWorksheet as GoogleSpreadsheetWorksheetType,
     GoogleSpreadsheet as GoogleSpreadsheetType
 } from "google-spreadsheet";
-import {spreadTeamType as teamNameType} from "../web/components/types";
-import * as path from "path";
+import {spreadMatchInfoType as matchInfoType} from "../web/components/types";
 // `C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 
 export class TeamType{
@@ -20,7 +19,7 @@ export class SheetService{
     isAuthed: boolean;
     teamData: TeamType[];
     idTable: Record<string,string>;
-    teamInfo:teamNameType; 
+    matchInfo:matchInfoType; 
     sheetId:string;
     clientEmail:string;
     privateKey:string;
@@ -34,7 +33,7 @@ export class SheetService{
         this.isAuthed = false;
         this.teamData = [];
         this.idTable = {};
-        this.teamInfo = {blue:"none",orange:"none",name:"",bo:"",blueMembers:[],orangeMembers:[]};
+        this.matchInfo = {blue:"none",orange:"none",name:"",bo:""};
     }
     hasPrivateKey(){
         return this.privateKey ? true : false;
@@ -59,30 +58,12 @@ export class SheetService{
         return this.isAuthed;
     }
 
-
     //thisに残すようにした
-    //getStaticTeamが先
-    async getTeamName(){
-        await this.doc.loadInfo();
-        this.sheet = this.doc.sheetsByTitle["進行管理"];
-        await this.sheet.loadCells();
-        const blueTeam:string = this.sheet.getCellByA1("A3").formattedValue;
-        const orangeTeam:string = this.sheet.getCellByA1("C3").formattedValue;
-        const matchName:string = this.sheet.getCellByA1("B2").formattedValue;
-        const bo:string = this.sheet.getCellByA1("B4").formattedValue;
-        // if(!this.teamData.length)await this.getStaticTeam().catch(console.error);
-        // //多分自明なはず...
-        const blueMembers = this.teamData.filter(t => t.teamName === blueTeam)[0].playerNames;
-        const orangeMembers = this.teamData.filter(t => t.teamName === orangeTeam)[0].playerNames;
-        this.teamInfo = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo,blueMembers:blueMembers,orangeMembers:orangeMembers};
-        return this.teamInfo;
-    }
-    //thisに残すようにした
-    async getStaticTeam(){
-        await this.doc.loadInfo();
+    async loadTeams(){
         this.sheet = this.doc.sheetsByIndex[0];
-        await this.sheet.loadCells();
-
+        console.log(this.sheet.rowCount);
+        //15チーム分は取得
+        await this.sheet.loadCells(`A1:O${(3+1)*15}`);
         let teamData:TeamType[] = [];
         let sheetIndex = 2;
         while(1){
@@ -98,10 +79,22 @@ export class SheetService{
             sheetIndex += 4;
         }
         this.teamData = teamData;
-        this.getIds();
-        return teamData;
     }
 
+    //thisに残すようにした
+    async getMatchInfo(){
+        this.sheet = this.doc.sheetsByTitle["進行管理"];
+        //最小サイズLoad
+        await this.sheet.loadCells("A1:C4");
+        const blueTeam:string = this.sheet.getCellByA1("A3").formattedValue;
+        const orangeTeam:string = this.sheet.getCellByA1("C3").formattedValue;
+        const matchName:string = this.sheet.getCellByA1("B2").formattedValue;
+        const bo:string = this.sheet.getCellByA1("B4").formattedValue;
+        this.matchInfo = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo};
+        return this.matchInfo;
+    }
+
+    //loadTeamsに依存
     getIds(){
         //それぞれ一次元
         const accountIds = this.teamData.map((t) => t.accountIds).flat();

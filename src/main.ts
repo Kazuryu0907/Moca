@@ -10,7 +10,7 @@ import {encode,decode} from "iconv-lite";
 import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 //D:\github\Moca\src
-const envPath = path.join(String.raw`D:\github\Moca\src`,".env");
+const envPath = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env");
 require("dotenv").config({path:envPath});
 
 let mainWindow:BrowserWindow;
@@ -39,7 +39,7 @@ const socketInit = () => {
     const idTable = ss.idTable;
     let root = {cmd:"idTable",data:idTable};
     ws.send(JSON.stringify(root));
-    const matchInfo = ss.teamInfo;
+    const matchInfo = ss.matchInfo;
     ws.send(JSON.stringify({cmd:"matchInfo",data:matchInfo}));
   }
 }
@@ -74,12 +74,19 @@ ipcMain.handle("stream",(e,input) => {
   return socket.stream(input);
 })
 
-ipcMain.handle("getTeamInfo",() => {
-  return ss.getStaticTeam();
+ipcMain.handle("spread:loadTeams",async() => {
+  return await ss.loadTeams();
 })
+ipcMain.handle("spread:getMatchInfo",async () => {
+  return await ss.getMatchInfo();
+});
 ipcMain.handle("getIdTable",() => {
   return ss.getIds();
 })
+ipcMain.handle("cachedMatchInfo",() => {
+  return ss.matchInfo;
+})
+
 
 ipcMain.handle("SPREADSHEET_ID",() => {
   return process.env.SPREADSHEET_ID;
@@ -88,14 +95,6 @@ ipcMain.handle("SPREADSHEET_ID",() => {
 ipcMain.handle("GOOGLEDRIVE_ID",() => {
   return process.env.GOOGLEDRIVE_ID;
 })
-
-ipcMain.handle("cachedMatchInfo",() => {
-  return ss.teamInfo;
-})
-
-ipcMain.handle("getTeam",async (event,data) => {
-  return await ss.getTeamName();
-});
 
 ipcMain.handle("getDrive",async (e,d:string) => {
   return await ds.filesFromFolderID(d).catch(console.error);

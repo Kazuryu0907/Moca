@@ -4,7 +4,7 @@ declare global {
     }
 }
 declare module "*.json"
-import {dataType,spreadTeamType} from "./components/types";
+import {dataType,spreadMatchInfoType} from "./components/types";
 export interface IMainProcess {
     on: (channel:string,callback:any) => void;
     index2render:(cmd:string,data?:any) => any;
@@ -14,7 +14,9 @@ export interface IMainProcess {
     GOOGLEDRIVE_ID:() => Promise<string|null>;
     SPREADSHEET_ID:() => Promise<string|null>;
     stream:(data:any) => Promise<void>,
-    cachedMatchInfo: () => Promise<spreadTeamType>,
+    cachedMatchInfo: () => Promise<spreadMatchInfoType>,
+    loadTeams: () => Promise<void>,
+    getMatchInfo: () => Promise<spreadMatchInfoType>
     sendSocket:(data:{path:string,data:dataType}) => Promise<void>;
     getDrive:(id:string) => Promise<any>;
     getTeam:() => Promise<any>;

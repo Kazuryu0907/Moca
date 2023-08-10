@@ -1,26 +1,26 @@
 import { FC, useState } from "react";
 import {CheckIcon,XMarkIcon} from "@heroicons/react/24/outline";
 import {Loading,Checked} from "./Loading";
-import {dataType, spreadTeamType as teamNameType} from "./types";
-// export type teamNameType = {
+import {dataType, spreadMatchInfoType as matchInfoType} from "./types";
+// export type matchInfoType = {
 //   blue: string;
 //   orange: string;
 // };
 
 export type Props = {
   authStatus: "loading" | "success" | "failed" | "none";
-  teamNames: teamNameType;
+  teamNames: matchInfoType;
 };
 
-let t:teamNameType;
+let teamName:matchInfoType;
 
-window.app.on("cachedMatchInfo",(e: Electron.IpcRendererEvent,d:teamNameType) => {
-  t = d;
+window.app.on("cachedMatchInfo",(e: Electron.IpcRendererEvent,d:matchInfoType) => {
+  teamName = d;
 })
 
 const defaultProps = (): Props => ({
   authStatus: "none",
-  teamNames: t
+  teamNames: teamName
 });
 
 const loading = () => {
@@ -51,33 +51,27 @@ const failed = () => {
 export const Teams = () => {
   const [team, setTeam] = useState(defaultProps());
 
-
-  const send2Overlay = async() => {
-    //StateからTeam情報とってくる
-    let data:dataType = {cmd:"teamNames",data:team.teamNames};
-    window.app.sendSocket({path:"/NextMatch",data:data});
-    window.app.getTeamInfo().then(console.log);
+  const getIdsANDStream = async() => {
+    await window.app.loadTeams().then(console.log);
     const idTable = await window.app.getIdTable();
     console.log(idTable);
     await window.app.stream({cmd:"idTable",data:idTable});
   }
-  const onclick = async () => {
+
+  const getMatchInfo = async () => {
     //ロードのフラグを立てる
     setTeam({ ...team, authStatus: "loading" });
-    // const idElm = document.getElementById("spread_id") as HTMLInputElement;
-    // const id = idElm.value;
-    // const id = await window.app.SPREADSHEET_ID() ?? "";
-    // //SpreadSheetのIDセット
-    // await window.app.setSheetID(id);
-    //Auth
     try{
-      // await window.app.spreadAuth();
-      const teamName: teamNameType = await window.app.getTeam();
+      teamName = await window.app.getMatchInfo();
       setTeam({ ...team, teamNames: teamName, authStatus: "success" });
     }catch(e){
       setTeam({ ...team, authStatus: "failed" });
     }
 
+  };
+
+  const sendMatchInfo = async () => {
+    await window.app.stream({cmd:"matchInfo",data:teamName});
   };
 
   return (
@@ -100,16 +94,25 @@ export const Teams = () => {
 
         <p className="col-start-3 text-center font-bold">{team.teamNames.bo}</p>
       </div>
-      <button onClick={send2Overlay} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
+      <button onClick={getIdsANDStream} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
         ユーザーID更新
       </button>
       <button
           id="getTeam"
-          onClick={onclick}
+          onClick={getMatchInfo}
           className="ml-5 mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-lg"
         >
-          チーム一覧更新
+          試合情報更新
+        </button>
+        <button
+          id="getTeam"
+          onClick={sendMatchInfo}
+          className="ml-5 mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-lg"
+        >
+          試合情報送信
         </button>
     </div>
   );
 };
+
+

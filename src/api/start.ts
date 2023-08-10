@@ -73,11 +73,17 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
 
     //first get data
     //spread
-    const teamInfo = await ss.getStaticTeam();
-    const matchInfo = await ss.getTeamName();
+    console.time("loadteam");
+    await ss.loadTeams();
+    console.timeEnd("loadteam");
+    const teamData = ss.teamData;
+    console.time("match");
+    const matchInfo = await ss.getMatchInfo();
+    console.timeEnd("match");
     const idTable = ss.getIds();
-    console.log(teamInfo,matchInfo);
-    console.log(idTable);
+
+    // console.log(teamData,matchInfo);
+    // console.log(idTable);
     //Succes!
     setEnvStatus({...envStatus,fetch:"success"});
     const playerTable = {cmd:"playerTable",data:idTable};

@@ -51,7 +51,7 @@
                 <!-- <div class="flex-auto"></div> -->
                 <div class="flex w-[1030px]  items-center">
                     <div class="ml-auto w-[260px]">
-                        <div class="font-bold text-gray-100 text-center text-[35px] mt-auto">GENG</div>
+                        <div id="blue_team_name" class="font-bold text-gray-100 text-center text-[35px] mt-auto">GENG</div>
                     </div>
                     <div class="w-[300px] h-auto border border-red-500">
                         <div class="flex text-center">
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="mr-auto w-[260px]">
-                        <div class="font-bold text-gray-100 text-center text-[35px] mt-auto">FAZE</div>
+                        <div id="orange_team_name" class="font-bold text-gray-100 text-center text-[35px] mt-auto">FAZE</div>
                     </div>
                 </div>
                 <!-- <div class="flex-auto"></div> -->
@@ -139,6 +139,7 @@
             let webSocket;
             let playerTable = {};
             let idTable = {};
+            let matchInfo = {};
             webSocket = new WebSocket("ws://localhost:8001/boost");
 
             webSocket.onmessage = function(message){
@@ -146,7 +147,7 @@
                 const msg = JSON.parse(message.data);
                 const cmd = msg["cmd"];
                 const data = msg["data"];
-                if(cmd != "boost")console.log(data);
+                if(cmd != "boost")console.log(msg);
                 if(cmd == "boost"){// Boost
                     // document.getElementById("boosts").style.visibility = "visible";
                     const {boost,index} = data;
@@ -154,6 +155,13 @@
                     document.getElementById("boost_bar"+index).style.width = boost+"%";
                     // document.getElementById("boost_"+index).value = parseInt(boost);
                     // document.getElementById("boost_val_"+index).textContent = boost;
+                }
+                else if(cmd == "matchInfo"){
+                    matchInfo = data;
+                    const blueTeamName = data.blue;
+                    const orangeTeamName = data.orange;
+                    document.getElementById("blue_team_name").textContent = blueTeamName;
+                    document.getElementById("orange_team_name").textContent = orangeTeamName;
                 }
                 else if(cmd == "playerTable"){// teamTable
                     const ids = data;
