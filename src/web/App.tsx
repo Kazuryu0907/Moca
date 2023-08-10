@@ -3,6 +3,7 @@ import { Browser } from "./components/Brower";
 import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
 import { Start } from "./components/Start";
+import { IdTable } from "./components/IdTable";
 import {MemoryRouter as Router,Routes,Route} from "react-router-dom";
 
 export const App = () => {
@@ -14,7 +15,7 @@ export const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Start/>} />
-            <Route path="/overlay" element={<Teams/>}/>
+            <Route path="/overlay" element={<div className="flex"><Teams/><IdTable/></div>}/>
           </Routes>
         </Router>
         {/* <Browser />

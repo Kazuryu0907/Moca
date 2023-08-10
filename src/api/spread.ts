@@ -98,6 +98,7 @@ export class SheetService{
         //それぞれ一次元
         const accountIds = this.teamData.map((t) => t.accountIds).flat();
         const vNames = this.teamData.map((t) => t.playerNames).flat();
+        this.idTable = {};
         for(let i = 0;i < accountIds.length;i++){
             if(accountIds[i] != null)this.idTable[accountIds[i]] = vNames[i];
         }

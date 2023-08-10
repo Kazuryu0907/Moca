@@ -24,8 +24,11 @@
 		]
 	},
 	"dependencies": {
+		"@emotion/react": "^11.11.1",
+		"@emotion/styled": "^11.11.0",
 		"@google-cloud/local-auth": "^2.1.1",
 		"@heroicons/react": "^2.0.18",
+		"@mui/material": "^5.14.4",
 		"arrify": "^3.0.0",
 		"dotenv": "^16.1.4",
 		"dseg": "^0.46.0",

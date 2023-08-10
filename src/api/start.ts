@@ -83,10 +83,11 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
     const idTable = ss.getIds();
 
     // console.log(teamData,matchInfo);
-    // console.log(idTable);
+    console.log(idTable);
     //Succes!
     setEnvStatus({...envStatus,fetch:"success"});
     const playerTable = {cmd:"playerTable",data:idTable};
     socket.stream(playerTable);
     mainWindow.webContents.send("cachedMatchInfo",matchInfo);
+    mainWindow.webContents.send("cachedIdTable",idTable);
   };
