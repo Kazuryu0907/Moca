@@ -64,7 +64,7 @@ app.whenReady().then(async() => {
 
 app.once("window-all-closed", () => app.quit());
 
-//handles
+//---------------handles--------------------------
 
 ipcMain.handle("sendSocket",(e,input) => {
   const {path,data} = input;

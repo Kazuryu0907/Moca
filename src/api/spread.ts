@@ -4,7 +4,6 @@ import type {
     GoogleSpreadsheet as GoogleSpreadsheetType
 } from "google-spreadsheet";
 import {spreadMatchInfoType as matchInfoType} from "../web/components/types";
-// `C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 
 export class TeamType{
   teamName: string = "";

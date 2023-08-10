@@ -76,23 +76,23 @@ export const Teams = () => {
 
   return (
     <div className="m-6 p-6 max-w-md  bg-white border border-gray-200 rounded-lg shadow">
-      <div className="flex">
-        {team.authStatus !== "none" && (team.authStatus === "loading" ? loading() : (team.authStatus === "success" ? checked() : failed()))}
-      </div>
-      <div className="mt-5 grid grid-cols-5 grid-rows-3 border border-gray-200 rounded-lg p-2">
-          <p className="col-span-2 bg-gray-400"></p>
-          <p className="col-start-3 text-center font-bold text-white bg-gray-400">{team.teamNames.name}</p>
-          <p className="col-span-2 bg-gray-400"></p>
-
-          <p className="text-center col-span-2 text-blue-800 font-bold bg-blue-200">
+      <div className="mt-5 border border-gray-200 rounded-lg p-2">
+        <div className="flex flex-row">
+          <p className="flex-auto text-center font-bold text-white bg-gray-400">{team.teamNames.name}</p>
+        </div>
+        <div className="flex flex-row w-full">
+          <p className="text-center basis-2/5 text-blue-800 font-bold bg-blue-200">
             {team.teamNames.blue}
           </p>
-          <p className="col-span-1 text-center">VS</p>
-          <p className="text-center col-span-2 text-orange-800 font-bold bg-orange-200">
+          <p className="text-center flex-auto my-auto">VS</p>
+          <p className="text-center basis-2/5 text-orange-800 font-bold bg-orange-200">
             {team.teamNames.orange}
           </p>
+        </div>
+        <div className="flex flex-grow">
+          <p className="flex-auto text-center font-bold">{team.teamNames.bo}</p>
+        </div>
 
-        <p className="col-start-3 text-center font-bold">{team.teamNames.bo}</p>
       </div>
       <button onClick={getIdsANDStream} className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300">
         ユーザーID更新
