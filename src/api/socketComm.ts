@@ -57,7 +57,7 @@ export class socketComm{
     socket.on("message",(msg,remote) => {
         // console.log(`${remote.address}:${remote.port} - ${msg}`);
         const data = msg.toString();
-        console.log(data);
+        if(JSON.parse(data).cmd != "boost")console.log(data);
         this.sortingData(JSON.parse(data));
     });
 
@@ -88,7 +88,6 @@ export class socketComm{
         // console.log(clients);
       });
 
-      console.log(this.connectedBrowsers);
     });
   }
 
@@ -105,6 +104,8 @@ export class socketComm{
       this.sendData("/boost",{cmd:"player",data:input.data});
     }else if(cmd == "score"){
       this.sendData("/boost",{cmd:"score",data:input.data});
+    }else if(cmd == "subScore"){
+      this.sendData("/boost",{cmd:"subScore",data:input.data});
     }
   }
 }

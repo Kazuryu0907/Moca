@@ -10,7 +10,7 @@ import {encode,decode} from "iconv-lite";
 import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 //D:\github\Moca\src
-const envPath = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env");
+const envPath = path.join(String.raw`D:\github\Moca\src`,".env");
 require("dotenv").config({path:envPath});
 
 let mainWindow:BrowserWindow;
@@ -73,6 +73,10 @@ ipcMain.handle("sendSocket",(e,input) => {
 })
 ipcMain.handle("stream",(e,input) => {
   return socket.stream(input);
+})
+
+ipcMain.handle("connectedBrowsers",() => {
+  return socket.connectedBrowsers;
 })
 
 ipcMain.handle("spread:loadTeams",async() => {

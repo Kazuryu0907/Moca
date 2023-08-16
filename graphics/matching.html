@@ -146,8 +146,25 @@
             <div id="player_name" class="font-bold text-white text-[50px]">
                 Moca
             </div>
-            <div id="score" class="font-bold text-white text-[30px] mx-[30px] my-auto">
-                0
+            <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                <p>score</p>
+                <p id="score">0</p>
+            </div>
+            <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                <p>goals</p>
+                <p id="goals">0</p>
+            </div>
+            <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                <p>shots</p>
+                <p id="shots">0</p>
+            </div>
+            <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                <p>assists</p>
+                <p id="assists">0</p>
+            </div>
+            <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                <p>saves</p>
+                <p id="saves">0</p>
             </div>
         </div>
 
@@ -243,6 +260,17 @@
                     document.getElementById("player_name").textContent = spreadPlayerName;
                     const boost = document.getElementById("boost"+playerIndex).textContent;
                     setBoost(Number(boost));
+                }
+                else if(cmd == "score"){
+                    const {score} = data;
+                    document.getElementById("score").textContent = score;
+                }
+                else if(cmd == "subScore"){
+                    const {goals,shots,assists,saves} = data;
+                    document.getElementById("goals").textContent = goals;
+                    document.getElementById("shots").textContent = shots;
+                    document.getElementById("assists").textContent = assists;
+                    document.getElementById("saves").textContent = saves;
                 }
                 else if(cmd == "matchInfo"){
                     matchInfo = data;

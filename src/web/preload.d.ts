@@ -4,13 +4,14 @@ declare global {
     }
 }
 declare module "*.json"
-import {dataType,spreadMatchInfoType} from "./components/types";
+import {dataType,spreadMatchInfoType,BrowserType} from "./components/types";
 export interface IMainProcess {
     on: (channel:string,callback:any) => void;
     index2render:(cmd:string,data?:any) => any;
     render2index:(cmd:string,data?:any) => any;
     getTeamInfo:() => Promise<any>;
     getIdTable:() => Promise<Record<string,string>>;
+    connectedBrowsers: () => Promise<Record<string,boolean> >;
     GOOGLEDRIVE_ID:() => Promise<string|null>;
     SPREADSHEET_ID:() => Promise<string|null>;
     stream:(data:any) => Promise<void>,

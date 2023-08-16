@@ -16,3 +16,8 @@ botでdebugできるように0~5.pngを導入するべきか
 
 DEbug Tabで，socketをLoggingして外部出力する機能
 driveのtoken.json自動削除機能
+/Boostイレギュラー時のMugiの自動リロード機能
+まだ試合中のとき，playerTableをcacheしておいて，自動送信
+/browserの再レンダリング問題
+statsのprogress bar実装
+nextMatchのレイアウト微調整と，画像，名前の機能

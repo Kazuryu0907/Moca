@@ -23,9 +23,9 @@
             <div id="matchName" class="absolute font-bold text-gray-100 text-[100px] text-center inset-0 top-[100px]">Grand Final</div>
         </div>
         <div class="font-bold  text-gray-100 text-[100px] flex mt-[150px] mx-10">
-            <div id="blueTeamName" class="grid place-items-center h-[150px] js-resize-text  w-team text-center my-auto">地上戦隊アカレンジャイ∠(　˙-˙ )／</div>
+            <div id="blueTeamName" class="grid place-items-center h-[150px] fit w-team text-center my-auto">地上戦隊アカレンジャイ∠(　˙-˙ )／</div>
             <div class="flex-auto"></div>
-            <div id="orangeTeamName" class="grid place-items-center h-[150px] js-resize-text  w-team text-center my-auto">総プレイ40時間</div>
+            <div id="orangeTeamName" class="grid place-items-center h-[150px] fit  w-team text-center my-auto">総プレイ40時間</div>
         </div>
         <div class="mt-[80px] mx-7">
             <div class="flex">
@@ -64,35 +64,43 @@
         <script type="text/javascript">
             let webSocket = new WebSocket("ws://localhost:8001/nextMatch");
             webSocket.onmessage = function(message){
-                console.log(message.data);
-                let data = JSON.parse(message.data).data;
-                const blueTeamName = data.blue;
-                const orangeTeamName = data.orange;
-                const matchName = data.name;
-                const bo = data.bo;
-                const blueMembers = data.blueMembers;
-                const orangeMembers = data.orangeMembers;
-                document.getElementById("blueTeamName").textContent = blueTeamName;
-                document.getElementById("orangeTeamName").textContent = orangeTeamName;
-                document.getElementById("bo").textContent = bo;
-                document.getElementById("matchName").textContent = matchName;
-                resize();
-            }
-
-            function resize() {
-                let resizeText = document.getElementsByClassName('js-resize-text');
-                for (let i = 0; i < resizeText.length; i++) {
-                    
-                    let textElm = resizeText[i];
-                    console.log(i,textElm.getBoundingClientRect().height);
-                    let size = 100;
-                    for(;textElm.scrollHeight > textElm.getBoundingClientRect().height && size > 1;size--){
-                        textElm.style.fontSize = size + "px";
-                    }
-
+                const msg = JSON.parse(message.data);
+                const {cmd,data} = msg;
+                console.log(msg);
+                if(cmd == "matchInfo"){
+                    const blueTeamName = data.blue;
+                    const orangeTeamName = data.orange;
+                    const matchName = data.name;
+                    const bo = data.bo;
+                    const blueMembers = data.blueMembers;
+                    const orangeMembers = data.orangeMembers;
+                    document.getElementById("blueTeamName").textContent = blueTeamName;
+                    document.getElementById("orangeTeamName").textContent = orangeTeamName;
+                    document.getElementById("bo").textContent = bo;
+                    document.getElementById("matchName").textContent = matchName;
+                    fit();
                 }
             }
-            window.onload = function(){resize()};
+
+            const fit = () => {
+                const defaultTextSize = 150;
+                const divHeight = 150;
+                let resizeText = document.getElementsByClassName('fit');
+                for (let i = 0; i < resizeText.length; i++) {
+                    let textElm = resizeText[i];
+                    //----------INIT---------
+                    textElm.style.marginTop = "0px";
+                    textElm.style.fontSize = `${defaultTextSize}px`;
+                    // console.log(i,textElm.getBoundingClientRect().height,textElm.scrollHeight);
+                    let size = defaultTextSize;
+                    for(;textElm.scrollHeight > divHeight && size > 1;size--){
+                        textElm.style.fontSize = size + "px";
+                    }
+                    const margin = (divHeight - textElm.scrollHeight)/2;
+                    textElm.style.marginTop = `${margin}px`;
+                }
+            }
+            window.onload = function(){fit()};
         </script>
     </body>
 </html>

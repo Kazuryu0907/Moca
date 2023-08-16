@@ -22,7 +22,7 @@
           </style>
 
     </head>
-    <body class="font-sans bg-black" style="background-image: url(stats.png);">
+    <body class="font-sans bg-black" style="background-image: url(!./stats.png);">
         <div class="h-[310px] border border-red-800 mb-[50px] relative">
             <div class="absolute right-0 left-0 mt-[55px] grid border border-green-600 mx-[150px] h-[95px]">
                 <div class="flex">
@@ -160,24 +160,35 @@
         </div>
         <script>
             let webSocket = new WebSocket("ws://localhost:8001/stats");
+            let playerTable = {};
+            let idTable = {};
             webSocket.onmessage = function(message){
                 const msg = JSON.parse(message.data);
                 const {cmd,data} = msg;
                 console.log(msg);
                 if(cmd == "playerTable"){
-                    for(let i = 0;i<6;i++){
-                        const players = data;
-                        document.getElementById(`names${i}`).textContent = players[i];
-                    }
+                    playerTable = {...data};
+                    // for(let i = 0;i<6;i++){
+                    //     const players = data;
+                    //     document.getElementById(`names${i}`).textContent = players[i];
+                    // }
                 }else if(cmd == "stats"){
                     //data array
-                    const table = ["names","scores","goals","assists","shots","saves","demos"];
-                    table.forEach((t) => {
-                        for(let i = 0;i<6;i++){
-                            console.log(`${t}_${i}`);
-                            document.getElementById(`${t}_${i}`).textContent = data[i][t];
-                        }
-                    })
+                    const table = ["scores","goals","assists","shots","saves","demos"];
+                    // table.forEach((t) => {
+                    //     for(let i = 0;i<6;i++){
+                    //         document.getElementById(`${t}_${i}`).textContent = data[i][t];
+                    //     }
+                    // });
+                    for(let i = 0;i<6;i++){
+                        const state = data[i];
+                        table.forEach(t => {
+                            document.getElementById(`${t}_${i}`).textContent = state[t];
+                        })
+                        document.getElementById(`names_${i}`).textContent = idTable[state["id"]];
+                    }
+                }else if(cmd == "idTable"){
+                    idTable = {...data};
                 }
             }
         </script>
