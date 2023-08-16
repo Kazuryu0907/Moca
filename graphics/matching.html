@@ -142,8 +142,14 @@
             
                   </div>
         </div>
-      <div class="mt-100"><button class="m-5" onclick="circle()">AAAA</button></div>
-
+        <div class="flex absolute bottom-10 ml-5 ">
+            <div id="player_name" class="font-bold text-white text-[50px]">
+                Moca
+            </div>
+            <div id="score" class="font-bold text-white text-[30px] mx-[30px] my-auto">
+                0
+            </div>
+        </div>
 
 
 
@@ -189,7 +195,8 @@
             const setBoost = (per) => {
                 const r = 100;
                 let circumference = 2 * r * Math.PI;
-                let offset = ((100.-per)/100) * circumference;
+                //Max75%
+                let offset = ((100.-per*0.75)/100) * circumference;
                 $("#inner-circle").attr("stroke-dashoffset",Math.floor(offset));
                 $("#inner-circle").attr("stroke-dasharray",circumference);
                 $("#circle-text").text(`${Math.floor(per)}`);
@@ -231,6 +238,9 @@
                     const {playerIndex,playerName} = data;
                     console.log(playerIndex);
                     watchingBoostIndex = playerIndex;
+                    const watchingPlayerId = playerTable[playerIndex];
+                    const spreadPlayerName = idTable[watchingPlayerId];
+                    document.getElementById("player_name").textContent = spreadPlayerName;
                     const boost = document.getElementById("boost"+playerIndex).textContent;
                     setBoost(Number(boost));
                 }
@@ -245,6 +255,7 @@
                 else if(cmd == "playerTable"){// teamTable
                     const ids = data;
                     console.log(ids,idTable);
+                    playerTable = {...ids};
                     for(let i = 0;i<6;i++){
                         const id = ids[i];
                         document.getElementById("player_name"+i).textContent = idTable[id];

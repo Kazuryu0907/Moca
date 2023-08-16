@@ -103,6 +103,8 @@ export class socketComm{
       this.sendData("/stats",{cmd:"stats",data:input.data});
     }else if(cmd == "player"){
       this.sendData("/boost",{cmd:"player",data:input.data});
+    }else if(cmd == "score"){
+      this.sendData("/boost",{cmd:"score",data:input.data});
     }
   }
 }

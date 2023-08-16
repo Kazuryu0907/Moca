@@ -15,3 +15,4 @@ kawaii~:https://dribbble.com/shots/6013675-Cyber-Robot-Game-UX-UI
 botでdebugできるように0~5.pngを導入するべきか
 
 DEbug Tabで，socketをLoggingして外部出力する機能
+driveのtoken.json自動削除機能
