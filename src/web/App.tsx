@@ -7,6 +7,14 @@ import { IdTable } from "./components/IdTable";
 import {MemoryRouter as Router,Routes,Route,Navigate} from "react-router-dom";
 import { Main,Topper } from "./components/Main";
 
+const Spread = () => {
+  return(
+    <div className="flex">
+      <Teams/><IdTable/>
+    </div>
+  )
+}
+
 export const App = () => {
   //Websocket更新時にState更新
   console.log(window.location.pathname);
@@ -21,7 +29,7 @@ export const App = () => {
             <Route path="/overlay" element={<Topper/>}>
               <Route index element={<Navigate to="/overlay/browser" replace/>}/>
               <Route path="browser" element={<Browser/>}/>
-              <Route path="spread" element={<><Teams/><IdTable/></>}/>
+              <Route path="spread" element={<Spread/>}/>
               <Route path="drive" element={<Overlay/>}/>
               <Route path="*" element={<Navigate to="/overlay/browser" replace/>}/>
             </Route>

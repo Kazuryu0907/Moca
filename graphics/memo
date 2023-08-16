@@ -14,4 +14,4 @@ kawaii~:https://dribbble.com/shots/6013675-Cyber-Robot-Game-UX-UI
 
 botでdebugできるように0~5.pngを導入するべきか
 
-getTeamInfo() => getIds() => stream => cmd:"idTable"
+DEbug Tabで，socketをLoggingして外部出力する機能

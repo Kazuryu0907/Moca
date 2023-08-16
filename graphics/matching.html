@@ -6,8 +6,6 @@
     </head>
     <body class="bg-gray-500" style="background-image: url(1./matching.png);">
         
-
-
         <div class="flex">
             <div class="mt-5">
 
@@ -51,14 +49,14 @@
                 <!-- <div class="flex-auto"></div> -->
                 <div class="flex w-[1030px]">
                     <div class="ml-auto w-[360px] h-[70px]">
-                        <div id="blue_team_name" class="fit border border-red-300  font-bold text-gray-100 text-center text-[50px] mt-auto"><nobr>GENG</nobr></div>
+                        <div id="blue_team_name" class="fit border  font-bold text-gray-100 text-center text-[50px] mt-auto">GENG</div>
                     </div>
                     <div class="w-[300px] h-[70px] border mt-0">
                         <div class="flex text-center">
-                            <div id="point_blue" class="text-center border w-[80px] font-bold text-gray-100 text-[50px]">0</div>
+                            <div id="point_blue" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
                             <!-- Dummy -->
                             <div class="flex-auto"></div>
-                            <div id="point_orange" class="text-center border w-[80px] font-bold text-gray-100 text-[50px]">1</div>
+                            <div id="point_orange" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]"><p class="m-auto">1</p></div>
                         </div>
                     </div>
                     <div class="mr-auto w-[360px] h-[70px]">
@@ -107,12 +105,44 @@
             </div>
         </div>
 
-
-
-
-
-        player_name{n},boost{n},boost_bar{n}
-        point_blue,point_orange
+        <div class="absolute bottom-[80px] right-[100px]">
+            <div
+            class="inline-flex items-center justify-center overflow-hidden rounded-full"
+                  >
+            <!-- Building a Progress Ring: https://css-tricks.com/building-progress-ring-quickly/ -->
+            <svg class="w-[200px] h-[200px] rotate-90">
+              <circle
+                class="text-gray-300"
+                stroke-width="30"
+                stroke="currentColor"
+                fill="transparent"
+                r="100"
+                cx="100"
+                cy="100"
+              />
+              <!--
+                :stroke-dasharray="circumference"
+                :stroke-dashoffset="circumference - percent / 100 * circumference"
+               -->
+              <circle
+                id="inner-circle"
+                class="text-blue-600"
+                stroke-width="30"
+                stroke-dasharray="628"
+                stroke-dashoffset="628"
+                stroke-linecap="butt"
+                stroke="currentColor"
+                fill="transparent"
+                r="100"
+                cx="100"
+                cy="100"
+              />
+            </svg>
+            <span id="circle-text" class="absolute text-[50px] text-blue-700">5</span>
+            
+                  </div>
+        </div>
+      <div class="mt-100"><button class="m-5" onclick="circle()">AAAA</button></div>
 
 
 
@@ -120,7 +150,6 @@
 
         <!-- <button onclick="feedout('#blue_1',-500);feedout('#blue_2',-500);feedout('#orange_1',500);feedout('#orange_2',500);">B</button> -->
         <!-- <button id="b">C</button> -->
-        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.0/gsap.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script>
@@ -142,6 +171,30 @@
                     textElm.style.marginTop = `${margin}px`;
                 }
             }
+            const sleep = (second) => new Promise(resolve => setTimeout(resolve, second * 1000));
+            const circle = async() => {
+                const r = 100;
+                let circumference = 2 * r * Math.PI;
+                let per = 0;
+                for(let i = 0;i<100;i++){
+                    per += 0.75;
+                    let offset = ((100.-per)/100) * circumference;
+                    $("#inner-circle").attr("stroke-dashoffset",Math.floor(offset));
+                    $("#inner-circle").attr("stroke-dasharray",circumference);
+                    $("#circle-text").text(`${Math.floor(i+1)}`);
+                    await sleep(0.01);
+                }
+            }
+
+            const setBoost = (per) => {
+                const r = 100;
+                let circumference = 2 * r * Math.PI;
+                let offset = ((100.-per)/100) * circumference;
+                $("#inner-circle").attr("stroke-dashoffset",Math.floor(offset));
+                $("#inner-circle").attr("stroke-dasharray",circumference);
+                $("#circle-text").text(`${Math.floor(per)}`);
+            }
+
             const feedin = (tar,x) => {
                 gsap.set(tar,{opacity:1});
                 gsap.from(tar,{x:x,duration:0.8,opacity:0,ease:Circ.easeOut});
@@ -157,6 +210,8 @@
             let playerTable = {};
             let idTable = {};
             let matchInfo = {};
+            //右下のBoostゲージ Index
+            let watchingBoostIndex = null;
             webSocket = new WebSocket("ws://localhost:8001/boost");
 
             webSocket.onmessage = function(message){
@@ -168,10 +223,16 @@
                 if(cmd == "boost"){// Boost
                     // document.getElementById("boosts").style.visibility = "visible";
                     const {boost,index} = data;
+                    if(index == watchingBoostIndex)setBoost(Number(boost));
                     document.getElementById("boost"+index).textContent = boost;
                     document.getElementById("boost_bar"+index).style.width = boost+"%";
-                    // document.getElementById("boost_"+index).value = parseInt(boost);
-                    // document.getElementById("boost_val_"+index).textContent = boost;
+                }
+                else if(cmd == "player"){
+                    const {playerIndex,playerName} = data;
+                    console.log(playerIndex);
+                    watchingBoostIndex = playerIndex;
+                    const boost = document.getElementById("boost"+playerIndex).textContent;
+                    setBoost(Number(boost));
                 }
                 else if(cmd == "matchInfo"){
                     matchInfo = data;

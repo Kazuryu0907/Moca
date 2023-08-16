@@ -101,6 +101,8 @@ export class socketComm{
       this.sendData("/boost",{cmd:"boost",data:data});
     }else if(cmd == "stats"){
       this.sendData("/stats",{cmd:"stats",data:input.data});
+    }else if(cmd == "player"){
+      this.sendData("/boost",{cmd:"player",data:input.data});
     }
   }
 }
