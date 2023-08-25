@@ -23,6 +23,7 @@ contextBridge.exposeInMainWorld(
         loadTeams: () => ipcRenderer.invoke("spread:loadTeams"),
         getMatchInfo:() => ipcRenderer.invoke("spread:getMatchInfo"),
         sendSocket:(data:any) => ipcRenderer.invoke("sendSocket",data),
+        sendSocketCommunication:(data:string) => ipcRenderer.invoke("sendSocketCommunication",data),
         stream:(data:any) => ipcRenderer.invoke("stream",data),
         getDrive: (id:string) => ipcRenderer.invoke("getDrive",id),
         // getTeam: () => ipcRenderer.invoke("getTeam"),

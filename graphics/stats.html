@@ -18,6 +18,9 @@
                 .stats-orange-progress{
                     @apply w-full bg-orange-500 h-2.5 bottom-0;
                 }
+                .player-icon{
+                    @apply object-cover object-top border rounded-2xl;
+                }
             }
           </style>
 
@@ -27,7 +30,7 @@
             <div class="absolute right-0 left-0 mt-[55px] grid border border-green-600 mx-[150px] h-[95px]">
                 <div class="flex">
                     <div class="flex-auto"></div>
-                    <div class="w-[350px] border font-bold text-gray-100 text-center my-auto text-[40px]">
+                    <div id="blue_team_name" class="w-[550px] fit h-[95px] grid place-items-center border font-bold text-gray-100 text-center my-auto text-[40px]">
                         GENGMOBILE1
                     </div>
                     <div class="w-[330px] border">
@@ -40,12 +43,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-[350px] border font-bold text-gray-100 text-center my-auto text-[40px]">
+                    <div id="orange_team_name" class="w-[550px] fit h-[95px] grid place-items-center border font-bold text-gray-100 text-center my-auto text-[40px]">
                         FAZE CLAN
                     </div>
                     <div class="flex-auto"></div>
                 </div>
             </div>
+        <div></div>
             <div class="absolute right-0 left-0 bottom-0 grid border mx-[150px] h-[95px] text-center font-bold text-[30px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
                 <div id="names_0" class="text-gray-100 col-span-2 mt-8">Player1</div>
                 <div id="names_1" class="text-gray-100 col-span-2 mt-8">Player2</div>
@@ -166,7 +170,12 @@
                 const msg = JSON.parse(message.data);
                 const {cmd,data} = msg;
                 console.log(msg);
-                if(cmd == "playerTable"){
+                if(cmd == "matchInfo"){
+                    const {blue,bo,name,orange} = data;
+                    document.getElementById("blue_team_name").textContent = blue;
+                    document.getElementById("orange_team_name").textContent = orange;
+                    fit();
+                }else if(cmd == "playerTable"){
                     playerTable = {...data};
                     // for(let i = 0;i<6;i++){
                     //     const players = data;
@@ -189,6 +198,25 @@
                     }
                 }else if(cmd == "idTable"){
                     idTable = {...data};
+                }
+            }
+
+            const fit = () => {
+                const defaultTextSize = 40;
+                const divHeight = 95;
+                let resizeText = document.getElementsByClassName('fit');
+                for (let i = 0; i < resizeText.length; i++) {
+                    let textElm = resizeText[i];
+                    //----------INIT---------
+                    textElm.style.marginTop = "0px";
+                    textElm.style.fontSize = `${defaultTextSize}px`;
+                    // console.log(i,textElm.getBoundingClientRect().height,textElm.scrollHeight);
+                    let size = defaultTextSize;
+                    for(;textElm.scrollHeight > divHeight && size > 1;size--){
+                        textElm.style.fontSize = size + "px";
+                    }
+                    const margin = (divHeight - textElm.scrollHeight)/2;
+                    textElm.style.marginTop = `${margin}px`;
                 }
             }
         </script>

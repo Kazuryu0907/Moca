@@ -16,8 +16,9 @@ export interface IMainProcess {
     SPREADSHEET_ID:() => Promise<string|null>;
     stream:(data:any) => Promise<void>,
     cachedMatchInfo: () => Promise<spreadMatchInfoType>,
-    loadTeams: () => Promise<void>,
-    getMatchInfo: () => Promise<spreadMatchInfoType>
+    loadTeams: () => Promise<void>;
+    getMatchInfo: () => Promise<spreadMatchInfoType>;
+    sendSocketCommunication:(data:string) => Promise<void>;
     sendSocket:(data:{path:string,data:dataType}) => Promise<void>;
     getDrive:(id:string) => Promise<any>;
     getTeam:() => Promise<any>;

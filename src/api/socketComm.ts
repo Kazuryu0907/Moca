@@ -24,7 +24,7 @@ export class socketComm{
   clients: Record<BrowserType,WebSocket|null>= initRecord<null>(Browsers,null);
   //接続時に実行するHook
   onConnection:onConnectionType = (ws:WebSocket) => {};
-
+  socket : dgram.Socket = dgram.createSocket("udp4");
   constructor(mainWindow: BrowserWindow){
     this.mainWindow = mainWindow;
   }
@@ -44,25 +44,28 @@ export class socketComm{
     const port = 12345;
     const host = "127.0.0.1";
 
-    const socket = dgram.createSocket("udp4");
 
-    socket.on("listening",() => {
-        const addr = socket.address();
+    this.socket.on("listening",() => {
+        const addr = this.socket.address();
         console.log(`UDP socket listening on ${addr.address}:${addr.port}`);
     })
 
     const s = new WebSocketServer({port:8001});
 
 
-    socket.on("message",(msg,remote) => {
+    this.socket.on("message",(msg,remote) => {
         // console.log(`${remote.address}:${remote.port} - ${msg}`);
         const data = msg.toString();
-        if(JSON.parse(data).cmd != "boost")console.log(data);
-        this.sortingData(JSON.parse(data));
+        try{
+          if(JSON.parse(data).cmd != "boost")console.log(data);
+          this.sortingData(JSON.parse(data));
+        }catch(e){
+          console.error(e);
+        }
+
     });
 
-    socket.bind(port, host);
-
+    this.socket.bind(port, host);
     const isBrowser = (path:string): path is BrowserType => {
       return Browsers.some((v) => v === path);
     }
@@ -75,7 +78,7 @@ export class socketComm{
         this.clients[path] = ws;
         this.connectedBrowsers[path] = true;
         this.mainWindow!.webContents.send("connections",this.connectedBrowsers);
-        console.log(this.connectedBrowsers);
+        // console.log(this.connectedBrowsers);
         this.onConnection(ws);
       }
 
@@ -107,5 +110,9 @@ export class socketComm{
     }else if(cmd == "subScore"){
       this.sendData("/boost",{cmd:"subScore",data:input.data});
     }
+  }
+
+  sendSocket(data:string){
+    this.socket.send(data,12345,"localhost");
   }
 }

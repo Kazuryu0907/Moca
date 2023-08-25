@@ -35,13 +35,17 @@ const socketInit = () => {
   _socket.bind();
   //idTableの自動取得
   _socket.onConnection = (ws:WebSocket) => {
+    ws.send(JSON.stringify({cmd:"imgPath",data:process.env.GRAPHICS_DIR}));
     const idTable = ss.idTable;
     let root = {cmd:"idTable",data:idTable};
     ws.send(JSON.stringify(root));
+    const teamData = ss.teamData;
+    ws.send(JSON.stringify({cmd:"teamData",data:teamData}));
     const matchInfo = ss.matchInfo;
     ws.send(JSON.stringify({cmd:"matchInfo",data:matchInfo}));
   }
 }
+
 
 const createWindow = () => {
   const _mainWindow = new BrowserWindow({
@@ -66,6 +70,9 @@ app.whenReady().then(async() => {
 app.once("window-all-closed", () => app.quit());
 
 //---------------handles--------------------------
+ipcMain.handle("sendSocketCommunication",(e,input) => {
+  return socket.sendSocket(input);
+})
 
 ipcMain.handle("sendSocket",(e,input) => {
   const {path,data} = input;
@@ -104,6 +111,7 @@ ipcMain.handle("GOOGLEDRIVE_ID",() => {
 ipcMain.handle("getDrive",async (e,d:string) => {
   return await ds.filesFromFolderID(d).catch(console.error);
 });
+
 
 ipcMain.handle("glob",async () => {
   return await getHashesFromFolder(process.env.GRAPHICS_DIR!,/.*\.(jpg|png)$/);

@@ -32,53 +32,72 @@
                 <!-- 900px -->
                 <div class="flex gap-[30px] ">
                     <div>
-                        <img class="player-icon" src="assets/0.png" >
-                        <div class="player-name">宮古ミヤ</div>
+                        <img id="img_b1" class="player-icon">
+                        <div id="player_b1" class="player-name">宮古ミヤ</div>
                     </div>
                     <div>
-                        <img class="player-icon" src="assets/1.png" >
-                        <div class="player-name">幽鬼シオン</div>
+                        <img id="img_b2" class="player-icon">
+                        <div id="player_b2" class="player-name">幽鬼シオン</div>
                     </div>
                     <div>
-                        <img class="player-icon" src="assets/2.png" >
-                        <div class="player-name">早波八雲</div>
+                        <img id="img_b3" class="player-icon">
+                        <div id="player_b3" class="player-name">早波八雲</div>
                     </div>
                 </div>
                 <div class="flex-auto"></div>
                 <div class="flex gap-[30px]">
                     <div>
-                        <img class="player-icon" src="assets/3.png" >
-                        <div class="player-name">鳴海小波音</div>
+                        <img id="img_o1" class="player-icon">
+                        <div id="player_o1" class="player-name">鳴海小波音</div>
                     </div>
                     <div>
-                        <img class="player-icon" src="assets/4.png" >
-                        <div class="player-name">ちゃんひな</div>
+                        <img id="img_o2" class="player-icon">
+                        <div id="player_o2" class="player-name">ちゃんひな</div>
                     </div>
                     <div>
-                        <img class="player-icon" src="assets/5.png" >
-                        <div class="player-name">石蕗なのは</div>
+                        <img id="img_o3" class="player-icon">
+                        <div id="player_o3" class="player-name">石蕗なのは</div>
                     </div>
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
         <script type="text/javascript">
             let webSocket = new WebSocket("ws://localhost:8001/nextMatch");
+            let imgPath = "";
+            let teamData = [];
             webSocket.onmessage = function(message){
                 const msg = JSON.parse(message.data);
                 const {cmd,data} = msg;
                 console.log(msg);
+                if(cmd == "imgPath"){
+                    imgPath = data;
+                }
+                if(cmd == "teamData"){
+                    teamData = data;
+                }
                 if(cmd == "matchInfo"){
                     const blueTeamName = data.blue;
                     const orangeTeamName = data.orange;
                     const matchName = data.name;
                     const bo = data.bo;
-                    const blueMembers = data.blueMembers;
-                    const orangeMembers = data.orangeMembers;
+                    const blueMembers = teamData.find(t => t.teamName == blueTeamName).playerNames;
+                    const orangeMembers = teamData.find(t => t.teamName == orangeTeamName).playerNames;;
                     document.getElementById("blueTeamName").textContent = blueTeamName;
                     document.getElementById("orangeTeamName").textContent = orangeTeamName;
                     document.getElementById("bo").textContent = bo;
                     document.getElementById("matchName").textContent = matchName;
                     fit();
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                    for(let i = 0;i<3;i++){
+                        //Blue
+                        $(`#player_b${i+1}`).text(blueMembers[i]);
+                        $(`#img_b${i+1}`).attr("src",path+`${blueMembers[i]}.png`);
+                        //Orange
+                        $(`#player_o${i+1}`).text(orangeMembers[i]);
+                        $(`#img_o${i+1}`).attr("src",path+`${orangeMembers[i]}.png`);
+                    }
+                    console.log(window.obsstudio);
                 }
             }
 
