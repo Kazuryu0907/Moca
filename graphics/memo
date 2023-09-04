@@ -12,7 +12,7 @@ Vのテーマからーとか抜き出してワンポイントにしたい
 kawaii~:https://dribbble.com/shots/6013675-Cyber-Robot-Game-UX-UI
 いいプレイはダイジェストにしたいよねぇ
 
-botでdebugできるように0~5.pngを導入するべきか
+//botでdebugできるように0~5.pngを導入するべきか
 
 DEbug Tabで，socketをLoggingして外部出力する機能
 driveのtoken.json自動削除機能
@@ -21,3 +21,7 @@ driveのtoken.json自動削除機能
 /browserの再レンダリング問題
 statsのprogress bar実装
 nextMatchのレイアウト微調整と，画像，名前の機能
+graphic dirをexplorerで起動する機能
+statsをcacheしておく機能
+なんかbotのidと色が違うんだが...
+https://zenn.dev/itosho/articles/git-commit-message-2023#%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%83%E3%83%88

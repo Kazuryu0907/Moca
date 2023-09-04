@@ -4,9 +4,9 @@
         <title>Moca Matching Overlay</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-gray-500" style="background-image: url(1./matching.png);">
-        
-        <div class="flex">
+    <body class="bg-green-500" style="background-image: url(1./matching.png);">
+        <video src="./gbc.mp4" id="mv_goal" hidden muted></video>
+        <div class="flex z-10">
             <div class="mt-5">
 
                 <div class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-r-[0.2rem]">
@@ -53,10 +53,14 @@
                     </div>
                     <div class="w-[300px] h-[70px] border mt-0">
                         <div class="flex text-center">
-                            <div id="point_blue" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
+                            <div id="score_blue" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
                             <!-- Dummy -->
-                            <div class="flex-auto"></div>
-                            <div id="point_orange" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]"><p class="m-auto">1</p></div>
+                            <div class="flex-auto">
+                                <div id="time" class="text-[50px] text-center font-bold text-white bottom-0 top-0">
+                                    5:00
+                                </div>
+                            </div>
+                            <div id="score_orange" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
                         </div>
                     </div>
                     <div class="mr-auto w-[360px] h-[70px]">
@@ -105,7 +109,7 @@
             </div>
         </div>
 
-        <div class="absolute bottom-[80px] right-[100px]">
+        <div class="-z-10 absolute bottom-[80px] right-[100px]">
             <div
             class="inline-flex items-center justify-center overflow-hidden rounded-full"
                   >
@@ -138,11 +142,11 @@
                 cy="100"
               />
             </svg>
-            <span id="circle-text" class="absolute text-[50px] text-blue-700">5</span>
+            <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700">5</span>
             
                   </div>
         </div>
-        <div class="absolute bottom-10 ml-5 ">
+        <div class="-z-10 absolute bottom-10 ml-5 ">
             <div id="team_name" class="font-bold text-white text-[30px]">
                 Glaces Blaze
             </div>
@@ -237,6 +241,14 @@
                 gsap.to(tar,{x:x,duration:0.8,opacity:1,ease:Circ.easeOut});
             };
 
+            const playTransition = (id) => {
+                $(id).show();
+                const v = $(id).get(0);
+                v.play();
+                $(id).on("ended",function(){
+                    $(this).hide();
+                });
+            }
 
             let webSocket;
             let playerTable = {};
@@ -252,7 +264,7 @@
                 const msg = JSON.parse(message.data);
                 const cmd = msg["cmd"];
                 const data = msg["data"];
-                if(cmd != "boost")console.log(msg);
+                if(cmd != "boost" || cmd != "time")console.log(msg);
                 if(cmd == "boost"){// Boost
                     // document.getElementById("boosts").style.visibility = "visible";
                     const {boost,index} = data;
@@ -272,8 +284,18 @@
                     const teamName = matchInfo[team];
                     const teamOb = teamData.find(t => t.teamName == teamName);
                     const teamAbbr = teamOb.teamAbbrevitation;
+                    const boostColor = team == "blue" ? "text-blue-600" : "text-orange-600";
+                    const boostTextColor = team == "blue" ? "text-blue-700" : "text-orange-700";
                     $("#abbr").text(teamAbbr);
                     $("#team_name").text(teamName);
+
+                    //Change Boost Color
+                    let circleElm = document.getElementById("inner-circle");
+                    circleElm.classList.remove("text-blue-600");circleElm.classList.remove("text-orange-600");
+                    circleElm.classList.add(boostColor);
+                    let textElm = document.getElementById("circle-text");
+                    textElm.classList.remove("text-blue-700");textElm.classList.remove("text-orange-700");
+                    textElm.classList.add(boostTextColor);
                 }
                 else if(cmd == "score"){
                     const {score} = data;
@@ -302,6 +324,28 @@
                         const id = ids[i];
                         document.getElementById("player_name"+i).textContent = idTable[id];
                     }
+                }
+                else if(cmd == "time"){
+                    const time = data;
+                    const minutes = Math.floor(time/60);
+                    const seconds = time % 60;
+                    document.getElementById("time").textContent = `${minutes}:${seconds < 10 ? "0"+seconds : seconds}`; 
+                }
+                else if(cmd == "goals"){//onGoal
+                    //    string,string,blue|orange
+                    const {assistId,scoreId,team} = data;
+                    const currentScore = Number(document.getElementById(`score_${team}`).textContent);
+                    document.getElementById(`score_${team}`).textContent = currentScore + 1;
+                    setTimeout(() => {playTransition("#mv_goal")},3000);
+                }
+                else if(cmd == "endReplay"){
+                    playTransition("#mv_goal");
+                }
+                //RESET
+                else if(cmd == "endStats"){
+                    $("#score_blue").text("0");
+                    $("#score_orange").text("0");
+                    $("#time").text("5:00");
                 }
                 else if(cmd == "teamData"){
                     teamData = data;

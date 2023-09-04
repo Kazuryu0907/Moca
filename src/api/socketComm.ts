@@ -109,6 +109,15 @@ export class socketComm{
       this.sendData("/boost",{cmd:"score",data:input.data});
     }else if(cmd == "subScore"){
       this.sendData("/boost",{cmd:"subScore",data:input.data});
+    }else if(cmd == "time"){
+      this.sendData("/boost",{cmd:"time",data:input.data});
+    }else if(cmd == "goals"){
+      const data:{assistId:string,scoreId:string,team:"blue"|"orange"} = input.data;
+      this.sendData("/boost",{cmd:"goals",data:data});
+    }else if(cmd == "endStats"){
+      this.sendData("/boost",{cmd:"endStats",data:0});
+    }else if(cmd == "endReplay"){
+      this.sendData("/boost",{cmd:"endReplay",data:0});
     }
   }
 

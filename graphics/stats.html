@@ -56,17 +56,6 @@
                 <div class="flex-auto"></div>
             </div>
         </div>
-
-        <!-- <div class="absolute right-0 left-0 bottom-0 grid border mx-[150px] h-[95px] text-center font-bold text-[30px] text-white"
-            style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div id="names_0" class="text-gray-100 col-span-2 mt-8">Player1</div>
-            <div id="names_1" class="text-gray-100 col-span-2 mt-8">Player2</div>
-            <div id="names_2" class="text-gray-100 col-span-2 mt-8">Player3</div>
-            <div class="stats-name"></div>
-            <div id="names_3" class="text-gray-100 col-span-2 mt-8">Player4</div>
-            <div id="names_4" class="text-gray-100 col-span-2 mt-8">Player5</div>
-            <div id="names_5" class="text-gray-100 col-span-2 mt-8">Player6</div>
-        </div> -->
     </div>
     <div class="grid mx-[150px] text-[30px] font-bold text-center" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
         <div class="border col-span-2">
@@ -202,11 +191,14 @@
         let webSocket = new WebSocket("ws://localhost:8001/stats");
         let playerTable = {};
         let idTable = {};
+        let imgPath = "";
         webSocket.onmessage = function (message) {
             const msg = JSON.parse(message.data);
             const { cmd, data } = msg;
             console.log(msg);
-            if (cmd == "matchInfo") {
+            if(cmd == "imgPath"){
+                imgPath = data;
+            }else if (cmd == "matchInfo") {
                 const { blue, bo, name, orange } = data;
                 document.getElementById("blue_team_name").textContent = blue;
                 document.getElementById("orange_team_name").textContent = orange;
@@ -220,18 +212,17 @@
             } else if (cmd == "stats") {
                 //data array
                 const table = ["scores", "goals", "assists", "shots", "saves", "demos"];
-                // table.forEach((t) => {
-                //     for(let i = 0;i<6;i++){
-                //         document.getElementById(`${t}_${i}`).textContent = data[i][t];
-                //     }
-                // });
+                const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
                 for (let i = 0; i < 6; i++) {
                     const state = data[i];
                     table.forEach(t => {
                         document.getElementById(`${t}_${i}`).textContent = state[t];
                     })
-                    document.getElementById(`names_${i}`).textContent = idTable[state["id"]];
+                    const playerName = idTable[state["id"]];
+                    document.getElementById(`names_${i}`).textContent = playerName;
+                    document.getElementById(`img_${i}`).setAttribute("src",path+`${playerName}.png`);
                 }
+
             } else if (cmd == "idTable") {
                 idTable = { ...data };
             }

@@ -10,7 +10,7 @@ import {encode,decode} from "iconv-lite";
 import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 //D:\github\Moca\src
-const envPath = path.join(String.raw`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`,".env");
+const envPath = path.join(String.raw`D:\github\Moca\src`,".env");
 require("dotenv").config({path:envPath});
 
 let mainWindow:BrowserWindow;
@@ -45,6 +45,7 @@ const socketInit = () => {
     ws.send(JSON.stringify({cmd:"matchInfo",data:matchInfo}));
   }
 }
+
 
 
 const createWindow = () => {
@@ -98,6 +99,7 @@ ipcMain.handle("getIdTable",() => {
 ipcMain.handle("cachedMatchInfo",() => {
   return ss.matchInfo;
 })
+
 
 
 ipcMain.handle("SPREADSHEET_ID",() => {
