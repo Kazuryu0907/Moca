@@ -14,6 +14,8 @@ kawaii~:https://dribbble.com/shots/6013675-Cyber-Robot-Game-UX-UI
 
 //botでdebugできるように0~5.pngを導入するべきか
 
+{"cmd":"endReplay"}
+
 DEbug Tabで，socketをLoggingして外部出力する機能
 driveのtoken.json自動削除機能
 /Boostイレギュラー時のMugiの自動リロード機能

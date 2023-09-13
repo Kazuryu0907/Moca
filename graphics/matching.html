@@ -45,26 +45,26 @@
             </div>
             <!-- Dummy -->
             <div class="flex-auto"></div>
-            <div class="mt-10 h-[70px] border  w-[1030px]">
+            <div class="mt-10 h-[70px]  w-[1030px]">
                 <!-- <div class="flex-auto"></div> -->
                 <div class="flex w-[1030px]">
                     <div class="ml-auto w-[360px] h-[70px]">
-                        <div id="blue_team_name" class="fit border  font-bold text-gray-100 text-center text-[50px] mt-auto">GENG</div>
+                        <div id="blue_team_name" class="fit  font-bold text-gray-100 text-center text-[50px] mt-auto">GENG</div>
                     </div>
-                    <div class="w-[300px] h-[70px] border mt-0">
+                    <div class="w-[300px] h-[70px] mt-0">
                         <div class="flex text-center">
-                            <div id="score_blue" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
+                            <div id="score_blue" class="text-center w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
                             <!-- Dummy -->
                             <div class="flex-auto">
                                 <div id="time" class="text-[50px] text-center font-bold text-white bottom-0 top-0">
                                     5:00
                                 </div>
                             </div>
-                            <div id="score_orange" class="text-center border w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
+                            <div id="score_orange" class="text-center w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
                         </div>
                     </div>
                     <div class="mr-auto w-[360px] h-[70px]">
-                        <div id="orange_team_name" class="fit border font-bold text-gray-100 text-center text-[50px]">FAZE</div>
+                        <div id="orange_team_name" class="fit font-bold text-gray-100 text-center text-[50px]">FAZE</div>
                     </div>
                 </div>
                 <!-- <div class="flex-auto"></div> -->
@@ -146,36 +146,39 @@
             
                   </div>
         </div>
+        <img id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" src="C:\Users\kazum\Desktop\GBC_dev\graphics\icons\水溶性豆苗.png" alt="">
         <div class="-z-10 absolute bottom-10 ml-5 ">
-            <div id="team_name" class="font-bold text-white text-[30px]">
-                Glaces Blaze
-            </div>
-            <div id="abbr" class="font-bold text-white text-[30px]">
-                GBC
-            </div>
-            <div class="flex">
-                <div id="player_name" class="font-bold text-white text-[50px]">
-                    Moca
+            <div class="">
+                <div id="team_name" class="font-bold text-white text-[30px]">
+                    Glaces Blaze
                 </div>
-                <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                    <p>score</p>
-                    <p id="score">0</p>
+                <div id="abbr" class="font-bold text-white text-[30px]">
+                    GBC
                 </div>
-                <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                    <p>goals</p>
-                    <p id="goals">0</p>
-                </div>
-                <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                    <p>shots</p>
-                    <p id="shots">0</p>
-                </div>
-                <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                    <p>assists</p>
-                    <p id="assists">0</p>
-                </div>
-                <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                    <p>saves</p>
-                    <p id="saves">0</p>
+                <div class="flex">
+                    <div id="player_name" class="font-bold text-white text-[50px]">
+                        Moca
+                    </div>
+                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                        <p>score</p>
+                        <p id="score">0</p>
+                    </div>
+                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                        <p>goals</p>
+                        <p id="goals">0</p>
+                    </div>
+                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                        <p>shots</p>
+                        <p id="shots">0</p>
+                    </div>
+                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                        <p>assists</p>
+                        <p id="assists">0</p>
+                    </div>
+                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                        <p>saves</p>
+                        <p id="saves">0</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -255,6 +258,7 @@
             let idTable = {};
             let matchInfo = {};
             let teamData = [];
+            let imgPath = "";
             //右下のBoostゲージ Index
             let watchingBoostIndex = null;
             webSocket = new WebSocket("ws://localhost:8001/boost");
@@ -265,7 +269,10 @@
                 const cmd = msg["cmd"];
                 const data = msg["data"];
                 if(cmd != "boost" || cmd != "time")console.log(msg);
-                if(cmd == "boost"){// Boost
+                if(cmd == "imgPath"){
+                    imgPath = data;
+                }
+                else if(cmd == "boost"){// Boost
                     // document.getElementById("boosts").style.visibility = "visible";
                     const {boost,index} = data;
                     if(index == watchingBoostIndex)setBoost(Number(boost));
@@ -288,6 +295,10 @@
                     const boostTextColor = team == "blue" ? "text-blue-700" : "text-orange-700";
                     $("#abbr").text(teamAbbr);
                     $("#team_name").text(teamName);
+
+                    //Icon
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                    $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
 
                     //Change Boost Color
                     let circleElm = document.getElementById("inner-circle");

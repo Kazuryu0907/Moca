@@ -11,8 +11,8 @@ import {start} from "./api/start";
 //`C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
 //D:\github\Moca\src
 const envPath = path.join(String.raw`D:\github\Moca\src`,".env");
-require("dotenv").config({path:envPath});
-
+// require("dotenv").config({path:envPath});
+require("dotenv").config();
 let mainWindow:BrowserWindow;
 let socket:socketComm;
 
