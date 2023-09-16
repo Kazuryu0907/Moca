@@ -8,7 +8,7 @@
         <video src="./gbc.mp4" id="mv_goal" hidden muted></video>
         <div class="flex z-10">
             <div class="mt-5">
-                <div class="mt-2 bg-gray-800 w-[350px] h-[150px] rounded-r-[0.2rem] relative">
+                <div id="player_0" class="mt-2 bg-gray-800 w-[350px] h-[150px] rounded-r-[0.2rem] relative">
                     <!-- <img src="./kafka.png" class="left-2 top-0 absolute w-[150px]" alt=""> -->
                     <div class="absolute h-[37.5px] w-full bottom-0 bg-gray-800"></div>
                     <div class="absolute bottom-1 w-full">
@@ -21,7 +21,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-2 bg-gray-800 w-[350px] h-[200px] rounded-r-[0.2rem]">
+                <div id="player_1" class="mt-2 bg-gray-800 w-[350px] h-[200px] rounded-r-[0.2rem]">
                     <div class="ml-5 mr-2">
                         <img src="./kafka.png" class="w-[150px]" alt="">
                         <div class="flex">
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-r-[0.2rem]">
+                <div id="player_2" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-r-[0.2rem]">
                     <div class="ml-5 mr-2">
                         <div class="flex">
                             <div id="player_name2" class="text-left text-[25px] text-gray-100 font-bold flex-auto">Neko</div>
@@ -75,7 +75,7 @@
             <div class="flex-auto"></div>
             <div class="mt-5 right-0">
 
-                <div class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
+                <div id="player_3" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
                     <div class="ml-2 mr-5">
                         <div class="flex">
                             <div id="boost3" class="text-left text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
+                <div id="player_4" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
                     <div class="ml-2 mr-5">
                         <div class="flex">
                             <div id="boost4" class="text-left text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
+                <div id="player_5" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
                     <div class="ml-2 mr-5">
                         <div class="flex">
                             <div id="boost5" class="text-left text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
@@ -111,7 +111,7 @@
             </div>
         </div>
 
-        <div class="-z-10 absolute bottom-[80px] right-[100px]">
+        <div id="boost_gauge" class="-z-10 absolute bottom-[80px] right-[100px]">
             <div
             class="inline-flex items-center justify-center overflow-hidden rounded-full"
                   >
@@ -149,7 +149,7 @@
         </div>
         </div>
         <img id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
-        <div class="-z-10 absolute bottom-10 ml-5 ">
+        <div id="sub_stats" class="-z-10 absolute bottom-10 ml-5 ">
             <div class="">
                 <div id="team_name" class="font-bold text-white text-[30px]">
                     Glaces Blaze
@@ -198,6 +198,42 @@
                 else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:Circ.easeOut});
             }
 
+            const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
+            const feedinFromTop = async() => {
+                ["#time"].forEach(tar => feedin(tar,null,-100,1));
+                // await sleep(1000);
+                ["#score_blue","#score_orange"].forEach(tar => feedin(tar,null,-100,1));
+                await sleep(1000);
+                ["#blue_team_name","#orange_team_name"].forEach(tar => feedin(tar,null,-500,1.5));
+            }
+            const feedinPlayers = async() => {
+                ["#player_0","#player_3"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
+                await sleep(300);
+                ["#player_1","#player_4"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
+                await sleep(300);
+                ["#player_2","#player_5"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
+            } 
+            const feedinSubStats = async() => {
+                feedin("#sub_stats",null,100);
+                feedin("#boost_gauge",null,100);
+            }
+            const feedinit = async() => {
+                await feedinFromTop();
+                await sleep(3000);
+                await feedinPlayers();
+                await sleep(1000);
+                await feedinSubStats();
+            }
+            window.onload = () => {
+                const feedFromTopList = ["#blue_team_name","#orange_team_name","#time","#score_blue","#score_orange"];
+                const playerList = [...Array(6).keys()].map(i => `#player_${i}`);
+                const subStatsList = ["#sub_stats","#boost_gauge"];
+                feedFromTopList.forEach((tar) => opa0(tar));
+                playerList.forEach(tar => opa0(tar));
+                subStatsList.forEach(tar => opa0(tar));
+                gsap.delayedCall(1,feedinit);
+            }
+
             const fit = () => {
                 const defaultTextSize = 50;
                 const divHeight = 70;
@@ -216,7 +252,6 @@
                     textElm.style.marginTop = `${margin}px`;
                 }
             }
-            const sleep = (second) => new Promise(resolve => setTimeout(resolve, second * 1000));
             const circle = async() => {
                 const r = 100;
                 let circumference = 2 * r * Math.PI;
@@ -227,7 +262,7 @@
                     $("#inner-circle").attr("stroke-dashoffset",Math.floor(offset));
                     $("#inner-circle").attr("stroke-dasharray",circumference);
                     $("#circle-text").text(`${Math.floor(i+1)}`);
-                    await sleep(0.01);
+                    await sleep(10);
                 }
             }
 
