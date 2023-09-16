@@ -8,20 +8,22 @@
         <video src="./gbc.mp4" id="mv_goal" hidden muted></video>
         <div class="flex z-10">
             <div class="mt-5">
-
-                <div class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-r-[0.2rem]">
-                    <div class="ml-5 mr-2">
+                <div class="mt-2 bg-gray-800 w-[350px] h-[150px] rounded-r-[0.2rem] relative">
+                    <!-- <img src="./kafka.png" class="left-2 top-0 absolute w-[150px]" alt=""> -->
+                    <div class="absolute h-[37.5px] w-full bottom-0 bg-gray-800"></div>
+                    <div class="absolute bottom-1 w-full">
+                        <div id="player_name0" class="ml-[170px] text-left text-[25px] text-gray-100 font-bold flex-auto">Kani</div>
                         <div class="flex">
-                            <div id="player_name0" class=" text-left text-[25px] text-gray-100 font-bold flex-auto">GB</div>
+                            <div class="w-[272px] ml-5 mr-2 mt-[12px] bg-black h-4 rounded-[2rem]">
+                                <div id="boost_bar0" class="bg-orange-500 h-4 rounded-[2rem]" style="width: 45%;"></div>
+                            </div>
                             <div id="boost0" class="text-right text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
-                        </div>
-                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                            <div id="boost_bar0" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:45%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-r-[0.2rem]">
+                <div class="mt-2 bg-gray-800 w-[350px] h-[200px] rounded-r-[0.2rem]">
                     <div class="ml-5 mr-2">
+                        <img src="./kafka.png" class="w-[150px]" alt="">
                         <div class="flex">
                             <div id="player_name1" class="text-left text-[25px] text-gray-100 font-bold flex-auto">Kani</div>
                             <div id="boost1" class="text-right text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
@@ -144,9 +146,9 @@
             </svg>
             <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700">5</span>
             
-                  </div>
         </div>
-        <img id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" src="C:\Users\kazum\Desktop\GBC_dev\graphics\icons\水溶性豆苗.png" alt="">
+        </div>
+        <img id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
         <div class="-z-10 absolute bottom-10 ml-5 ">
             <div class="">
                 <div id="team_name" class="font-bold text-white text-[30px]">
@@ -183,14 +185,19 @@
             </div>
         </div>
 
-
-
-
-        <!-- <button onclick="feedout('#blue_1',-500);feedout('#blue_2',-500);feedout('#orange_1',500);feedout('#orange_2',500);">B</button> -->
-        <!-- <button id="b">C</button> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.0/gsap.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script>
+            const opa0 = (tar) => {
+                gsap.set(tar,{opacity:0});
+            }
+
+            const feedin = (tar,diffx,diffy,duration=2) => {
+                gsap.set(tar,{opacity:1});
+                if(diffx == null)gsap.from(tar,{y:diffy,duration:duration,opacity:0,ease:Circ.easeOut});
+                else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:Circ.easeOut});
+            }
+
             const fit = () => {
                 const defaultTextSize = 50;
                 const divHeight = 70;
@@ -234,15 +241,6 @@
                 $("#circle-text").text(`${Math.floor(per)}`);
             }
 
-            const feedin = (tar,x) => {
-                gsap.set(tar,{opacity:1});
-                gsap.from(tar,{x:x,duration:0.8,opacity:0,ease:Circ.easeOut});
-            }
-
-            const feedout = (tar,x)=> {
-                gsap.set(tar,{opacity:0});
-                gsap.to(tar,{x:x,duration:0.8,opacity:1,ease:Circ.easeOut});
-            };
 
             const playTransition = (id) => {
                 $(id).show();
