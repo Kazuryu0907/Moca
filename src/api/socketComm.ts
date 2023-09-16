@@ -18,10 +18,15 @@ function initRecord<Y>(arr:readonly string[],defaultVal:Y){
   return toReturn;
 }
 
+class Caches{
+  stats:Object = {};
+}
+
 export class socketComm{
   mainWindow:BrowserWindow|undefined = undefined;
   connectedBrowsers:Record<BrowserType,boolean> = initRecord<boolean>(Browsers,false);
   clients: Record<BrowserType,WebSocket|null>= initRecord<null>(Browsers,null);
+  caches:Caches = new Caches();
   //接続時に実行するHook
   onConnection:onConnectionType = (ws:WebSocket) => {};
   socket : dgram.Socket = dgram.createSocket("udp4");
@@ -103,6 +108,8 @@ export class socketComm{
       this.sendData("/boost",{cmd:"boost",data:data});
     }else if(cmd == "stats"){
       this.sendData("/stats",{cmd:"stats",data:input.data});
+      //deepcopy
+      this.caches.stats = JSON.parse(JSON.stringify(input.data));
     }else if(cmd == "player"){
       this.sendData("/boost",{cmd:"player",data:input.data});
     }else if(cmd == "score"){

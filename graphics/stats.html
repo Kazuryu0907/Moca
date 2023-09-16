@@ -99,7 +99,7 @@
         <div class="stats-name relative">
             <div class="mx-auto mt-4">SCORE</div>
             <div class="absolute stats-orange-progress">
-                <div class="stats-blue-progress" style="width:45%"></div>
+                <div id="scores_per" class="stats-blue-progress" style="width:45%"></div>
             </div>
         </div>
         <!--　n vs n -->
@@ -115,7 +115,7 @@
         <div class="stats-name relative">
             <div class="mx-auto mt-4">GOALS</div>
             <div class="absolute stats-orange-progress">
-                <div class="stats-blue-progress" style="width:45%"></div>
+                <div id="goals_per" class="stats-blue-progress" style="width:45%"></div>
             </div>
         </div>
         <!--　n vs n -->
@@ -131,7 +131,7 @@
         <div class="stats-name relative">
             <div class="mx-auto mt-4">ASSISTS</div>
             <div class="absolute stats-orange-progress">
-                <div class="stats-blue-progress" style="width:45%"></div>
+                <div id="assists_per" class="stats-blue-progress" style="width:45%"></div>
             </div>
         </div>
         <!--　n vs n -->
@@ -147,7 +147,7 @@
         <div class="stats-name relative">
             <div class="mx-auto mt-4">SHOTS</div>
             <div class="absolute stats-orange-progress">
-                <div class="stats-blue-progress" style="width:45%"></div>
+                <div id="shots_per" class="stats-blue-progress" style="width:45%"></div>
             </div>
         </div>
         <!--　n vs n -->
@@ -163,7 +163,7 @@
         <div class="stats-name relative">
             <div class="mx-auto mt-4">SAVES</div>
             <div class="absolute stats-orange-progress">
-                <div class="stats-blue-progress" style="width:45%"></div>
+                <div id="saves_per" class="stats-blue-progress" style="width:45%"></div>
             </div>
         </div>
         <!--　n vs n -->
@@ -179,7 +179,7 @@
         <div class="stats-name relative">
             <div class="mx-auto mt-4">DEMOS</div>
             <div class="absolute stats-orange-progress">
-                <div class="stats-blue-progress" style="width:45%"></div>
+                <div id="demos_per" class="stats-blue-progress" style="width:45%"></div>
             </div>
         </div>
         <!--　n vs n -->
@@ -187,6 +187,7 @@
         <div id="demos_4" class="stats-score">9</div>
         <div id="demos_5" class="stats-score">0</div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         let webSocket = new WebSocket("ws://localhost:8001/stats");
         let playerTable = {};
@@ -222,6 +223,22 @@
                     document.getElementById(`names_${i}`).textContent = playerName;
                     document.getElementById(`img_${i}`).setAttribute("src",path+`${playerName}.png`);
                 }
+                table.forEach((calm) => {
+                    const calcPer = (blue,orange) => {
+                        if(blue+orange == 0){
+                            return 0.5;
+                        }else{
+                            return blue/(blue+orange);
+                        }
+                    };
+                    const calmDatas = data.map((d) => d[calm]);
+                    const calmBlue = calmDatas.slice(0,3);
+                    const calmOrange = calmDatas.slice(3);
+                    const sumBlue = calmBlue.reduce((sum,num) => sum + num,0);
+                    const sumOrange = calmOrange.reduce((sum,num) => sum + num,0);
+                    const Blueper = Math.floor(calcPer(sumBlue,sumOrange)*10)/10 * 100;//%
+                    $(`#${calm}_per`).css("width",Blueper+"%");
+                })
 
             } else if (cmd == "idTable") {
                 idTable = { ...data };

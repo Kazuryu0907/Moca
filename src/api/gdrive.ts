@@ -8,9 +8,11 @@ import { OAuth2Client } from "googleapis-common";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
-const TOKEN_PATH = path.resolve(__dirname, "./../src", "token.json");
-const CREDENTIAL_PATH = path.resolve(__dirname, "./../src", "credentials.json");
-
+console.log(process.cwd())
+// const TOKEN_PATH = path.resolve(__dirname, "./../src", "token.json");
+// const CREDENTIAL_PATH = path.resolve(__dirname, "./../src", "credentials.json");
+const TOKEN_PATH = "./token.json";
+const CREDENTIAL_PATH = "./credentials.json";
 export class DriveService {
   drive: drive_v3.Drive | undefined;
   isAuthed: boolean = false;
@@ -53,7 +55,7 @@ export class DriveService {
     });
     await writeFile(TOKEN_PATH, payload);
   }
-
+  
   async authorize() {
     let loadedClient = await this.loadSavedCredentialsIfExist();
     this.isAuthed = true;

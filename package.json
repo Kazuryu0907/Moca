@@ -7,7 +7,12 @@
 		"name": "kazum"
 	},
 	"build":{
-		"appId":"my.id"
+		"extraMetadata":{
+			"main":"./dist/main.js"
+		},
+		"files":[
+			"dist/**/*"
+		]
 	},
 	"repository": {
 		"url": "https://github.com/kazum/electron-react-ts.git"

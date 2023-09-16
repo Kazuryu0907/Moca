@@ -14,11 +14,11 @@ const envPath = path.join(String.raw`D:\github\Moca\src`,".env");
 // require("dotenv").config({path:envPath});
 require("dotenv").config();
 let mainWindow:BrowserWindow;
-let socket:socketComm;
+let socket:socketComm; 
 
 
 (async ()=>{
-let ss:SheetService;
+let ss:SheetService; 
 let ds:DriveService;
 // await ss.init();
 ds = new DriveService();
@@ -43,6 +43,8 @@ const socketInit = () => {
     ws.send(JSON.stringify({cmd:"teamData",data:teamData}));
     const matchInfo = ss.matchInfo;
     ws.send(JSON.stringify({cmd:"matchInfo",data:matchInfo}));
+    const stats = _socket.caches.stats;
+    ws.send(JSON.stringify({cmd:"stats",data:stats}));
   }
 }
 
