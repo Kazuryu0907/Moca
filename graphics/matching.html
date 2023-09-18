@@ -4,7 +4,7 @@
         <title>Moca Matching Overlay</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-green-500" style="background-color: rgba(0, 0, 0, 0); background-image: url(1./matching.png);">
+    <body class="bg-green-500" style="background-color: rgba(0, 0, 0, 1); background-image: url(1./matching.png);">
         <video src="./gbc.mp4" id="mv_goal" hidden muted></video>
         <div class="flex z-10">
             <div class="mt-5">
@@ -51,7 +51,7 @@
                 <!-- <div class="flex-auto"></div> -->
                 <div class="flex w-[1030px]">
                     <div class="ml-auto w-[360px] h-[70px]">
-                        <div id="blue_team_name" class="fit  font-bold text-gray-100 text-center text-[50px] mt-auto">GENG</div>
+                        <div class="teamName fit  font-bold text-gray-100 text-center text-[50px] mt-auto"><span  id="blue_team_name">GENG</span></div>
                     </div>
                     <div class="w-[300px] h-[70px] mt-0">
                         <div class="flex text-center">
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="mr-auto w-[360px] h-[70px]">
-                        <div id="orange_team_name" class="fit font-bold text-gray-100 text-center text-[50px]">FAZE</div>
+                        <div class="teamName fit font-bold text-gray-100 text-center text-[50px]"><span id="orange_team_name">FAZE</span></div>
                     </div>
                 </div>
                 <!-- <div class="flex-auto"></div> -->
@@ -194,8 +194,8 @@
 
             const feedin = (tar,diffx,diffy,duration=2) => {
                 gsap.set(tar,{opacity:1});
-                if(diffx == null)gsap.from(tar,{y:diffy,duration:duration,opacity:0,ease:Circ.easeOut});
-                else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:Circ.easeOut});
+                if(diffx == null)gsap.from(tar,{y:diffy,duration:duration,opacity:0,ease:"expo.out"});
+                else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:"expo.out"});
             }
 
             const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
@@ -218,19 +218,23 @@
                 feedin("#boost_gauge",null,100);
             }
             const feedinit = async() => {
-                await feedinFromTop();
+                // await feedinFromTop();
+                gsap.to("#blue_team_name",{opacity:1});gsap.to("#orange_team_name",{opacity:1});
+                $(".teamName").addClass("fade");
                 await sleep(3000);
                 await feedinPlayers();
                 await sleep(1000);
                 await feedinSubStats();
+
             }
             window.onload = () => {
-                const feedFromTopList = ["#blue_team_name","#orange_team_name","#time","#score_blue","#score_orange"];
+                // const feedFromTopList = ["#blue_team_name","#orange_team_name","#time","#score_blue","#score_orange"];
                 const playerList = [...Array(6).keys()].map(i => `#player_${i}`);
                 const subStatsList = ["#sub_stats","#boost_gauge"];
-                feedFromTopList.forEach((tar) => opa0(tar));
+                // feedFromTopList.forEach((tar) => opa0(tar));
                 playerList.forEach(tar => opa0(tar));
                 subStatsList.forEach(tar => opa0(tar));
+                $(".team_name").addClass("fade");
                 gsap.delayedCall(1,feedinit);
             }
 
@@ -400,5 +404,26 @@
             }
 
         </script>
+        <style>
+            .teamName{
+                overflow: hidden;
+                transform: translate(100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName span{
+                display: block;
+                transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName.-visible,
+            .teamName.-visible span{
+                transform: translate(0,0);
+            }
+            .teamName.fade,
+            .teamName.fade span{
+                transform: translate(0,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s;
+            }
+        </style>
     </body>
 </html>
