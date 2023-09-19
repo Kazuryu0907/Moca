@@ -2,45 +2,56 @@
 <html>
     <head>
         <title>Moca Matching Overlay</title>
+        <meta charset="utf-8">
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-green-500" style="background-color: rgba(0, 0, 0, 1); background-image: url(1./matching.png);">
+    <body class="bg-green-500" style="background-color: rgba(0, 0, 0, 1);">
         <video src="./gbc.mp4" id="mv_goal" hidden muted></video>
+        <img id="dummy_img" hidden src="" alt="">
         <div class="flex z-10">
             <div class="mt-5">
-                <div id="player_0" class="mt-2 bg-gray-800 w-[350px] h-[150px] rounded-r-[0.2rem] relative">
-                    <!-- <img src="./kafka.png" class="left-2 top-0 absolute w-[150px]" alt=""> -->
-                    <div class="absolute h-[37.5px] w-full bottom-0 bg-gray-800"></div>
-                    <div class="absolute bottom-1 w-full">
-                        <div id="player_name0" class="ml-[170px] text-left text-[25px] text-gray-100 font-bold flex-auto">Kani</div>
+                <div id="player_0" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                    <div class="ml-5 player_frame_blue">
                         <div class="flex">
-                            <div class="w-[272px] ml-5 mr-2 mt-[12px] bg-black h-4 rounded-[2rem]">
-                                <div id="boost_bar0" class="bg-orange-500 h-4 rounded-[2rem]" style="width: 45%;"></div>
+                            <img id="player_icon0" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
+                            <div class="ml-2 mr-2 w-full relative">
+                                <div class="w-full absolute bottom-2">
+                                    <div id="player_name0" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Uni</div>
+                                    <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
+                                        <div id="boost_bar0" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="boost0" class="text-right text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
                         </div>
                     </div>
                 </div>
-                <div id="player_1" class="mt-2 bg-gray-800 w-[350px] h-[200px] rounded-r-[0.2rem]">
-                    <div class="ml-5 mr-2">
-                        <img src="./kafka.png" class="w-[150px]" alt="">
+                <div id="player_1" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                    <div class="ml-5 player_frame_blue">
                         <div class="flex">
-                            <div id="player_name1" class="text-left text-[25px] text-gray-100 font-bold flex-auto">Kani</div>
-                            <div id="boost1" class="text-right text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
-                        </div>
-                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                            <div id="boost_bar1" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:45%"></div>
+                            <img id="player_icon1" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
+                            <div class="ml-2 mr-2 w-full relative">
+                                <div class="w-full absolute bottom-2">
+                                    <div id="player_name1" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kani</div>
+                                    <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
+                                        <div id="boost_bar1" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="player_2" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-r-[0.2rem]">
-                    <div class="ml-5 mr-2">
+                <div id="player_2" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                    <div class="ml-5 player_frame_blue">
                         <div class="flex">
-                            <div id="player_name2" class="text-left text-[25px] text-gray-100 font-bold flex-auto">Neko</div>
-                            <div id="boost2" class=" text-right text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
-                        </div>
-                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                            <div id="boost_bar2" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:45%"></div>
+                            <img id="player_icon2" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
+                            <div class="ml-2 mr-2 w-full relative">
+                                <div class="w-full absolute bottom-2">
+                                    <div id="player_name2" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">天ノ川寝夢</div>
+                                    <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
+                                        <div id="boost_bar2" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +62,7 @@
                 <!-- <div class="flex-auto"></div> -->
                 <div class="flex w-[1030px]">
                     <div class="ml-auto w-[360px] h-[70px]">
-                        <div class="teamName fit  font-bold text-gray-100 text-center text-[50px] mt-auto"><span  id="blue_team_name">GENG</span></div>
+                        <div class="teamName teamName_blue fit  font-bold text-gray-100 text-center text-[50px] mt-auto"><span  id="blue_team_name">GENG</span></div>
                     </div>
                     <div class="w-[300px] h-[70px] mt-0">
                         <div class="flex text-center">
@@ -66,7 +77,7 @@
                         </div>
                     </div>
                     <div class="mr-auto w-[360px] h-[70px]">
-                        <div class="teamName fit font-bold text-gray-100 text-center text-[50px]"><span id="orange_team_name">FAZE</span></div>
+                        <div class="teamName teamName_orange fit font-bold text-gray-100 text-center text-[50px]"><span id="orange_team_name">FAZE</span></div>
                     </div>
                 </div>
                 <!-- <div class="flex-auto"></div> -->
@@ -75,36 +86,48 @@
             <div class="flex-auto"></div>
             <div class="mt-5 right-0">
 
-                <div id="player_3" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
-                    <div class="ml-2 mr-5">
-                        <div class="flex">
-                            <div id="boost3" class="text-left text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
-                            <div id="player_name3" class="text-right text-[25px] text-gray-100 font-bold flex-auto">GB</div>
-                        </div>
-                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                            <div id="boost_bar3" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:45%"></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="player_4" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
-                    <div class="ml-2 mr-5">
-                        <div class="flex">
-                            <div id="boost4" class="text-left text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
-                            <div id="player_name4" class=" text-right text-[25px] text-gray-100 font-bold flex-auto">Kani</div>
-                        </div>
-                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                            <div id="boost_bar4" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:45%"></div>
+                <div id="player_3" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                    <div class="mr-5 player_frame_orange">
+                        <div class="flex flex-row-reverse">
+                            <img id="player_icon3" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
+                            <div class="ml-2 mr-2 w-full relative">
+                                <div class="w-full absolute bottom-2">
+                                    <div id="player_name3" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Inu</div>
+                                    <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                        <div id="boost_bar3" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="player_5" class="mt-2 bg-gray-800 w-[350px] h-[50px] rounded-l-[0.2rem]">
-                    <div class="ml-2 mr-5">
-                        <div class="flex">
-                            <div id="boost5" class="text-left text-[25px] text-gray-100 font-bold w-[50px] flex-initial">100</div>
-                            <div id="player_name5" class="text-right text-[25px] text-gray-100 font-bold flex-auto">Neko</div>
+                <div id="player_4" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
+                    <div class="mr-5 player_frame_orange">
+                        <div class="flex flex-row-reverse">
+                            <img id="player_icon4" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
+                            <div class="ml-2 mr-2 w-full relative">
+                                <div class="w-full absolute bottom-2">
+                                    <div id="player_name4" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kaniiiiiiiiii</div>
+                                    <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                        <div id="boost_bar4" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                            <div id="boost_bar5" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:45%"></div>
+                    </div>
+                </div>
+                <div id="player_5" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
+                    <div class="mr-5 player_frame_orange">
+                        <div class="flex flex-row-reverse">
+                            <img id="player_icon5" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
+                            <div class="ml-2 mr-2 w-full relative">
+                                <div class="w-full absolute bottom-2">
+                                    <div id="player_name5" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Wani</div>
+                                    <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                        <div id="boost_bar5" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -148,8 +171,8 @@
             
         </div>
         </div>
-        <img id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
-        <div id="sub_stats" class="-z-10 absolute bottom-10 ml-5 ">
+        <img src="" id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
+        <div id="sub_stats" class="-z-10 absolute bottom-10 ml-7 ">
             <div class="">
                 <div id="team_name" class="font-bold text-white text-[30px]">
                     Glaces Blaze
@@ -158,8 +181,8 @@
                     GBC
                 </div>
                 <div class="flex">
-                    <div id="player_name" class="font-bold text-white text-[50px]">
-                        Moca
+                    <div class="font-bold text-white text-[50px] w-[270px] flex">
+                        <span id="player_name" class="my-auto">天ノ川寝夢</span>
                     </div>
                     <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
                         <p>score</p>
@@ -230,11 +253,14 @@
             window.onload = () => {
                 // const feedFromTopList = ["#blue_team_name","#orange_team_name","#time","#score_blue","#score_orange"];
                 const playerList = [...Array(6).keys()].map(i => `#player_${i}`);
-                const subStatsList = ["#sub_stats","#boost_gauge"];
+                const subStatsList = ["#sub_stats","#boost_gauge","#player_icon"];
                 // feedFromTopList.forEach((tar) => opa0(tar));
                 playerList.forEach(tar => opa0(tar));
                 subStatsList.forEach(tar => opa0(tar));
                 $(".team_name").addClass("fade");
+
+                const boost = 33;
+                setBoost(Number(boost));
                 gsap.delayedCall(1,feedinit);
             }
 
@@ -336,7 +362,7 @@
                     //Icon
                     const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
                     $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
-
+                    gsap.to("#player_icon",{opacity:1});
                     //Change Boost Color
                     let circleElm = document.getElementById("inner-circle");
                     circleElm.classList.remove("text-blue-600");circleElm.classList.remove("text-orange-600");
@@ -363,14 +389,28 @@
                     document.getElementById("blue_team_name").textContent = blueTeamName;
                     document.getElementById("orange_team_name").textContent = orangeTeamName;
                     fit();
+                    // V用立ち絵のpreLoad
+                    const blueTeamMembers = teamData.find(t => t.teamName == blueTeamName).playerNames;
+                    const orangeTeamMembers = teamData.find(t => t.teamName == orangeTeamName).playerNames;
+                    console.log(blueTeamMembers,orangeTeamMembers);
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                    blueTeamMembers.forEach((name,i) => {
+                        $(`#player_icon${i}`).attr("src",path+`${name}.png`);
+                        // $(`#player_name${i}`).text(name);
+                    });
+                    orangeTeamMembers.forEach((name,i) => {
+                        $(`#player_icon${i+3}`).attr("src",path+`${name}.png`);
+                        // $(`#player_name${i+3}`).text(name);
+                    });
                 }
+                // ? ここバグってそう
                 else if(cmd == "playerTable"){// teamTable
                     const ids = data;
                     console.log(ids,idTable);
                     playerTable = {...ids};
                     for(let i = 0;i<6;i++){
                         const id = ids[i];
-                        document.getElementById("player_name"+i).textContent = idTable[id];
+                        // document.getElementById("player_name"+i).textContent = idTable[id];
                     }
                 }
                 else if(cmd == "time"){
@@ -405,14 +445,30 @@
 
         </script>
         <style>
-            .teamName{
+            .player_frame_blue{
+                background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10C0.5 4.75329 4.7533 0.5 10 0.5H140C145.247 0.5 149.5 4.7533 149.5 10V74C149.5 79.799 154.201 84.5 160 84.5H320C325.247 84.5 329.5 88.7533 329.5 94V140C329.5 145.247 325.247 149.5 320 149.5H150H10C4.75329 149.5 0.5 145.247 0.5 140V10Z" fill="rgb(31,41,58)" stroke="rgb(31,41,58)"/></svg>');
+            }
+            .player_frame_orange{
+                background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path fill="rgb(31,41,58)" fill-rule="evenodd" clip-rule="evenodd" d="M180 10C180 4.47715 184.477 0 190 0H320C325.523 0 330 4.47715 330 10V140C330 145.523 325.523 150 320 150H180H10C4.47716 150 0 145.523 0 140V94C0 88.4771 4.47715 84 10 84H170C175.523 84 180 79.5229 180 74V10Z"/><path d="M190 -1C183.925 -1 179 3.92487 179 10H181C181 5.02944 185.029 1 190 1V-1ZM320 -1H190V1H320V-1ZM331 10C331 3.92487 326.075 -1 320 -1V1C324.971 1 329 5.02944 329 10H331ZM331 140V10H329V140H331ZM320 151C326.075 151 331 146.075 331 140H329C329 144.971 324.971 149 320 149V151ZM180 151H320V149H180V151ZM10 151H180V149H10V151ZM-1 140C-1 146.075 3.92487 151 10 151V149C5.02944 149 1 144.971 1 140H-1ZM-1 94V140H1V94H-1ZM10 83C3.92487 83 -1 87.9249 -1 94H1C1 89.0294 5.02944 85 10 85V83ZM170 83H10V85H170V83ZM170 85C176.075 85 181 80.0751 181 74H179C179 78.9706 174.971 83 170 83V85ZM179 10V74H181V10H179Z" fill="rgb(31,41,58)"/></svg>');
+            }
+            .teamName_blue{
                 overflow: hidden;
                 transform: translate(100%,0);
                 transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
             }
-            .teamName span{
+            .teamName_blue span{
                 display: block;
                 transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_orange{
+                overflow: hidden;
+                transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_orange span{
+                display: block;
+                transform: translate(100%,0);
                 transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
             }
             .teamName.-visible,
