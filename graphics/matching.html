@@ -6,49 +6,126 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="bg-green-500" style="background-color: rgba(0, 0, 0, 1);">
-        <video src="./gbc.mp4" id="mv_goal" hidden muted></video>
+        <video preload="none" src="./gbc.mp4" id="mv_goal" hidden muted></video>
         <img id="dummy_img" hidden src="" alt="">
-        <div class="flex z-10">
-            <div class="mt-5">
-                <div id="player_0" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                    <div class="ml-5 player_frame_blue">
-                        <div class="flex">
-                            <img id="player_icon0" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
-                            <div class="ml-2 mr-2 w-full relative">
-                                <div class="w-full absolute bottom-2">
-                                    <div id="player_name0" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Uni</div>
-                                    <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
-                                        <div id="boost_bar0" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+        <div class="screen hidden">
+            <div class="flex z-10">
+                <div class="mt-5">
+                    <div id="player_0" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                        <div class="ml-5 player_frame_blue">
+                            <div class="flex">
+                                <img id="player_icon0" class="w-[150px] rounded-lg" alt="">
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute bottom-2">
+                                        <div id="player_name0" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Uni</div>
+                                        <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar0" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="player_1" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                        <div class="ml-5 player_frame_blue">
+                            <div class="flex">
+                                <img id="player_icon1" class="w-[150px] rounded-lg" alt="">
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute bottom-2">
+                                        <div id="player_name1" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kani</div>
+                                        <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar1" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="player_2" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                        <div class="ml-5 player_frame_blue">
+                            <div class="flex">
+                                <img id="player_icon2" class="w-[150px] rounded-lg" alt="">
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute bottom-2">
+                                        <div id="player_name2" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">天ノ川寝夢</div>
+                                        <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar2" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="player_1" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                    <div class="ml-5 player_frame_blue">
-                        <div class="flex">
-                            <img id="player_icon1" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
-                            <div class="ml-2 mr-2 w-full relative">
-                                <div class="w-full absolute bottom-2">
-                                    <div id="player_name1" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kani</div>
-                                    <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
-                                        <div id="boost_bar1" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                <!-- Dummy -->
+                <div class="flex-auto"></div>
+                <div class="mt-10 h-[70px]  w-[1030px]">
+                    <!-- <div class="flex-auto"></div> -->
+                    <div class="flex w-[1030px]">
+                        <div class="ml-auto w-[700px] h-[70px]">
+                            <div class="teamName teamName_blue fit  font-bold text-gray-100 text-center text-[50px] my-auto"><span  id="blue_team_name">GENG</span></div>
+                        </div>
+                        <div class="w-[300px] h-[70px] mt-0">
+                            <div class="flex text-center">
+                                <div id="score_blue" class="text-center w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
+                                <!-- Dummy -->
+                                <div class="flex-auto">
+                                    <div id="time" class="text-[50px] text-center font-bold text-white bottom-0 top-0">
+                                        5:00
+                                    </div>
+                                </div>
+                                <div id="score_orange" class="text-center w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
+                            </div>
+                        </div>
+                        <div class="mr-auto w-[700px] h-[70px]">
+                            <div class="teamName teamName_orange fit font-bold text-gray-100 text-center text-[50px] my-auto"><span id="orange_team_name">FAZE</span></div>
+                        </div>
+                    </div>
+                    <!-- <div class="flex-auto"></div> -->
+                </div>
+                <!-- Dummy -->
+                <div class="flex-auto"></div>
+                <div class="mt-5 right-0">
+                    <div id="player_3" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                        <div class="mr-5 player_frame_orange">
+                            <div class="flex flex-row-reverse">
+                                <img id="player_icon3" class="w-[150px] rounded-lg" alt="">
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute bottom-2">
+                                        <div id="player_name3" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Inu</div>
+                                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar3" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="player_2" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                    <div class="ml-5 player_frame_blue">
-                        <div class="flex">
-                            <img id="player_icon2" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
-                            <div class="ml-2 mr-2 w-full relative">
-                                <div class="w-full absolute bottom-2">
-                                    <div id="player_name2" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">天ノ川寝夢</div>
-                                    <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
-                                        <div id="boost_bar2" class="bg-orange-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
+                    <div id="player_4" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
+                        <div class="mr-5 player_frame_orange">
+                            <div class="flex flex-row-reverse">
+                                <img id="player_icon4" class="w-[150px] rounded-lg" alt="">
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute bottom-2">
+                                        <div id="player_name4" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kaniiiiiiiiii</div>
+                                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar4" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="player_5" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
+                        <div class="mr-5 player_frame_orange">
+                            <div class="flex flex-row-reverse">
+                                <img id="player_icon5" class="w-[150px] rounded-lg" alt="">
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute bottom-2">
+                                        <div id="player_name5" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Wani</div>
+                                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar5" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -56,153 +133,76 @@
                     </div>
                 </div>
             </div>
-            <!-- Dummy -->
-            <div class="flex-auto"></div>
-            <div class="mt-10 h-[70px]  w-[1030px]">
-                <!-- <div class="flex-auto"></div> -->
-                <div class="flex w-[1030px]">
-                    <div class="ml-auto w-[360px] h-[70px]">
-                        <div class="teamName teamName_blue fit  font-bold text-gray-100 text-center text-[50px] mt-auto"><span  id="blue_team_name">GENG</span></div>
-                    </div>
-                    <div class="w-[300px] h-[70px] mt-0">
-                        <div class="flex text-center">
-                            <div id="score_blue" class="text-center w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
-                            <!-- Dummy -->
-                            <div class="flex-auto">
-                                <div id="time" class="text-[50px] text-center font-bold text-white bottom-0 top-0">
-                                    5:00
-                                </div>
-                            </div>
-                            <div id="score_orange" class="text-center w-[80px] h-[80px] font-bold text-gray-100 text-[50px]">0</div>
-                        </div>
-                    </div>
-                    <div class="mr-auto w-[360px] h-[70px]">
-                        <div class="teamName teamName_orange fit font-bold text-gray-100 text-center text-[50px]"><span id="orange_team_name">FAZE</span></div>
-                    </div>
-                </div>
-                <!-- <div class="flex-auto"></div> -->
-            </div>
-            <!-- Dummy -->
-            <div class="flex-auto"></div>
-            <div class="mt-5 right-0">
-
-                <div id="player_3" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                    <div class="mr-5 player_frame_orange">
-                        <div class="flex flex-row-reverse">
-                            <img id="player_icon3" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
-                            <div class="ml-2 mr-2 w-full relative">
-                                <div class="w-full absolute bottom-2">
-                                    <div id="player_name3" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Inu</div>
-                                    <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                                        <div id="boost_bar3" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="player_4" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
-                    <div class="mr-5 player_frame_orange">
-                        <div class="flex flex-row-reverse">
-                            <img id="player_icon4" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
-                            <div class="ml-2 mr-2 w-full relative">
-                                <div class="w-full absolute bottom-2">
-                                    <div id="player_name4" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kaniiiiiiiiii</div>
-                                    <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                                        <div id="boost_bar4" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="player_5" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
-                    <div class="mr-5 player_frame_orange">
-                        <div class="flex flex-row-reverse">
-                            <img id="player_icon5" src="./kafka.png" class="w-[150px] rounded-lg" alt="">
-                            <div class="ml-2 mr-2 w-full relative">
-                                <div class="w-full absolute bottom-2">
-                                    <div id="player_name5" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Wani</div>
-                                    <div class="w-auto bg-black h-2 rounded-[0.2rem]">
-                                        <div id="boost_bar5" class="bg-blue-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="boost_gauge" class="-z-10 absolute bottom-[80px] right-[100px]">
-            <div
-            class="inline-flex items-center justify-center overflow-hidden rounded-full"
-                  >
-            <!-- Building a Progress Ring: https://css-tricks.com/building-progress-ring-quickly/ -->
-            <svg class="w-[200px] h-[200px] rotate-90">
-              <circle
-                class="text-gray-300"
-                stroke-width="30"
-                stroke="currentColor"
-                fill="transparent"
-                r="100"
-                cx="100"
-                cy="100"
-              />
-              <!--
-                :stroke-dasharray="circumference"
-                :stroke-dashoffset="circumference - percent / 100 * circumference"
-               -->
-              <circle
-                id="inner-circle"
-                class="text-blue-600"
-                stroke-width="30"
-                stroke-dasharray="628"
-                stroke-dashoffset="628"
-                stroke-linecap="butt"
-                stroke="currentColor"
-                fill="transparent"
-                r="100"
-                cx="100"
-                cy="100"
-              />
-            </svg>
-            <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700">5</span>
+            <div id="boost_gauge" class="-z-10 absolute bottom-[80px] right-[100px]">
+                <div
+                class="inline-flex items-center justify-center overflow-hidden rounded-full"
+                      >
+                <!-- Building a Progress Ring: https://css-tricks.com/building-progress-ring-quickly/ -->
+                <svg class="w-[200px] h-[200px] rotate-90">
+                  <circle
+                    class="text-gray-300"
+                    stroke-width="30"
+                    stroke="currentColor"
+                    fill="transparent"
+                    r="100"
+                    cx="100"
+                    cy="100"
+                  />
+                  <!--
+                    :stroke-dasharray="circumference"
+                    :stroke-dashoffset="circumference - percent / 100 * circumference"
+                   -->
+                  <circle
+                    id="inner-circle"
+                    class="text-blue-600"
+                    stroke-width="30"
+                    stroke-dasharray="628"
+                    stroke-dashoffset="628"
+                    stroke-linecap="butt"
+                    stroke="currentColor"
+                    fill="transparent"
+                    r="100"
+                    cx="100"
+                    cy="100"
+                  />
+                </svg>
+                <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700">5</span>
             
-        </div>
-        </div>
-        <img src="" id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
-        <div id="sub_stats" class="-z-10 absolute bottom-10 ml-7 ">
-            <div class="">
-                <div id="team_name" class="font-bold text-white text-[30px]">
-                    Glaces Blaze
-                </div>
-                <div id="abbr" class="font-bold text-white text-[30px]">
-                    GBC
-                </div>
-                <div class="flex">
-                    <div class="font-bold text-white text-[50px] w-[270px] flex">
-                        <span id="player_name" class="my-auto">天ノ川寝夢</span>
+            </div>
+            </div>
+            <img src="" id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
+            <div id="sub_stats" class="-z-10 absolute bottom-10 ml-7 ">
+                <div class="">
+                    <div id="team_name" class="font-bold text-white text-[30px]">
+                        Glaces Blaze
                     </div>
-                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                        <p>score</p>
-                        <p id="score">0</p>
+                    <div id="abbr" class="font-bold text-white text-[30px]">
+                        GBC
                     </div>
-                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                        <p>goals</p>
-                        <p id="goals">0</p>
-                    </div>
-                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                        <p>shots</p>
-                        <p id="shots">0</p>
-                    </div>
-                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                        <p>assists</p>
-                        <p id="assists">0</p>
-                    </div>
-                    <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                        <p>saves</p>
-                        <p id="saves">0</p>
+                    <div class="flex">
+                        <div class="font-bold text-white text-[50px] w-[270px] flex">
+                            <span id="player_name" class="my-auto">天ノ川寝夢</span>
+                        </div>
+                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                            <p>score</p>
+                            <p id="score">0</p>
+                        </div>
+                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                            <p>goals</p>
+                            <p id="goals">0</p>
+                        </div>
+                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                            <p>shots</p>
+                            <p id="shots">0</p>
+                        </div>
+                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                            <p>assists</p>
+                            <p id="assists">0</p>
+                        </div>
+                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                            <p>saves</p>
+                            <p id="saves">0</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -244,7 +244,7 @@
                 // await feedinFromTop();
                 gsap.to("#blue_team_name",{opacity:1});gsap.to("#orange_team_name",{opacity:1});
                 $(".teamName").addClass("fade");
-                await sleep(3000);
+                await sleep(2000);
                 await feedinPlayers();
                 await sleep(1000);
                 await feedinSubStats();
@@ -257,6 +257,10 @@
                 // feedFromTopList.forEach((tar) => opa0(tar));
                 playerList.forEach(tar => opa0(tar));
                 subStatsList.forEach(tar => opa0(tar));
+
+                //ここで描画
+                $(".screen").removeClass("hidden");
+
                 $(".team_name").addClass("fade");
 
                 const boost = 33;
