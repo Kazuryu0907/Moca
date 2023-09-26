@@ -28,7 +28,7 @@ const socketInit = () => {
   socket = _socket;
   _socket.onConnection = (ws:WebSocket) => {
     const idTable = ss.idTable;
-    const playerTable = {cmd:"playerTable",data:idTable};
+    const playerTable = {cmd:"idTable",data:idTable};
     ws.send(JSON.stringify(playerTable));
   };
   _socket.bind();

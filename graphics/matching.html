@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-green-500" style="background-color: rgba(0, 0, 0, 1);">
+    <body class="bg-green-500" style="background-color: rgba(51, 255, 0, 0);">
         <video preload="none" src="./gbc.mp4" id="mv_goal" hidden muted></video>
         <img id="dummy_img" hidden src="" alt="">
         <div class="screen hidden">
@@ -366,7 +366,7 @@
                 const msg = JSON.parse(message.data);
                 const cmd = msg["cmd"];
                 const data = msg["data"];
-                if(cmd != "boost" || cmd != "time")console.log(msg);
+                if(cmd != "boost" && cmd != "time")console.log(msg);
                 if(cmd == "imgPath"){
                     imgPath = data;
                 }
@@ -374,7 +374,7 @@
                     // document.getElementById("boosts").style.visibility = "visible";
                     const {boost,index} = data;
                     if(index == watchingBoostIndex)setBoost(Number(boost));
-                    document.getElementById("boost"+index).textContent = boost;
+                    // document.getElementById("boost"+index).textContent = boost;
                     document.getElementById("boost_bar"+index).style.width = boost+"%";
                 }
                 else if(cmd == "player"){
@@ -384,7 +384,7 @@
                     const watchingPlayerId = playerTable[playerIndex];
                     const spreadPlayerName = idTable[watchingPlayerId];
                     document.getElementById("player_name").textContent = spreadPlayerName;
-                    const boost = document.getElementById("boost"+playerIndex).textContent;
+                    const boost = document.getElementById("boost_bar"+playerIndex).style.width.slice(0,-1);
                     setBoost(Number(boost));
                     const teamName = matchInfo[team];
                     const teamOb = teamData.find(t => t.teamName == teamName);
@@ -439,13 +439,19 @@
                     });
                 }
                 // ? ここバグってそう
+                /*
+                {"cmd":"playerTable","data":["49de3a89b8564d8dba3b2f9c994ac52f","76561198127881181","76561198174543701","b70cd508b0874599a0f8d36c8ce1088f","76561198241218630","76561198273898935"]}
+                */
                 else if(cmd == "playerTable"){// teamTable
                     const ids = data;
                     console.log(ids,idTable);
                     playerTable = {...ids};
                     for(let i = 0;i<6;i++){
                         const id = ids[i];
-                        // document.getElementById("player_name"+i).textContent = idTable[id];
+                        const name = idTable[id];
+                        const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                        document.getElementById("player_name"+i).textContent = name;
+                       $("#player_icon"+i).attr("src",path+`${name}.png`);
                     }
                 }
                 else if(cmd == "time"){
@@ -480,6 +486,12 @@
 
         </script>
         <style>
+            .player_frame_orange,
+            .player_frame_blue{
+                width: 330px;
+                height: 150px;
+            }
+
             .player_frame_blue{
                 background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10C0.5 4.75329 4.7533 0.5 10 0.5H140C145.247 0.5 149.5 4.7533 149.5 10V74C149.5 79.799 154.201 84.5 160 84.5H320C325.247 84.5 329.5 88.7533 329.5 94V140C329.5 145.247 325.247 149.5 320 149.5H150H10C4.75329 149.5 0.5 145.247 0.5 140V10Z" fill="rgb(31,41,58)" stroke="rgb(31,41,58)"/></svg>');
             }
@@ -523,7 +535,7 @@
             .setPoint_blue>.setPointChild{
                 /* display: block; */
                 transform: translate(-100%,0);
-                transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+                transform: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
             }
             .setPoint_orange{
                 overflow: hidden;
