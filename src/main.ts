@@ -16,7 +16,6 @@ require("dotenv").config();
 let mainWindow:BrowserWindow;
 let socket:socketComm; 
 
-
 (async ()=>{
 let ss:SheetService; 
 let ds:DriveService;
