@@ -125,6 +125,8 @@ export class socketComm{
       this.sendData("/boost",{cmd:"endStats",data:0});
     }else if(cmd == "endReplay"){
       this.sendData("/boost",{cmd:"endReplay",data:0});
+    }else if(cmd == "setPoint"){
+      this.sendData("/boost",{cmd:"setPoint",data:input.data});
     }
   }
 

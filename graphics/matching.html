@@ -460,6 +460,14 @@
                     const seconds = time % 60;
                     document.getElementById("time").textContent = `${minutes}:${seconds < 10 ? "0"+seconds : seconds}`; 
                 }
+                else if(cmd == "setPoint"){
+                    //bluePoint,orangePoint
+                    const {blue,orange} = data;
+                    if(blue == 0)[0,1].forEach(i => $(`#setPoint_blue_${i}`).addClass("bg-gray-500").removeClass("bg-blue-500"));
+                    if(orange == 0)[0,1].forEach(i => $(`#setPoint_orange_${i}`).addClass("bg-gray-500").removeClass("bg-orange-500"));
+                    for(let i = 0;i<blue;i++)$(`#setPoint_blue_${i}`).removeClass("bg-gray-500").addClass("bg-blue-500");
+                    for(let i = 0;i<orange;i++)$(`#setPoint_orange_${i}`).removeClass("bg-gray-500").addClass("bg-orange-500");
+                }
                 else if(cmd == "goals"){//onGoal
                     //    string,string,blue|orange
                     const {assistId,scoreId,team} = data;
