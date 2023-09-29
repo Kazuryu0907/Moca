@@ -46,10 +46,10 @@
                 <div class="w-[330px] border h-[95px]">
                     <div class="">
                         <div class="flex text-center font-['DSEG7_Classic']">
-                            <div class="text-center w-[80px] font-bold text-gray-100 text-[55px] tabular-nums">0</div>
+                            <div id="setPoint_blue" class="text-center w-[80px] font-bold text-gray-100 text-[55px] tabular-nums">0</div>
                             <!-- Dummy -->
                             <div class="flex-auto"></div>
-                            <div class="text-center w-[80px] font-bold text-gray-100 text-[55px] tabular-nums">1</div>
+                            <div id="setPoint_orange" class="text-center w-[80px] font-bold text-gray-100 text-[55px] tabular-nums">1</div>
                         </div>
                     </div>
                 </div>
@@ -259,6 +259,10 @@
                 //     const players = data;
                 //     document.getElementById(`names${i}`).textContent = players[i];
                 // }
+            } else if (cmd == "setPoint"){
+                const {blue,orange} = data;
+                document.getElementById("setPoint_blue").textContent = blue;
+                document.getElementById("setPoint_orange").textContent = orange;
             } else if (cmd == "stats") {
                 //data array
                 const table = ["scores", "goals", "assists", "shots", "saves", "demos"];
