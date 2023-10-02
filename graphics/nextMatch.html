@@ -36,7 +36,7 @@
                 <!-- 900px -->
                 <div class="flex gap-[30px] ">
                     <div id="vtuber_b1">
-                        <img id="img_b1" class="player-icon">
+                        <img id="img_b1" class="fadebig player-icon">
                         <div id="player_b1" class="player-name">アーサー＝ダイ・ルバーシュ
                         </div>
                     </div>
@@ -135,6 +135,9 @@
                 else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:"expo.out"});
             }
 
+            const fadeBig = (tar) => {
+                gsap.fromTo(tar,{width:0,height:0,opacity:0},{width:"280px",height:"280px",opacity:1,duration:10,ease:Back.easeOut.config(1.7)});
+            }
 
             const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
             window.onload = function(){

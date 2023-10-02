@@ -10,6 +10,11 @@
         <img id="dummy_img" hidden src="" alt="">
         <div class="screen hidden">
             <div class="relative">
+                <div class="absolute w-full flex top-[14px]">
+                    <div class="mx-auto ">
+                        <img src="./background.svg" alt="">
+                    </div>                    
+                </div>
                 <div class="absolute w-full mt-5">
                     <!-- <div class="flex-auto"></div> -->
                     <div class="flex  h-[80px]">
@@ -39,19 +44,21 @@
                         <div class="flex-auto"></div>
                         <!-- Dummy -->
                     </div>
-                    <div class="flex h-[30px] mt-5">
+                    <div class="flex h-[44px]">
                         <!-- Dummy -->
                         <div class="flex-auto"></div>
                         <!-- Dummy -->
-                        <div class="setPoint setPoint_blue w-[250px]">
-                            <div class="flex justify-end setPointChild">
+                        <div class="setPoint setPoint_blue w-[265px]">
+                            <div class="flex justify-end setPointChild  mt-5">
                                 <div id="setPoint_blue_1" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
                                 <div id="setPoint_blue_0" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
+                                <div class="w-[50px]"></div>
                             </div>
                         </div>
-                        <div class="w-[300px]"></div>
-                        <div class="setPoint setPoint_orange w-[250px]">
-                            <div class="flex setPointChild">
+                        <div class="w-[160px]"></div>
+                        <div class="setPoint setPoint_orange w-[265px]">
+                            <div class="flex setPointChild mt-5">
+                                <div class="w-[50px]"></div>
                                 <div id="setPoint_orange_0" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
                                 <div id="setPoint_orange_1" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
                             </div>
@@ -59,6 +66,18 @@
                         <!-- Dummy -->
                         <div class="flex-auto"></div>
                         <!-- Dummy -->
+                    </div>
+                </div>
+                <div class="absolute w-full top-[100px]">
+                    <div class="flex justify-center">
+                        <span id="bo" class="text-white text-[30px]">Bo3</span>
+                    </div>
+                </div>
+                <div class="absolute w-full top-[0px]">
+                    <div class="flex justify-center">
+                        <div class="w-[300px] h-[23px] flex justify-center items-center">
+                            <span id="title" class="text-white text-[20px]">Bo3</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,7 +105,7 @@
                                 <img id="player_icon1" class="w-[150px] rounded-lg" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
-                                        <div id="player_name1" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kani</div>
+                                        <div id="player_name1" class="fit-icon text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kani</div>
                                         <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
                                             <div id="boost_bar1" class="bg-blue-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
                                         </div>
@@ -101,7 +120,7 @@
                                 <img id="player_icon2" class="w-[150px] rounded-lg" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
-                                        <div id="player_name2" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">天ノ川寝夢</div>
+                                        <div id="player_name2" class="fit-icon text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">天ノ川寝夢</div>
                                         <div class="mt-1 w-full bg-black h-2 rounded-[0.2rem]">
                                             <div id="boost_bar2" class="bg-blue-500 h-2 rounded-[0.2rem]" style="width:33%"></div>
                                         </div>
@@ -123,8 +142,8 @@
                                 <img id="player_icon3" class="w-[150px] rounded-lg" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
-                                        <div id="player_name3" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Inu</div>
-                                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                        <div id="player_name3" class="fit-icon text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Inu</div>
+                                        <div class="mt-1 w-auto bg-black h-2 rounded-[0.2rem]">
                                             <div id="boost_bar3" class="bg-orange-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
                                         </div>
                                     </div>
@@ -138,8 +157,8 @@
                                 <img id="player_icon4" class="w-[150px] rounded-lg" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
-                                        <div id="player_name4" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kaniiiiiiiiii</div>
-                                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                        <div id="player_name4" class="fit-icon text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kaniiiiiiiiii</div>
+                                        <div class="mt-1 w-auto bg-black h-2 rounded-[0.2rem]">
                                             <div id="boost_bar4" class="bg-orange-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
                                         </div>
                                     </div>
@@ -153,8 +172,8 @@
                                 <img id="player_icon5" class="w-[150px] rounded-lg" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
-                                        <div id="player_name5" class="text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Wani</div>
-                                        <div class="w-auto bg-black h-2 rounded-[0.2rem]">
+                                        <div id="player_name5" class="fit-icon text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Wani</div>
+                                        <div class="mt-1 w-auto bg-black h-2 rounded-[0.2rem]">
                                             <div id="boost_bar5" class="bg-orange-500 h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
                                         </div>
                                     </div>
@@ -201,20 +220,22 @@
             
             </div>
             </div>
-            <img src="" id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
-            <div id="sub_stats" class="-z-10 absolute bottom-10 ml-7 ">
-                <div class="">
-                    <div id="abbr" class="font-bold text-white text-[30px]">
-                        GBC
+            <img src="http://absolute/C:\Users\kazum\Desktop\programings\GBC_dev\graphics/images/きんちゃま.png" id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
+            <div id="sub_stats" class="-z-10 absolute bottom-2 ml-7 border">
+                <div class="sub-stats">
+                    <div class="flex h-[45px]">
+                        <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
+                            <span id="abbr" class="mx-auto my-auto justify-center items-center">5G</span>
+                        </div>
+                        <div id="team_name" class="mx-3 font-bold text-white text-[30px]">
+                            ガチガバガバゴールゲーミング
+                        </div>
                     </div>
-                    <div id="team_name" class="font-bold text-white text-[30px]">
-                        Glaces Blaze
+                    <div class="mx-3 font-bold text-white text-[50px] w-[350px] flex">
+                        <span id="player_name" class="my-auto">獅子美夜ふぇりえ</span>
                     </div>
                     <div class="flex">
-                        <div class="font-bold text-white text-[50px] w-[270px] flex">
-                            <span id="player_name" class="my-auto">天ノ川寝夢</span>
-                        </div>
-                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
+                        <div class="text-center font-bold text-white text-[30px] mr-[30px] my-auto">
                             <p>score</p>
                             <p id="score">0</p>
                         </div>
@@ -266,6 +287,7 @@
                 ["#player_1","#player_4"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
                 await sleep(300);
                 ["#player_2","#player_5"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
+                // fit_icon();
             } 
             const feedinSubStats = async() => {
                 feedin("#sub_stats",null,100);
@@ -273,6 +295,7 @@
             }
             const feedinit = async() => {
                 // await feedinFromTop();
+                fit_icon();
                 gsap.to("#blue_team_name",{opacity:1});gsap.to("#orange_team_name",{opacity:1});
                 $(".teamName").addClass("fade");
                 $(".setPoint").addClass("fade");
@@ -292,30 +315,43 @@
 
                 //ここで描画
                 $(".screen").removeClass("hidden");
-
-
                 const boost = 33;
                 setBoost(Number(boost));
                 gsap.delayedCall(1,feedinit);
             }
-
-            const fit = () => {
-                const defaultTextSize = 50;
-                const divHeight = 70;
-                let resizeText = document.getElementsByClassName('fit');
+            const _fit = (className,defaultTextSize,divHeight) => {
+                let resizeText = document.getElementsByClassName(className);
                 for (let i = 0; i < resizeText.length; i++) {
                     let textElm = resizeText[i];
-                    //----------INIT---------
-                    // textElm.style.marginTop = "0px";
                     textElm.style.fontSize = `${defaultTextSize}px`;
-                    // console.log(i,textElm.getBoundingClientRect().height,textElm.scrollHeight);
                     let size = defaultTextSize;
                     for(;textElm.scrollHeight > divHeight && size > 1;size--){
                         textElm.style.fontSize = size + "px";
                     }
-                    // const margin = (divHeight - textElm.scrollHeight)/2;
-                    // textElm.style.marginTop = `${margin}px`;
                 }
+            }
+
+            const fit = () => {
+                _fit("fit",50,70);
+                // const defaultTextSize = 50;
+                // const divHeight = 70;
+                // let resizeText = document.getElementsByClassName('fit');
+                // for (let i = 0; i < resizeText.length; i++) {
+                //     let textElm = resizeText[i];
+                //     //----------INIT---------
+                //     // textElm.style.marginTop = "0px";
+                //     textElm.style.fontSize = `${defaultTextSize}px`;
+                //     // console.log(i,textElm.getBoundingClientRect().height,textElm.scrollHeight);
+                //     let size = defaultTextSize;
+                //     for(;textElm.scrollHeight > divHeight && size > 1;size--){
+                //         textElm.style.fontSize = size + "px";
+                //     }
+                //     // const margin = (divHeight - textElm.scrollHeight)/2;
+                //     // textElm.style.marginTop = `${margin}px`;
+                // }
+            }
+            const fit_icon = () => {
+                _fit("fit-icon",25,38);
             }
             const circle = async() => {
                 const r = 100;
@@ -395,7 +431,7 @@
                     $("#team_name").text(teamName);
 
                     //Icon
-                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/images/` : `${imgPath}/images/`;
                     $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
                     gsap.to("#player_icon",{opacity:1});
                     //Change Boost Color
@@ -421,8 +457,12 @@
                     matchInfo = data;
                     const blueTeamName = data.blue;
                     const orangeTeamName = data.orange;
+                    const title = data.name;
+                    const bo = data.bo;
                     document.getElementById("blue_team_name").textContent = blueTeamName;
                     document.getElementById("orange_team_name").textContent = orangeTeamName;
+                    document.getElementById("title").textContent = title;
+                    document.getElementById("bo").textContent = bo;
                     fit();
                     // V用立ち絵のpreLoad
                     const blueTeamMembers = teamData.find(t => t.teamName == blueTeamName).playerNames;
@@ -431,12 +471,13 @@
                     const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
                     blueTeamMembers.forEach((name,i) => {
                         $(`#player_icon${i}`).attr("src",path+`${name}.png`);
-                        // $(`#player_name${i}`).text(name);
+                        $(`#player_name${i}`).text(name);
                     });
                     orangeTeamMembers.forEach((name,i) => {
                         $(`#player_icon${i+3}`).attr("src",path+`${name}.png`);
-                        // $(`#player_name${i+3}`).text(name);
+                        $(`#player_name${i+3}`).text(name);
                     });
+                    fit_icon();
                 }
                 // ? ここバグってそう
                 /*
@@ -506,6 +547,16 @@
             .player_frame_orange{
                 background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path fill="rgb(31,41,58)" fill-rule="evenodd" clip-rule="evenodd" d="M180 10C180 4.47715 184.477 0 190 0H320C325.523 0 330 4.47715 330 10V140C330 145.523 325.523 150 320 150H180H10C4.47716 150 0 145.523 0 140V94C0 88.4771 4.47715 84 10 84H170C175.523 84 180 79.5229 180 74V10Z"/><path d="M190 -1C183.925 -1 179 3.92487 179 10H181C181 5.02944 185.029 1 190 1V-1ZM320 -1H190V1H320V-1ZM331 10C331 3.92487 326.075 -1 320 -1V1C324.971 1 329 5.02944 329 10H331ZM331 140V10H329V140H331ZM320 151C326.075 151 331 146.075 331 140H329C329 144.971 324.971 149 320 149V151ZM180 151H320V149H180V151ZM10 151H180V149H10V151ZM-1 140C-1 146.075 3.92487 151 10 151V149C5.02944 149 1 144.971 1 140H-1ZM-1 94V140H1V94H-1ZM10 83C3.92487 83 -1 87.9249 -1 94H1C1 89.0294 5.02944 85 10 85V83ZM170 83H10V85H170V83ZM170 85C176.075 85 181 80.0751 181 74H179C179 78.9706 174.971 83 170 83V85ZM179 10V74H181V10H179Z" fill="rgb(31,41,58)"/></svg>');
             }
+
+            /* .setPoint_blue{
+                background-image: url('data:image/svg+xml;utf8,<svg width="265" height="44" viewBox="0 0 265 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 43.5H264.5V0.5H0.5V4C0.5 25.8152 18.1848 43.5 40 43.5Z" stroke="black" fill="rgb(38,38,38)"/></svg>');
+            }
+            .setPoint_orange{
+                background-image: url('data:image/svg+xml;utf8,<svg width="265" height="44" viewBox="0 0 265 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 43.5H225C246.815 43.5 264.5 25.8152 264.5 4V0.5H0.5V43.5Z" stroke="black" fill="rgb(38,38,38)"/></svg>');
+            } */
+
+
+
             .teamName_blue{
                 overflow: hidden;
                 transform: translate(100%,0);

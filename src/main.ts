@@ -14,14 +14,15 @@ const envPath = path.join(String.raw`D:\github\Moca\src`,".env");
 // require("dotenv").config({path:envPath});
 require("dotenv").config();
 let mainWindow:BrowserWindow;
-let socket:socketComm; 
+let socket:socketComm;
 
-(async ()=>{
+(async ()=>{ 
 let ss:SheetService; 
 let ds:DriveService;
 // await ss.init();
 ds = new DriveService();
 ss = new SheetService(process.env);
+
 
 const socketInit = () => {
   const _socket = new socketComm(mainWindow);

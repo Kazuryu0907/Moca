@@ -69,7 +69,7 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
       return;
     }
     //Success時
-    setEnvStatus({ ...envStatus, auth: "success",fetch:"loading" });
+    setEnvStatus({ ...envStatus, auth: "success",fetch:"loading"});
 
     //first get data
     //spread
@@ -86,7 +86,7 @@ export const start = async (env:any,ss:SheetService,ds:DriveService,socket:socke
     console.log(idTable);
     //Succes!
     setEnvStatus({...envStatus,fetch:"success"});
-    const playerTable = {cmd:"playerTable",data:idTable};
+    const playerTable = {cmd:"idTable",data:idTable};
     socket.stream(playerTable);
     mainWindow.webContents.send("cachedMatchInfo",matchInfo);
     mainWindow.webContents.send("cachedIdTable",idTable);
