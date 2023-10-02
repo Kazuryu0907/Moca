@@ -220,40 +220,45 @@
             
             </div>
             </div>
-            <img src="http://absolute/C:\Users\kazum\Desktop\programings\GBC_dev\graphics/images/きんちゃま.png" id="player_icon" class="-z-10 absolute bottom-0  ml-2 w-[500px] h-[600px] object-cover object-left-top" alt="">
-            <div id="sub_stats" class="-z-10 absolute bottom-2 ml-7 border">
-                <div class="sub-stats">
-                    <div class="flex h-[45px]">
-                        <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
-                            <span id="abbr" class="mx-auto my-auto justify-center items-center">5G</span>
-                        </div>
-                        <div id="team_name" class="mx-3 font-bold text-white text-[30px]">
-                            ガチガバガバゴールゲーミング
-                        </div>
-                    </div>
-                    <div class="mx-3 font-bold text-white text-[50px] w-[350px] flex">
-                        <span id="player_name" class="my-auto">獅子美夜ふぇりえ</span>
-                    </div>
+            <img src="http://absolute/C:\Users\kazum\Desktop\programings\GBC_dev\graphics/images/きんちゃま.png" id="player_icon" class="-z-10 absolute bottom-[100px]  ml-2 w-[500px] h-[500px] object-cover object-left-top" alt="">
+            <div id="sub_stats" class="-z-10 absolute bottom-2 ml-7">
+                <div class="p-3 sub-stats">
                     <div class="flex">
-                        <div class="text-center font-bold text-white text-[30px] mr-[30px] my-auto">
-                            <p>score</p>
-                            <p id="score">0</p>
+                        <div>
+                            <div class="flex h-[45px] w-[442px]">
+                                <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
+                                    <span id="abbr" class="mx-auto my-auto justify-center items-center">5G</span>
+                                </div>
+                                <div id="team_name" class="mx-3 font-bold text-white text-[30px]">
+                                    ガチガバガバゴールゲーミング
+                                </div>
+                            </div>
+                            <div class="font-bold text-white text-[50px] w-[442px] flex">
+                                <span id="player_name" class="my-auto">獅子美夜ふぇりえ</span>
+                            </div>
+                            <div id="sub_stats_hr" class="h-[4px] bg-blue-600 w-full"></div>
                         </div>
-                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                            <p>goals</p>
-                            <p id="goals">0</p>
-                        </div>
-                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                            <p>shots</p>
-                            <p id="shots">0</p>
-                        </div>
-                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                            <p>assists</p>
-                            <p id="assists">0</p>
-                        </div>
-                        <div class="text-center font-bold text-white text-[30px] mx-[30px] my-auto">
-                            <p>saves</p>
-                            <p id="saves">0</p>
+                        <div class="ml-8 flex items-end">
+                            <div class="h-[105px] text-center font-bold text-white text-[30px] mr-[30px]">
+                                <p>score</p>
+                                <p id="score" class="text-[40px]">0</p>
+                            </div>
+                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                                <p>goals</p>
+                                <p id="goals" class="text-[40px]">0</p>
+                            </div>
+                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                                <p>shots</p>
+                                <p id="shots" class="text-[40px]">0</p>
+                            </div>
+                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                                <p>assists</p>
+                                <p id="assists" class="text-[40px]">0</p>
+                            </div>
+                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                                <p>saves</p>
+                                <p id="saves" class="text-[40px]">0</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -438,6 +443,9 @@
                     let circleElm = document.getElementById("inner-circle");
                     circleElm.classList.remove("text-blue-600");circleElm.classList.remove("text-orange-600");
                     circleElm.classList.add(boostColor);
+                    let hrElm = document.getElementById("sub_stats_hr");
+                    hrElm.classList.remove("bg-orange-600");hrElm.classList.remove("bg-blue-600");
+                    hrElm.classList.add(boostColor);
                     let textElm = document.getElementById("circle-text");
                     textElm.classList.remove("text-blue-700");textElm.classList.remove("text-orange-700");
                     textElm.classList.add(boostTextColor);
@@ -546,6 +554,9 @@
             }
             .player_frame_orange{
                 background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path fill="rgb(31,41,58)" fill-rule="evenodd" clip-rule="evenodd" d="M180 10C180 4.47715 184.477 0 190 0H320C325.523 0 330 4.47715 330 10V140C330 145.523 325.523 150 320 150H180H10C4.47716 150 0 145.523 0 140V94C0 88.4771 4.47715 84 10 84H170C175.523 84 180 79.5229 180 74V10Z"/><path d="M190 -1C183.925 -1 179 3.92487 179 10H181C181 5.02944 185.029 1 190 1V-1ZM320 -1H190V1H320V-1ZM331 10C331 3.92487 326.075 -1 320 -1V1C324.971 1 329 5.02944 329 10H331ZM331 140V10H329V140H331ZM320 151C326.075 151 331 146.075 331 140H329C329 144.971 324.971 149 320 149V151ZM180 151H320V149H180V151ZM10 151H180V149H10V151ZM-1 140C-1 146.075 3.92487 151 10 151V149C5.02944 149 1 144.971 1 140H-1ZM-1 94V140H1V94H-1ZM10 83C3.92487 83 -1 87.9249 -1 94H1C1 89.0294 5.02944 85 10 85V83ZM170 83H10V85H170V83ZM170 85C176.075 85 181 80.0751 181 74H179C179 78.9706 174.971 83 170 83V85ZM179 10V74H181V10H179Z" fill="rgb(31,41,58)"/></svg>');
+            }
+            .sub-stats{
+                background-image: url("./sub_stats.svg");
             }
 
             /* .setPoint_blue{
