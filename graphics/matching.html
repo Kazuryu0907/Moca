@@ -301,6 +301,7 @@
             const feedinit = async() => {
                 // await feedinFromTop();
                 fit_icon();
+                fit();
                 gsap.to("#blue_team_name",{opacity:1});gsap.to("#orange_team_name",{opacity:1});
                 $(".teamName").addClass("fade");
                 $(".setPoint").addClass("fade");
@@ -338,22 +339,6 @@
 
             const fit = () => {
                 _fit("fit",50,70);
-                // const defaultTextSize = 50;
-                // const divHeight = 70;
-                // let resizeText = document.getElementsByClassName('fit');
-                // for (let i = 0; i < resizeText.length; i++) {
-                //     let textElm = resizeText[i];
-                //     //----------INIT---------
-                //     // textElm.style.marginTop = "0px";
-                //     textElm.style.fontSize = `${defaultTextSize}px`;
-                //     // console.log(i,textElm.getBoundingClientRect().height,textElm.scrollHeight);
-                //     let size = defaultTextSize;
-                //     for(;textElm.scrollHeight > divHeight && size > 1;size--){
-                //         textElm.style.fontSize = size + "px";
-                //     }
-                //     // const margin = (divHeight - textElm.scrollHeight)/2;
-                //     // textElm.style.marginTop = `${margin}px`;
-                // }
             }
             const fit_icon = () => {
                 _fit("fit-icon",25,38);
@@ -431,6 +416,7 @@
                     const teamOb = teamData.find(t => t.teamName == teamName);
                     const teamAbbr = teamOb.teamAbbrevitation;
                     const boostColor = team == "blue" ? "text-blue-600" : "text-orange-600";
+                    const hrColor = team == "blue" ? "bg-blue-600" : "bg-orange-600";
                     const boostTextColor = team == "blue" ? "text-blue-700" : "text-orange-700";
                     $("#abbr").text(teamAbbr);
                     $("#team_name").text(teamName);
@@ -445,7 +431,7 @@
                     circleElm.classList.add(boostColor);
                     let hrElm = document.getElementById("sub_stats_hr");
                     hrElm.classList.remove("bg-orange-600");hrElm.classList.remove("bg-blue-600");
-                    hrElm.classList.add(boostColor);
+                    hrElm.classList.add(hrColor);
                     let textElm = document.getElementById("circle-text");
                     textElm.classList.remove("text-blue-700");textElm.classList.remove("text-orange-700");
                     textElm.classList.add(boostTextColor);
