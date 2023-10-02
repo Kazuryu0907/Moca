@@ -23,6 +23,7 @@ let ds:DriveService;
 ds = new DriveService();
 ss = new SheetService(process.env);
 
+
 const socketInit = () => {
   const _socket = new socketComm(mainWindow);
   socket = _socket;
@@ -44,6 +45,10 @@ const socketInit = () => {
     ws.send(JSON.stringify({cmd:"matchInfo",data:matchInfo}));
     const stats = _socket.caches.stats;
     ws.send(JSON.stringify({cmd:"stats",data:stats}));
+    const setPoints = _socket.caches.setPoints;
+    ws.send(JSON.stringify({cmd:"setPoint",data:setPoints}));
+    const playerTable = _socket.caches.playerTable;
+    // ws.send(JSON.stringify({cmd:"playerTable",data:playerTable}));
   }
 }
 
@@ -59,7 +64,7 @@ const createWindow = () => {
   });
   mainWindow = _mainWindow;
   mainWindow.loadFile("dist/index.html");
-  mainWindow.webContents.openDevTools({ mode: "detach" });
+  // mainWindow.webContents.openDevTools({ mode: "detach" });
   mainWindow.webContents.on('did-finish-load',() => start(process.env,ss,ds,socket,mainWindow));
 };
 

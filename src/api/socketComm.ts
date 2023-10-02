@@ -20,6 +20,8 @@ function initRecord<Y>(arr:readonly string[],defaultVal:Y){
 
 class Caches{
   stats:Object = {};
+  setPoints:Object = {};
+  playerTable:Object = {};
 }
 
 export class socketComm{
@@ -103,6 +105,7 @@ export class socketComm{
     const cmd = input.cmd;
     if(cmd == "playerTable"){
       this.stream({cmd:"playerTable","data":input.data});
+      this.caches.playerTable = JSON.parse(JSON.stringify(input.data));
     }else if(cmd == "boost"){
       const data:{"boost":number,"index":number} = input.data;
       this.sendData("/boost",{cmd:"boost",data:data});
@@ -127,7 +130,7 @@ export class socketComm{
       this.sendData("/boost",{cmd:"endReplay",data:0});
     }else if(cmd == "setPoint"){
       this.sendData("/boost",{cmd:"setPoint",data:input.data});
-      this.sendData("/stats",{cmd:"setPoint",data:input.data});
+      this.caches.setPoints = JSON.parse(JSON.stringify(input.data));
     }
   }
 
