@@ -60,17 +60,17 @@
             </div>
         </div>
         <div class="grid mt-10 mx-[150px] text-[30px] font-bold text-center" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-            <div id="player_0" class="col-span-2">
+            <div id="player_0" class="col-span-2 blue_player">
                 <img id="img_0" src="./assets/0.png"
                     class="mx-auto player-icon"></img>
                 <div id="names_0" class="player-name">Player1</div>
             </div>
-            <div id="player_1" class="col-span-2">
+            <div id="player_1" class="col-span-2 blue_player">
                 <img id="img_1" src="./assets/0.png"
                     class="mx-auto player-icon"></img>
                 <div id="names_1" class="player-name">Player2</div>
             </div>
-            <div id="player_2" class="col-span-2">
+            <div id="player_2" class="col-span-2 blue_player">
                 <img id="img_2" src="./assets/0.png"
                     class="mx-auto player-icon"></img>
                 <div id="names_2" class="player-name">Player3</div>
@@ -318,6 +318,10 @@
         }
     </script>
     <style>
+        /* .blue_player{
+            background: linear-gradient(to top, #f12711, #f5af19); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        } */
+
             .teamName_blue{
                 overflow: hidden;
                 transform: translate(100%,0);
