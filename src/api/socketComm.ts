@@ -20,6 +20,8 @@ function initRecord<Y>(arr:readonly string[],defaultVal:Y){
 
 class Caches{
   stats:Object = {};
+  setPoint:Object = {};
+  currentScore:{blue:number,orange:number} = {blue:0,orange:0};
 }
 
 export class socketComm{
@@ -102,6 +104,10 @@ export class socketComm{
   sortingData(input:{"cmd":string,"data":any}){
     const cmd = input.cmd;
     if(cmd == "start"){
+      //得点管理
+      this.caches.currentScore.blue = 0;
+      this.caches.currentScore.orange = 0;
+      this.sendData("/boost",{cmd:"currentScore",data:this.caches.currentScore});
       this.sendData("/boost",{cmd:"start",data:0});
     }else if(cmd == "playerTable"){
       this.stream({cmd:"playerTable","data":input.data});
@@ -122,14 +128,19 @@ export class socketComm{
       this.sendData("/boost",{cmd:"time",data:input.data});
     }else if(cmd == "goals"){
       const data:{assistId:string,scoreId:string,team:"blue"|"orange"} = input.data;
+      if(data.team == "blue")this.caches.currentScore.blue++;
+      else                   this.caches.currentScore.orange++;
       this.sendData("/boost",{cmd:"goals",data:data});
+      //得点管理
+      this.sendData("/boost",{cmd:"currentScore",data:this.caches.currentScore});
+      this.sendData("/stats",{cmd:"currentScore",data:this.caches.currentScore});
     }else if(cmd == "endStats"){
       this.sendData("/boost",{cmd:"endStats",data:0});
     }else if(cmd == "endReplay"){
       this.sendData("/boost",{cmd:"endReplay",data:0});
     }else if(cmd == "setPoint"){
       this.sendData("/boost",{cmd:"setPoint",data:input.data});
-      this.sendData("/stats",{cmd:"setPoint",data:input.data});
+      this.caches.setPoint = JSON.parse(JSON.stringify(input.data));
     }
   }
 

@@ -13,7 +13,7 @@ export const Debug = () => {
         for(const line of lines){
             if(JSON.parse(line)["cmd"] == "time")continue;
             await window.app.sendSocketCommunication(line);
-            await sleep(100);
+            // await sleep(100);
         }
         
     }

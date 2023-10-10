@@ -43,13 +43,17 @@
                 <div class="fit team-name">
                     <div class="teamName teamName_blue"><span id="blue_team_name">GENGMOBILE1</span></div>
                 </div>
-                <div class="w-[330px] border h-[95px]">
+                <div class="w-[330px] h-[95px]">
                     <div class="">
                         <div class="flex text-center font-['DSEG7_Classic']">
-                            <div id="setPoint_blue" class="text-center w-[80px] font-bold text-gray-100 text-[55px] tabular-nums">0</div>
+                            <div class="text-center w-[80px] font-bold text-gray-100 text-[60px] tabular-nums">
+                                <span id="setPoint_blue" >0</span>
+                            </div>
                             <!-- Dummy -->
                             <div class="flex-auto"></div>
-                            <div id="setPoint_orange" class="text-center w-[80px] font-bold text-gray-100 text-[55px] tabular-nums">1</div>
+                            <div class="text-center w-[80px] font-bold text-gray-100 text-[60px] tabular-nums">
+                                <span id="setPoint_orange">0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -259,7 +263,11 @@
                 //     const players = data;
                 //     document.getElementById(`names${i}`).textContent = players[i];
                 // }
-            } else if (cmd == "setPoint"){
+            
+            // } else if (cmd == "setPoint"){
+            //     const {blue,orange} = data;
+            
+            } else if (cmd == "currentScore"){
                 const {blue,orange} = data;
                 document.getElementById("setPoint_blue").textContent = blue;
                 document.getElementById("setPoint_orange").textContent = orange;
@@ -318,6 +326,10 @@
         }
     </script>
     <style>
+            @font-face{
+                font-family: "DSEG7 Classic";
+                src: url("./DSEG7Classic-Bold.woff2");
+            }
 
             .teamName_blue{
                 overflow: hidden;

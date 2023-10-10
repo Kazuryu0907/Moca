@@ -49,15 +49,15 @@
                         <div class="flex-auto"></div>
                         <!-- Dummy -->
                         <div class="setPoint setPoint_blue w-[265px]">
-                            <div class="flex justify-end setPointChild  mt-5">
+                            <div class="flex justify-end setPointChild  mt-[10px]">
                                 <div id="setPoint_blue_1" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
                                 <div id="setPoint_blue_0" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
                                 <div class="w-[50px]"></div>
                             </div>
                         </div>
-                        <div class="w-[160px]"></div>
+                        <div class="w-[300px]"></div>
                         <div class="setPoint setPoint_orange w-[265px]">
-                            <div class="flex setPointChild mt-5">
+                            <div class="flex setPointChild mt-[10px]">
                                 <div class="w-[50px]"></div>
                                 <div id="setPoint_orange_0" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
                                 <div id="setPoint_orange_1" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
@@ -70,12 +70,12 @@
                 </div>
                 <div class="absolute w-full top-[100px]">
                     <div class="flex justify-center items-center">
-                        <span id="bo" class="text-black text-[30px] font-bold">Bo3</span>
+                        <span id="bo" class="text-white text-[30px] font-bold">Bo3</span>
                     </div>
                 </div>
                 <div class="absolute w-full top-[0px]">
                     <div class="flex justify-center">
-                        <div class="w-[300px] h-[23px] flex justify-center items-center">
+                        <div class="w-[300px] h-[16px] flex justify-center items-center">
                             <span id="title" class="text-white text-[20px] font-bold">TITLE</span>
                         </div>
                     </div>
@@ -221,15 +221,15 @@
                     cy="100"
                   />
                 </svg>
-                <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700">5</span>
+                <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700 font-sans">33</span>
             
             </div>
             </div>
             <div id="sub_stats" class="-z-10 absolute bottom-2 ml-7">
-                <div class="p-3 sub-stats">
+                <div class="sub-stats">
                     <div class="flex">
-                        <div>
-                            <div class="flex h-[45px] w-[442px]">
+                        <div class="pl-3 h-[130px]">
+                            <div class="mb-3 flex h-[45px] w-[442px]">
                                 <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
                                     <span id="abbr" class="mx-auto my-auto justify-center items-center">5G</span>
                                 </div>
@@ -237,31 +237,31 @@
                                     ガチガバガバゴールゲーミング
                                 </div>
                             </div>
-                            <div class="font-bold text-white  text-[50px] w-[442px] flex">
+                            <div class="absolute font-bold text-white  text-[50px] w-[442px] flex">
                                 <span id="player_name" class="my-auto">獅子美夜ふぇりえ</span>
                             </div>
                             <!-- <div id="sub_stats_hr" class="h-[4px] bg-blue-600 w-full"></div> -->
                         </div>
-                        <div class="ml-8 flex items-end">
+                        <div class="pb-3 ml-8 flex items-end">
                             <div class="h-[105px] text-center font-bold text-white text-[30px] mr-[30px]">
                                 <p>score</p>
-                                <p id="score" class="text-[40px]">0</p>
+                                <p id="score" class="mt-1 text-[40px]">0</p>
                             </div>
-                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
                                 <p>goals</p>
-                                <p id="goals" class="text-[40px]">0</p>
+                                <p id="goals" class="mt-1 text-[40px]">0</p>
                             </div>
-                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
                                 <p>shots</p>
-                                <p id="shots" class="text-[40px]">0</p>
+                                <p id="shots" class="mt-1 text-[40px]">0</p>
                             </div>
-                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
                                 <p>assists</p>
-                                <p id="assists" class="text-[40px]">0</p>
+                                <p id="assists" class="mt-1 text-[40px]">0</p>
                             </div>
-                            <div class="text-center font-bold text-white text-[30px] mx-[30px]">
+                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
                                 <p>saves</p>
-                                <p id="saves" class="text-[40px]">0</p>
+                                <p id="saves" class="mt-1 text-[40px]">0</p>
                             </div>
                         </div>
                     </div>
@@ -389,6 +389,10 @@
                 });
             }
 
+            window.onload = () => {
+                overlayInit();
+            }
+
             let webSocket;
             let playerTable = {};
             let idTable = {};
@@ -474,6 +478,10 @@
                     document.getElementById("orange_team_name").textContent = orangeTeamName;
                     document.getElementById("title").textContent = title;
                     document.getElementById("bo").textContent = bo;
+                    // if(bo == "Bo1"){
+                    //     document.getElementById("setPoint_blue_1").hidden = true;
+                    //     document.getElementById("setPoint_orange_1").hidden = true;
+                    // }
                     fit();
                     // V用立ち絵のpreLoad
                     const blueTeamMembers = teamData.find(t => t.teamName == blueTeamName).playerNames;
@@ -520,11 +528,16 @@
                     for(let i = 0;i<blue;i++)$(`#setPoint_blue_${i}`).removeClass("bg-gray-500").addClass("bg-blue-500");
                     for(let i = 0;i<orange;i++)$(`#setPoint_orange_${i}`).removeClass("bg-gray-500").addClass("bg-orange-500");
                 }
+                else if(cmd == "currentScore"){
+                    const {blue,orange} = data;
+                    document.getElementById("score_blue").textContent = blue;
+                    document.getElementById("score_orange").textContent = orange;
+                }
                 else if(cmd == "goals"){//onGoal
                     //    string,string,blue|orange
                     const {assistId,scoreId,team} = data;
-                    const currentScore = Number(document.getElementById(`score_${team}`).textContent);
-                    document.getElementById(`score_${team}`).textContent = currentScore + 1;
+                    // const currentScore = Number(document.getElementById(`score_${team}`).textContent);
+                    // document.getElementById(`score_${team}`).textContent = currentScore + 1;
                     setTimeout(() => {playTransition("#mv_goal")},3000);
                 }
                 else if(cmd == "endReplay"){
@@ -532,9 +545,13 @@
                 }
                 //RESET
                 else if(cmd == "endStats"){
-                    $("#score_blue").text("0");
-                    $("#score_orange").text("0");
+                    // $("#score_blue").text("0");
+                    // $("#score_orange").text("0");
+                    const score_blue = document.getElementById("score_blue").textContent;
+                    const score_orange = document.getElementById("score_orange").textContent;
+
                     $("#time").text("5:00");
+
                 }
                 else if(cmd == "teamData"){
                     teamData = data;

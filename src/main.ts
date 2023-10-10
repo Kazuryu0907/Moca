@@ -42,11 +42,15 @@ const socketInit = () => {
     let root = {cmd:"idTable",data:idTable};
     ws.send(JSON.stringify(root));
     const teamData = ss.teamData;
-    ws.send(JSON.stringify({cmd:"teamData",data:teamData}));
+    ws.send(JSON.stringify({cmd:"teamData",data:teamData}));;
     const matchInfo = ss.matchInfo;
     ws.send(JSON.stringify({cmd:"matchInfo",data:matchInfo}));
     const stats = _socket.caches.stats;
     ws.send(JSON.stringify({cmd:"stats",data:stats}));
+    const setPoint = _socket.caches.setPoint;
+    ws.send(JSON.stringify({cmd:"setPoint",data:setPoint}));
+    const currentScore = _socket.caches.currentScore;
+    ws.send(JSON.stringify({cmd:"currentScore",data:currentScore}));
   }
 }
 
