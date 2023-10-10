@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld(
         getDrive: (id:string) => ipcRenderer.invoke("getDrive",id),
         // getTeam: () => ipcRenderer.invoke("getTeam"),
         glob: () => ipcRenderer.invoke("glob"),
+        readFile:(path:string) => ipcRenderer.invoke("readFile",path),
         download: (data:string[]) => ipcRenderer.invoke("download",data),
         path_join: (...data:string[]) => ipcRenderer.invoke("path.join",data),
         encodeString: (data:string) => ipcRenderer.invoke("iconv",data),

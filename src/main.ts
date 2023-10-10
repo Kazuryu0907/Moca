@@ -1,6 +1,7 @@
 import path from "path";
 import {WebSocket} from "ws";
-import {unlink,mkdirSync, PathLike} from "fs";
+import {unlink,mkdirSync, PathLike,readFileSync} from "fs";
+import {createInterface} from "readline";
 import { BrowserWindow, app, ipcMain } from "electron";
 import { socketComm } from "./api/socketComm";
 import { SheetService } from "./api/spread";
@@ -61,7 +62,7 @@ const createWindow = () => {
   });
   mainWindow = _mainWindow;
   mainWindow.loadFile("dist/index.html");
-  mainWindow.webContents.openDevTools({ mode: "detach" });
+  // mainWindow.webContents.openDevTools({ mode: "detach" });
   mainWindow.webContents.on('did-finish-load',() => start(process.env,ss,ds,socket,mainWindow));
 };
 
@@ -70,13 +71,17 @@ app.whenReady().then(async() => {
   socketInit();
 });
 
-
+;
 app.once("window-all-closed", () => app.quit());
 
 //---------------handles--------------------------
 ipcMain.handle("sendSocketCommunication",(e,input) => {
   return socket.sendSocket(input);
 })
+
+ipcMain.handle("readFile",(e,path) => {
+  return readFileSync(path).toString();
+});
 
 ipcMain.handle("sendSocket",(e,input) => {
   const {path,data} = input;
@@ -85,7 +90,7 @@ ipcMain.handle("sendSocket",(e,input) => {
 ipcMain.handle("stream",(e,input) => {
   return socket.stream(input);
 })
-
+;
 ipcMain.handle("connectedBrowsers",() => {
   return socket.connectedBrowsers;
 })

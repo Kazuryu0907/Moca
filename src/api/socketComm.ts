@@ -101,7 +101,9 @@ export class socketComm{
 
   sortingData(input:{"cmd":string,"data":any}){
     const cmd = input.cmd;
-    if(cmd == "playerTable"){
+    if(cmd == "start"){
+      this.sendData("/boost",{cmd:"start",data:0});
+    }else if(cmd == "playerTable"){
       this.stream({cmd:"playerTable","data":input.data});
     }else if(cmd == "boost"){
       const data:{"boost":number,"index":number} = input.data;
@@ -132,6 +134,6 @@ export class socketComm{
   }
 
   sendSocket(data:string){
-    this.socket.send(data,12345,"localhost");
+    this.socket.send(data,12345,"127.0.0.1");
   }
 }

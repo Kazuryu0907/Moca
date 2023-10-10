@@ -19,6 +19,7 @@ export interface IMainProcess {
     loadTeams: () => Promise<void>;
     getMatchInfo: () => Promise<spreadMatchInfoType>;
     sendSocketCommunication:(data:string) => Promise<void>;
+    readFile:(path:string) => Promise<string>;
     sendSocket:(data:{path:string,data:dataType}) => Promise<void>;
     getDrive:(id:string) => Promise<any>;
     getTeam:() => Promise<any>;
