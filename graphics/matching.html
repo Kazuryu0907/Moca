@@ -81,9 +81,6 @@
                     </div>
                 </div>
 
-                <img class="absolute -z-10" src="assets/Boost_base.png" alt="">
-                <img class="absolute" src="assets/Boost_scale.png" alt="">
-                <img id="sub_stats_bg" class="absolute -z-10" src="assets/Focus_blue.png" alt="">
                 <img src="http://absolute/C:\Users\kazum\Desktop\GBC_dev\graphics\images\きんちゃま.png" id="player_icon" class="-z-20 absolute" alt="">
             </div>
 
@@ -188,85 +185,94 @@
                     </div>
                 </div>
             </div>
-            <div id="boost_gauge" class="-z-10 absolute bottom-[80px] right-[100px]">
-                <div
-                class="inline-flex items-center justify-center overflow-hidden rounded-full"
-                      >
-                <!-- Building a Progress Ring: https://css-tricks.com/building-progress-ring-quickly/ -->
-                <svg class="w-[200px] h-[200px] rotate-90">
-                  <circle
-                    class="text-gray-300"
-                    stroke-width="30"
-                    stroke="currentColor"
-                    fill="transparent"
-                    r="100"
-                    cx="100"
-                    cy="100"
-                  />
-                  <!--
-                    :stroke-dasharray="circumference"
-                    :stroke-dashoffset="circumference - percent / 100 * circumference"
-                   -->
-                  <circle
-                    id="inner-circle"
-                    class="text-blue-600"
-                    stroke-width="30"
-                    stroke-dasharray="628"
-                    stroke-dashoffset="628"
-                    stroke-linecap="butt"
-                    stroke="currentColor"
-                    fill="transparent"
-                    r="100"
-                    cx="100"
-                    cy="100"
-                  />
-                </svg>
-                <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700 font-sans">33</span>
-            
+            <div id="boost_gauge" class="h-[250px] w-[500px] absolute right-[24px] bottom-[60px] -z-10">
+                <!-- -z-10 absolute bottom-[80px] right-[100px] -->
+                <div class="mt-[24px] ml-[224px] absolute">
+                        <div
+                        class="inline-flex items-center justify-center overflow-hidden rounded-full"
+                                >
+                        <!-- Building a Progress Ring: https://css-tricks.com/building-progress-ring-quickly/ -->
+                        <svg class="w-[200px] h-[200px] rotate-90">
+                            <circle
+                            class="text-gray-300"
+                            stroke-width="30"
+                            stroke="currentColor"
+                            fill="transparent"
+                            r="100"
+                            cx="100"
+                            cy="100"
+                            />
+                            <!--
+                            :stroke-dasharray="circumference"
+                            :stroke-dashoffset="circumference - percent / 100 * circumference"
+                            -->
+                            <circle
+                            id="inner-circle"
+                            class="text-blue-600"
+                            stroke-width="30"
+                            stroke-dasharray="628"
+                            stroke-dashoffset="628"
+                            stroke-linecap="butt"
+                            stroke="currentColor"
+                            fill="transparent"
+                            r="100"
+                            cx="100"
+                            cy="100"
+                            />
+                        </svg>
+                        <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700 font-['DSEG7 Classic']">33</span>
+                    </div>
+                </div>
+                <img src="./assets/Boost_scale.png" class="absolute w-full h-full"></img>
             </div>
-            </div>
-            <div id="sub_stats" class="-z-10 absolute bottom-2 ml-7">
-                <div class="sub-stats">
-                    <div class="flex">
-                        <div class="pl-3 h-[130px]">
-                            <div class="mb-3 flex h-[45px] w-[442px]">
-                                <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
-                                    <span id="abbr" class="mx-auto my-auto justify-center items-center">5G</span>
+            <!-- <div id="sub_stats" class="-z-10 absolute h-[200px] w-[1200px] bottom-0"> -->
+
+                <div id="sub_stats" class="-z-10 absolute bottom-0">
+                    <div class="relative h-[200px] w-[1200px]">
+                        <div class="sub-stats absolute  ml-7 bottom-2">
+                            <div class="flex">
+                                <div class="pl-3 h-[130px]">
+                                    <div class="mb-3 flex h-[45px] w-[442px]">
+                                        <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
+                                            <span id="abbr" class="mx-auto my-auto justify-center items-center">5G</span>
+                                        </div>
+                                        <div id="team_name" class="fit-team-name mx-3 font-bold text-white text-[30px]">
+                                            ガチガバガバゴールゲーミング
+                                        </div>
+                                    </div>
+                                    <div class="absolute font-bold text-white  text-[50px] w-[442px] flex">
+                                        <span id="player_name" class="my-auto">獅子美夜ふぇりえ</span>
+                                    </div>
+                                    <!-- <div id="sub_stats_hr" class="h-[4px] bg-blue-600 w-full"></div> -->
                                 </div>
-                                <div id="team_name" class="fit-team-name mx-3 font-bold text-white text-[30px]">
-                                    ガチガバガバゴールゲーミング
+                                <div class="pb-3 ml-8 flex items-end">
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mr-[30px]">
+                                        <p>score</p>
+                                        <p id="score" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
+                                        <p>goals</p>
+                                        <p id="goals" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
+                                        <p>shots</p>
+                                        <p id="shots" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
+                                        <p>assists</p>
+                                        <p id="assists" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
+                                        <p>saves</p>
+                                        <p id="saves" class="mt-1 text-[40px]">0</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="absolute font-bold text-white  text-[50px] w-[442px] flex">
-                                <span id="player_name" class="my-auto">獅子美夜ふぇりえ</span>
-                            </div>
-                            <!-- <div id="sub_stats_hr" class="h-[4px] bg-blue-600 w-full"></div> -->
-                        </div>
-                        <div class="pb-3 ml-8 flex items-end">
-                            <div class="h-[105px] text-center font-bold text-white text-[30px] mr-[30px]">
-                                <p>score</p>
-                                <p id="score" class="mt-1 text-[40px]">0</p>
-                            </div>
-                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
-                                <p>goals</p>
-                                <p id="goals" class="mt-1 text-[40px]">0</p>
-                            </div>
-                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
-                                <p>shots</p>
-                                <p id="shots" class="mt-1 text-[40px]">0</p>
-                            </div>
-                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
-                                <p>assists</p>
-                                <p id="assists" class="mt-1 text-[40px]">0</p>
-                            </div>
-                            <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px]">
-                                <p>saves</p>
-                                <p id="saves" class="mt-1 text-[40px]">0</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.0/gsap.min.js"></script>
@@ -389,9 +395,6 @@
                 });
             }
 
-            window.onload = () => {
-                overlayInit();
-            }
 
             let webSocket;
             let playerTable = {};
@@ -449,10 +452,9 @@
                     let circleElm = document.getElementById("inner-circle");
                     circleElm.classList.remove("text-blue-600");circleElm.classList.remove("text-orange-600");
                     circleElm.classList.add(boostColor);
-                    // let hrElm = document.getElementById("sub_stats_hr");
-                    // hrElm.classList.remove("bg-orange-600");hrElm.classList.remove("bg-blue-600");
-                    // hrElm.classList.add(hrColor);
-                    $("#sub_stats_bg").attr("src",`./assets/Focus_${team}.png`);
+                    //画像変更
+                    $("#boost_gauge").css("background-image",`url('./assets/Boost_base_${team}.png')`);
+                    $("#sub_stats").css("background-image",`url('./assets/Focus_${team}.png')`);
                     let textElm = document.getElementById("circle-text");
                     textElm.classList.remove("text-blue-700");textElm.classList.remove("text-orange-700");
                     textElm.classList.add(boostTextColor);
@@ -563,12 +565,27 @@
 
         </script>
         <style>
+            @font-face{
+                font-family: "DSEG7 Classic";
+                src: url("./DSEG7Classic-Bold.woff2");
+            }
+
+
             .player_frame_orange,
             .player_frame_blue{
                 width: 330px;
                 height: 150px;
             }
 
+            #sub_stats{
+                background-image: url("./assets/Focus_blue.png");
+            }
+            #boost_gauge{
+                background-image: url("./assets/Boost_base_blue.png");
+            }
+            #boost_scale{
+                background-image: url("./assets/Boost_scale.png");
+            }
             .player_frame_blue{
                 background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10C0.5 4.75329 4.7533 0.5 10 0.5H140C145.247 0.5 149.5 4.7533 149.5 10V74C149.5 79.799 154.201 84.5 160 84.5H320C325.247 84.5 329.5 88.7533 329.5 94V140C329.5 145.247 325.247 149.5 320 149.5H150H10C4.75329 149.5 0.5 145.247 0.5 140V10Z" fill="rgb(31,41,58)" stroke="rgb(31,41,58)"/></svg>');
             }
