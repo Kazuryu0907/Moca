@@ -6,7 +6,8 @@
         <style type="text/tailwindcss">
             @layer utilities{
                 .player-name{
-                    @apply text-gray-100 font-bold text-[50px] mt-1 text-center;
+                    /* fit用のflex items-center */
+                    @apply text-gray-100 font-bold text-[50px] mt-1 text-center w-[280px] h-[75px] flex items-center justify-center;
                 }
                 .player-icon{
                     @apply w-[280px] h-[280px] object-cover object-top border rounded-2xl;
@@ -37,31 +38,30 @@
                 <div class="flex gap-[30px] ">
                     <div id="vtuber_b1">
                         <img id="img_b1" class="fadebig player-icon">
-                        <div id="player_b1" class="player-name">アーサー＝ダイ・ルバーシュ
-                        </div>
+                        <div class="fit-Vname player-name"><span id="player_b1">アーサー＝ダイ・ルバーシュ</span></div>
                     </div>
                     <div id="vtuber_b2">
                         <img id="img_b2" class="player-icon">
-                        <div id="player_b2" class="player-name">幽鬼シオン</div>
+                        <div class="fit-Vname player-name"><span id="player_b2">幽鬼シオン</span></div>
                     </div>
                     <div id="vtuber_b3">
                         <img id="img_b3" class="player-icon">
-                        <div id="player_b3" class="player-name">早波八雲</div>
+                        <div class="fit-Vname player-name"><span id="player_b3">早波八雲</span></div>
                     </div>
                 </div>
                 <div class="flex-auto"></div>
                 <div class="flex gap-[30px]">
                     <div id="vtuber_o1">
                         <img id="img_o1" class="player-icon">
-                        <div id="player_o1" class="player-name">鳴海小波音</div>
+                        <div class="fit-Vname player-name"><span id="player_o1">鳴海小波音</span></div>
                     </div>
                     <div id="vtuber_o2">
                         <img id="img_o2" class="player-icon">
-                        <div id="player_o2" class="player-name">ちゃんひな</div>
+                        <div class="fit-Vname player-name"><span id="player_o2">ちゃんひな</span></div>
                     </div>
                     <div id="vtuber_o3">
                         <img id="img_o3" class="player-icon">
-                        <div id="player_o3" class="player-name">石蕗なのは</div>
+                        <div class="player-name fit-Vname"><span id="player_o3">石蕗なのは</span></div>
                     </div>
                 </div>
             </div>
@@ -103,27 +103,35 @@
                         $(`#player_o${i+1}`).text(orangeMembers[i]);
                         $(`#img_o${i+1}`).attr("src",path+`${orangeMembers[i]}.png`);
                     }
+                    fit_Vname();
                 }
             }
 
-            const fit = () => {
-                const defaultTextSize = 150;
-                const divHeight = 150;
-                let resizeText = document.getElementsByClassName('fit');
+            const _fit = (className,defaultTextSize,divHeight) => {
+                let resizeText = document.getElementsByClassName(className);
                 for (let i = 0; i < resizeText.length; i++) {
                     let textElm = resizeText[i];
-                    //----------INIT---------
-                    textElm.style.marginTop = "0px";
                     textElm.style.fontSize = `${defaultTextSize}px`;
-                    // console.log(i,textElm.getBoundingClientRect().height,textElm.scrollHeight);
                     let size = defaultTextSize;
                     for(;textElm.scrollHeight > divHeight && size > 1;size--){
                         textElm.style.fontSize = size + "px";
                     }
-                    const margin = (divHeight - textElm.scrollHeight)/2;
-                    textElm.style.marginTop = `${margin}px`;
                 }
             }
+
+            const fitInit = () => {
+                fit();
+                fit_Vname();
+            }
+
+            const fit = () => {
+                _fit("fit",150,150);
+            };
+
+            const fit_Vname = () => {
+                _fit("fit-Vname",50,75);
+            }
+
 
             const opa0 = (tar) => {
                 gsap.set(tar,{opacity:0});
@@ -143,7 +151,7 @@
             window.onload = function(){
                 opa0("#matchName");opa0("#bo");
                 for(let i = 0;i<3;i++){opa0(`#vtuber_b${i+1}`);opa0(`#vtuber_o${i+1}`);}
-                fit();
+                fitInit();
                 gsap.delayedCall(1,feed);
             };
 
