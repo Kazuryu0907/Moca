@@ -2,19 +2,45 @@ import { useState } from "react";
 import { Browser } from "./components/Brower";
 import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
+import { Start } from "./components/Start";
+import { IdTable } from "./components/IdTable";
+import { Debug } from "./components/Debug";
+import {MemoryRouter as Router,Routes,Route,Navigate} from "react-router-dom";
+import { Main,Topper } from "./components/Main";
 
+
+const Spread = () => {
+  return(
+    <div className="flex">
+      <Teams/><IdTable/>
+    </div>
+  )
+}
 
 export const App = () => {
-
   //Websocket更新時にState更新
-
+  console.log(window.location.pathname);
   return (
-    <div className="flex flex-wrap">
+    <div>
       {/* Browserは内部にupdateもってるよ */}
-        <Browser />
-        <Browser />
+      {/* {useLocation().pathname !== "/" ?? <Topper/>} */}
+        <Router>
+          <Routes>
+            <Route path="/" element={<Start/>} />
+            {/* Topperと下のDynamicで分ける */}
+            <Route path="/overlay" element={<Topper/>}>
+              <Route index element={<Navigate to="/overlay/browser" replace/>}/>
+              <Route path="browser" element={<Browser/>}/>
+              <Route path="spread" element={<Spread/>}/>
+              <Route path="drive" element={<Overlay/>}/>
+              <Route path="debug" element={<Debug/>}></Route>
+              <Route path="*" element={<Navigate to="/overlay/browser" replace/>}/>
+            </Route>
+          </Routes>
+        </Router>
+        {/* <Browser />
         <Teams />
-        <Overlay />
+        <Overlay /> */}
         
       {/* Teamは内部にupdateもってるよ */}
     </div>

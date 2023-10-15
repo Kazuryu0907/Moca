@@ -3,14 +3,7 @@ import type {
     GoogleSpreadsheetWorksheet as GoogleSpreadsheetWorksheetType,
     GoogleSpreadsheet as GoogleSpreadsheetType
 } from "google-spreadsheet";
-import {spreadTeamType as teamNameType} from "../web/components/types";
-import * as path from "path";
-// `C:\Users\kazum\Desktop\programings\electron\electron-react-ts\src`
-require("dotenv").config({path:path.join(String.raw`D:\github\Moca\src`,".env")});
-
-const sheetId = process.env.SHEET_ID;
-const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-const privateKey = process.env.GOOGLE_PRIVATE_KEY;
+import {spreadMatchInfoType as matchInfoType} from "../web/components/types";
 
 export class TeamType{
   teamName: string = "";
@@ -25,14 +18,24 @@ export class SheetService{
     isAuthed: boolean;
     teamData: TeamType[];
     idTable: Record<string,string>;
-    constructor(){
-        this.doc = new GoogleSpreadsheet(sheetId);
+    matchInfo:matchInfoType; 
+    sheetId:string;
+    clientEmail:string;
+    privateKey:string;
+
+    constructor(env:any){
+        this.sheetId = env.SHEET_ID;
+        this.clientEmail = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+        this.privateKey = env.GOOGLE_PRIVATE_KEY;
+
+        this.doc = new GoogleSpreadsheet(this.sheetId);
         this.isAuthed = false;
         this.teamData = [];
         this.idTable = {};
+        this.matchInfo = {blue:"none",orange:"none",name:"",bo:""};
     }
     hasPrivateKey(){
-        return privateKey ? true : false;
+        return this.privateKey ? true : false;
     }
 
     setSheetID(id:string){
@@ -41,35 +44,25 @@ export class SheetService{
     }
     //auth Run this first.
     async auth(){
-        await this.doc.useServiceAccountAuth({
-            client_email: clientEmail ?? "",
-            private_key: privateKey ?? "",
-        });
-        this.isAuthed = true;
+        try{
+            await this.doc.useServiceAccountAuth({
+                client_email: this.clientEmail ?? "",
+                private_key: this.privateKey ?? "",
+            });
+            this.isAuthed = true;
+        }catch{
+            this.isAuthed = false;
+        }
         await this.doc.loadInfo();
+        return this.isAuthed;
     }
 
-    async getTeamName(){
-        let teamName:teamNameType; 
-        this.sheet = this.doc.sheetsByTitle["進行管理"];
-        await this.sheet.loadCells();
-        const blueTeam:string = this.sheet.getCellByA1("A3").formattedValue;
-        const orangeTeam:string = this.sheet.getCellByA1("C3").formattedValue;
-        const matchName:string = this.sheet.getCellByA1("B2").formattedValue;
-        const bo:string = this.sheet.getCellByA1("B4").formattedValue;
-        if(!this.teamData.length)await this.getStaticTeam().catch(console.error);
-        //多分自明なはず...
-        // console.log(this.teamData)
-        const blueMembers = this.teamData.filter(t => t.teamName === blueTeam)[0].playerNames;
-        const orangeMembers = this.teamData.filter(t => t.teamName === orangeTeam)[0].playerNames;
-        teamName = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo,blueMembers:blueMembers,orangeMembers:orangeMembers};
-        return teamName;
-    }
-
-    async getStaticTeam(){
+    //thisに残すようにした
+    async loadTeams(){
         this.sheet = this.doc.sheetsByIndex[0];
-        await this.sheet.loadCells();
-
+        console.log(this.sheet.rowCount);
+        //15チーム分は取得
+        await this.sheet.loadCells(`A1:O${(3+1)*15}`);
         let teamData:TeamType[] = [];
         let sheetIndex = 2;
         while(1){
@@ -85,15 +78,27 @@ export class SheetService{
             sheetIndex += 4;
         }
         this.teamData = teamData;
-        this.getIds();
-        return teamData;
     }
 
+    //thisに残すようにした
+    async getMatchInfo(){
+        this.sheet = this.doc.sheetsByTitle["進行管理"];
+        //最小サイズLoad
+        await this.sheet.loadCells("A1:C4");
+        const blueTeam:string = this.sheet.getCellByA1("A3").formattedValue;
+        const orangeTeam:string = this.sheet.getCellByA1("C3").formattedValue;
+        const matchName:string = this.sheet.getCellByA1("B2").formattedValue;
+        const bo:string = this.sheet.getCellByA1("B4").formattedValue;
+        this.matchInfo = {blue:blueTeam,orange:orangeTeam,name:matchName,bo:bo};
+        return this.matchInfo;
+    }
+
+    //loadTeamsに依存
     getIds(){
         //それぞれ一次元
         const accountIds = this.teamData.map((t) => t.accountIds).flat();
         const vNames = this.teamData.map((t) => t.playerNames).flat();
-        console.log(accountIds,vNames)
+        this.idTable = {};
         for(let i = 0;i < accountIds.length;i++){
             if(accountIds[i] != null)this.idTable[accountIds[i]] = vNames[i];
         }

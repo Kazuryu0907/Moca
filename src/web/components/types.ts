@@ -23,13 +23,11 @@ export type dataType = {
   data:any
 }
 
-export type spreadTeamType = {
+export type spreadMatchInfoType = {
   blue:string,
   orange:string,
   name:string,
   bo:string,
-  blueMembers:string[],
-  orangeMembers:string[]
 };
 
 

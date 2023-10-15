@@ -2,10 +2,11 @@ import {FC} from "react";
 
 type Props = {
     css:string
+    className?:string
 }
-export const Loading:FC<Props> = ({css}) => {
+export const Loading:FC<Props> = ({css,className}) => {
   return (
-    <div role="status">
+    <div role="status" className={className}>
       <svg
         aria-hidden="true"
         className={css}
@@ -27,9 +28,9 @@ export const Loading:FC<Props> = ({css}) => {
   );
 };
 
-export const Checked:FC<Props> = ({css}) => {
+export const Checked:FC<Props> = ({css,className}) => {
     return(
-        <div role="status">
+        <div role="status" className={className}>
         <svg
           aria-hidden="true"
           className={css}
@@ -46,4 +47,27 @@ export const Checked:FC<Props> = ({css}) => {
         <span className="sr-only">Loading...</span>
       </div>
     );
+}
+
+//w-5 h-5 mr-2 text-red-500 font-bold
+export const Failed = ({css,className}:{css:string,className?:string}) => {
+      return (
+          <div role="status" className={className}>
+            <svg
+              className={css}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            <span className="sr-only">Loading...</span>
+          </div>
+      );
 }

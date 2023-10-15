@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Moca stats</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <!-- <link rel="stylesheet" href="./stats.css"> -->
-        <style type="text/tailwindcss">
-            @layer utilities {
+
+<head>
+    <title>Moca stats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="./stats.css"> -->
+    <style type="text/tailwindcss">
+        @layer utilities {
                 .stats-score{
-                    @apply text-gray-200 col-span-2 border border-red-800 my-auto;
+                    @apply text-gray-200 col-span-2 my-auto;
                 }
                 .stats-name{
-                    @apply col-span-3 text-[40px] border border-red-800 text-gray-500;
+                    @apply col-span-3 text-[40px] text-gray-500;
                 }
                 .stats-blue-progress{
                     @apply bg-blue-500 h-2.5;
@@ -18,64 +19,92 @@
                 .stats-orange-progress{
                     @apply w-full bg-orange-500 h-2.5 bottom-0;
                 }
+                .player-icon{
+                    @apply w-[180px] h-[180px] object-cover object-top rounded-2xl border bg-gray-800 z-10;
+                }
+                .player-name{
+                    @apply text-gray-100 col-span-2 mt-3 z-0;
+                }
+                .team-name{
+                    @apply mx-5 w-[600px] h-[95px] grid place-items-center font-bold text-gray-100 text-center my-auto text-[40px];
+                }
             }
           </style>
 
-    </head>
-    <body class="font-sans bg-black" style="background-image: url(stats.png);">
-        <div class="h-[310px] border border-red-800 mb-[50px] relative">
-            <div class="absolute right-0 left-0 mt-[55px] grid border border-green-600 mx-[150px] h-[95px]">
-                <div class="flex">
-                    <div class="flex-auto"></div>
-                    <div class="w-[350px] border font-bold text-gray-100 text-center my-auto text-[40px]">
-                        GENGMOBILE1
-                    </div>
-                    <div class="w-[330px] border">
-                        <div class="border border-red-500">
-                            <div class="flex text-center font-['DSEG7_Classic']">
-                                <div class="text-center border w-[80px] font-bold text-gray-100 text-[55px]">0</div>
-                                <!-- Dummy -->
-                                <div class="flex-auto"></div>
-                                <div class="text-center border w-[80px] font-bold text-gray-100 text-[55px]">1</div>
+</head>
+<!-- 
+    {"cmd":"stats","data":[{"assists":0,"ballTouches":0,"demos":0,"goals":0,"id":"0","saves":0,"scores":0,"shots":0,"teams":1},{"assists":0,"ballTouches":3,"demos":0,"goals":0,"id":"3","saves":0,"scores":0,"shots":0,"teams":1},{"assists":0,"ballTouches":1,"demos":0,"goals":0,"id":"5","saves":0,"scores":0,"shots":0,"teams":1},{"assists":0,"ballTouches":4,"demos":0,"goals":1,"id":"4","saves":0,"scores":112,"shots":1,"teams":0},{"assists":0,"ballTouches":3,"demos":0,"goals":0,"id":"2","saves":0,"scores":2,"shots":0,"teams":0},{"assists":0,"ballTouches":0,"demos":0,"goals":0,"id":"1","saves":0,"scores":0,"shots":0,"teams":0}]}
+ -->
+<body class="font-sans">
+    <div class="screen hidden">
+        <div class="mt-[40px] grid  mx-[150px] h-[95px]">
+            <div class="flex h-[95px]">
+                <div class="flex-auto"></div>
+                <div class="fit team-name">
+                    <div class="teamName teamName_blue"><span id="blue_team_name">GENGMOBILE1</span></div>
+                </div>
+                <div class="w-[330px] h-[95px]">
+                    <div class="">
+                        <div class="flex text-center font-['DSEG7_Classic']">
+                            <div class="text-center w-[80px] font-bold text-gray-100 text-[60px] tabular-nums">
+                                <span id="setPoint_blue" >0</span>
+                            </div>
+                            <!-- Dummy -->
+                            <div class="flex-auto"></div>
+                            <div class="text-center w-[80px] font-bold text-gray-100 text-[60px] tabular-nums">
+                                <span id="setPoint_orange">0</span>
                             </div>
                         </div>
                     </div>
-                    <div class="w-[350px] border font-bold text-gray-100 text-center my-auto text-[40px]">
-                        FAZE CLAN
-                    </div>
-                    <div class="flex-auto"></div>
                 </div>
-            </div>
-            <div class="absolute right-0 left-0 bottom-0 grid border mx-[150px] h-[95px] text-center font-bold text-[30px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
-                <div id="names_0" class="text-gray-100 col-span-2 mt-8">Player1</div>
-                <div id="names_1" class="text-gray-100 col-span-2 mt-8">Player2</div>
-                <div id="names_2" class="text-gray-100 col-span-2 mt-8">Player3</div>
-                <div class="stats-name"></div>
-                <div id="names_3" class="text-gray-100 col-span-2 mt-8">Player4</div>
-                <div id="names_4" class="text-gray-100 col-span-2 mt-8">Player5</div>
-                <div id="names_5" class="text-gray-100 col-span-2 mt-8">Player6</div>
-            </div>
-            <!-- <div class="h-[95px] right-0 left-0 flex absolute bottom-0">
-                <div class="flex-auto"></div>
-                <div class="grid grid-cols-3 w-[660px] border">
-                    <div class="border">Player1</div>
-                    <div class="border">Player1</div>
-                    <div class="border">Player1</div>
+                <div class="fit team-name">
+                    <div class="teamName teamName_orange "><span id="orange_team_name">FAZE CLAN</span></div>
                 </div>
-                <div class="w-[330px] border"></div>
-                <div class="grid grid-cols-3 w-[660px] border"></div>
                 <div class="flex-auto"></div>
-            </div> -->
+            </div>
         </div>
-
-        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+        <div class="grid mt-10 mx-[150px] text-[30px] font-bold text-center" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+            <div id="player_0" class="col-span-2 blue_player">
+                <img id="img_0" src="./assets/0.png"
+                    class="mx-auto player-icon"></img>
+                <div id="names_0" class="player-name">Player1</div>
+            </div>
+            <div id="player_1" class="col-span-2 blue_player">
+                <img id="img_1" src="./assets/0.png"
+                    class="mx-auto player-icon"></img>
+                <div id="names_1" class="player-name">Player2</div>
+            </div>
+            <div id="player_2" class="col-span-2 blue_player">
+                <img id="img_2" src="./assets/0.png"
+                    class="mx-auto player-icon"></img>
+                <div id="names_2" class="player-name">Player3</div>
+            </div>
+            <img class="stats-name"></img>
+            <div id="player_3" class="col-span-2">
+                <img id="img_3" src="./assets/0.png"
+                    class="mx-auto player-icon"></img>
+                <div id="names_3" class="player-name">Player4</div>
+            </div>
+            <div id="player_4" class="col-span-2">
+                <img id="img_4" src="./assets/0.png"
+                    class="mx-auto player-icon"></img>
+                <div id="names_4" class="player-name">Player5</div>
+            </div>
+            <div id="player_5" class="col-span-2">
+                <img id="img_5" src="./assets/0.png"
+                    class="mx-auto player-icon"></img>
+                <div id="names_5" class="player-name">Player6</div>
+            </div>
+        </div>
+        <div class="grid mt-6 mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+            style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="scores_0" class="stats-score">41</div>
             <div id="scores_1" class="stats-score">82</div>
             <div id="scores_2" class="stats-score">102</div>
-            <div class="stats-name relative">
+            <div id="scores_text" class="stats-name relative">
                 <div class="mx-auto mt-4">SCORE</div>
                 <div class="absolute stats-orange-progress">
-                    <div class="stats-blue-progress" style="width:45%"></div>
+                    <div id="scores_per" class="stats-blue-progress" style="width:45%"></div>
                 </div>
             </div>
             <!--　n vs n -->
@@ -83,14 +112,15 @@
             <div id="scores_4" class="stats-score">9</div>
             <div id="scores_5" class="stats-score">0</div>
         </div>
-        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+            style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="goals_0" class="stats-score">41</div>
             <div id="goals_1" class="stats-score">82</div>
             <div id="goals_2" class="stats-score">102</div>
-            <div class="stats-name relative">
+            <div id="goals_text" class="stats-name relative">
                 <div class="mx-auto mt-4">GOALS</div>
                 <div class="absolute stats-orange-progress">
-                    <div class="stats-blue-progress" style="width:45%"></div>
+                    <div id="goals_per" class="stats-blue-progress" style="width:45%"></div>
                 </div>
             </div>
             <!--　n vs n -->
@@ -98,14 +128,15 @@
             <div id="goals_4" class="stats-score">9</div>
             <div id="goals_5" class="stats-score">0</div>
         </div>
-        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+            style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="assists_0" class="stats-score">41</div>
             <div id="assists_1" class="stats-score">82</div>
             <div id="assists_2" class="stats-score">102</div>
-            <div class="stats-name relative">
+            <div id="assists_text" class="stats-name relative">
                 <div class="mx-auto mt-4">ASSISTS</div>
                 <div class="absolute stats-orange-progress">
-                    <div class="stats-blue-progress" style="width:45%"></div>
+                    <div id="assists_per" class="stats-blue-progress" style="width:45%"></div>
                 </div>
             </div>
             <!--　n vs n -->
@@ -113,14 +144,15 @@
             <div id="assists_4" class="stats-score">9</div>
             <div id="assists_5" class="stats-score">0</div>
         </div>
-        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+            style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="shots_0" class="stats-score">41</div>
             <div id="shots_1" class="stats-score">82</div>
             <div id="shots_2" class="stats-score">102</div>
-            <div class="stats-name relative">
+            <div id="shots_text" class="stats-name relative">
                 <div class="mx-auto mt-4">SHOTS</div>
                 <div class="absolute stats-orange-progress">
-                    <div class="stats-blue-progress" style="width:45%"></div>
+                    <div id="shots_per" class="stats-blue-progress" style="width:45%"></div>
                 </div>
             </div>
             <!--　n vs n -->
@@ -128,14 +160,15 @@
             <div id="shots_4" class="stats-score">9</div>
             <div id="shots_5" class="stats-score">0</div>
         </div>
-        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+            style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="saves_0" class="stats-score">41</div>
             <div id="saves_1" class="stats-score">82</div>
             <div id="saves_2" class="stats-score">102</div>
-            <div class="stats-name relative">
+            <div id="saves_text" class="stats-name relative">
                 <div class="mx-auto mt-4">SAVES</div>
                 <div class="absolute stats-orange-progress">
-                    <div class="stats-blue-progress" style="width:45%"></div>
+                    <div id="saves_per" class="stats-blue-progress" style="width:45%"></div>
                 </div>
             </div>
             <!--　n vs n -->
@@ -143,14 +176,15 @@
             <div id="saves_4" class="stats-score">9</div>
             <div id="saves_5" class="stats-score">0</div>
         </div>
-        <div class="grid border mx-[150px] h-[95px] text-center font-bold text-[45px] text-white" style="grid-template-columns: repeat(15, minmax(0, 1fr));">
+        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+            style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="demos_0" class="stats-score">41</div>
             <div id="demos_1" class="stats-score">82</div>
             <div id="demos_2" class="stats-score">102</div>
-            <div class="stats-name relative">
+            <div id="demos_text" class="stats-name relative">
                 <div class="mx-auto mt-4">DEMOS</div>
                 <div class="absolute stats-orange-progress">
-                    <div class="stats-blue-progress" style="width:45%"></div>
+                    <div id="demos_per" class="stats-blue-progress" style="width:45%"></div>
                 </div>
             </div>
             <!--　n vs n -->
@@ -158,28 +192,176 @@
             <div id="demos_4" class="stats-score">9</div>
             <div id="demos_5" class="stats-score">0</div>
         </div>
-        <script>
-            let webSocket = new WebSocket("ws://localhost:8001/stats");
-            webSocket.onmessage = function(message){
-                const msg = JSON.parse(message.data);
-                const {cmd,data} = msg;
-                console.log(msg);
-                if(cmd == "playerTable"){
-                    for(let i = 0;i<6;i++){
-                        const players = data;
-                        document.getElementById(`names${i}`).textContent = players[i];
-                    }
-                }else if(cmd == "stats"){
-                    //data array
-                    const table = ["names","scores","goals","assists","shots","saves","demos"];
-                    table.forEach((t) => {
-                        for(let i = 0;i<6;i++){
-                            console.log(`${t}_${i}`);
-                            document.getElementById(`${t}_${i}`).textContent = data[i][t];
-                        }
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.0/gsap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script>
+        const opa0 = (tar) => {
+                gsap.set(tar,{opacity:0});
+            }
+        const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
+        const feedin = (tar,diffx,diffy,duration=2) => {
+                gsap.set(tar,{opacity:1});
+                if(diffx == null)gsap.from(tar,{y:diffy,duration:duration,opacity:0,ease:"expo.out"});
+                else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:"expo.out"});
+            }
+        window.onload = () => {
+            const fadeinit = async() => {
+                [...Array(6).keys()].forEach(i => {opa0(`#player_${i}`);opa0(`#names_${i}`);opa0(`#scores_${i}`);opa0("#scores_text")});
+                const statsNames = ["scores","goals","assists","shots","saves","demos"];
+                statsNames.forEach(name => {
+                    [...Array(6).keys()].forEach(i => {
+                        opa0(`#${name}_${i}`);opa0(`#${name}_text`);
                     })
+                });
+
+                //ここで初めて描画
+                $(".screen").removeClass("hidden");
+                fit();
+
+                await sleep(1000);
+                $(".teamName").addClass("fade");
+                await sleep(1000);
+                [...Array(6).keys()].forEach(i => feedin(`#player_${i}`,null,-100,2));
+                await sleep(800);
+                [...Array(6).keys()].forEach(i => feedin(`#names_${i}`,null,-100,1));
+                await sleep(1000);
+                // [...Array(6).keys()].forEach(i => feedin(`#scores_${i}`,null,-100,1));feedin("#scores_text",null,-100,1);
+                
+                for(let name of statsNames){
+                    [...Array(6).keys()].forEach(i => {
+                        feedin(`#${name}_${i}`,null,-100,1);
+                    });
+                    feedin(`#${name}_text`,null,-100,1);
+                    await sleep(200);
                 }
             }
-        </script>
-    </body>
+            gsap.delayedCall(1,fadeinit);
+        }
+
+        let webSocket = new WebSocket("ws://localhost:8001/stats");
+        let playerTable = {};
+        let idTable = {};
+        let imgPath = "";
+        webSocket.onmessage = function (message) {
+            const msg = JSON.parse(message.data);
+            const { cmd, data } = msg;
+            console.log(msg);
+            if(cmd == "imgPath"){
+                imgPath = data;
+            }else if (cmd == "matchInfo") {
+                const { blue, bo, name, orange } = data;
+                document.getElementById("blue_team_name").textContent = blue;
+                document.getElementById("orange_team_name").textContent = orange;
+                fit();
+            } else if (cmd == "playerTable") {
+                playerTable = { ...data };
+                // for(let i = 0;i<6;i++){
+                //     const players = data;
+                //     document.getElementById(`names${i}`).textContent = players[i];
+                // }
+            
+            // } else if (cmd == "setPoint"){
+            //     const {blue,orange} = data;
+            
+            } else if (cmd == "currentScore"){
+                const {blue,orange} = data;
+                document.getElementById("setPoint_blue").textContent = blue;
+                document.getElementById("setPoint_orange").textContent = orange;
+            } else if (cmd == "stats") {
+                //data array
+                const table = ["scores", "goals", "assists", "shots", "saves", "demos"];
+                const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                for (let i = 0; i < 6; i++) {
+                    const state = data[i];
+                    table.forEach(t => {
+                        document.getElementById(`${t}_${i}`).textContent = state[t];
+                    })
+                    const playerName = idTable[state["id"]];
+                    document.getElementById(`names_${i}`).textContent = playerName;
+                    document.getElementById(`img_${i}`).setAttribute("src",path+`${playerName}.png`);
+                }
+                table.forEach((calm) => {
+                    const calcPer = (blue,orange) => {
+                        if(blue+orange == 0){
+                            return 0.5;
+                        }else{
+                            return blue/(blue+orange);
+                        }
+                    };
+                    const calmDatas = data.map((d) => d[calm]);
+                    const calmBlue = calmDatas.slice(0,3);
+                    const calmOrange = calmDatas.slice(3);
+                    const sumBlue = calmBlue.reduce((sum,num) => sum + num,0);
+                    const sumOrange = calmOrange.reduce((sum,num) => sum + num,0);
+                    const Blueper = Math.floor(calcPer(sumBlue,sumOrange)*10)/10 * 100;//%
+                    $(`#${calm}_per`).css("width",Blueper+"%");
+                })
+
+            } else if (cmd == "idTable") {
+                idTable = { ...data };
+            }
+        }
+
+        const fit = () => {
+            const defaultTextSize = 60;
+            const divHeight = 95;
+            let resizeText = document.getElementsByClassName('fit');
+            for (let i = 0; i < resizeText.length; i++) {
+                let textElm = resizeText[i];
+                //----------INIT---------
+                // textElm.style.marginTop = "0px";
+                console.log(i,textElm.getBoundingClientRect().height,textElm.scrollHeight);
+                textElm.style.fontSize = `${defaultTextSize}px`;
+                let size = defaultTextSize;
+                for (; textElm.scrollHeight > divHeight && size > 1; size--) {
+                    textElm.style.fontSize = size + "px";
+                }
+                // const margin = (divHeight - textElm.scrollHeight) / 2;
+                // textElm.style.marginTop = `${margin}px`;
+            }
+        }
+    </script>
+    <style>
+            @font-face{
+                font-family: "DSEG7 Classic";
+                src: url("./DSEG7Classic-Bold.woff2");
+            }
+
+            html{
+                background-image: url("assets/Stats.png");
+                width: 1920px;
+                height: 1090px;
+            }
+
+            .teamName_blue{
+                overflow: hidden;
+                transform: translate(100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_blue span{
+                display: block;
+                transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_orange{
+                overflow: hidden;
+                transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_orange span{
+                display: block;
+                transform: translate(100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName.fade,
+            .teamName.fade span{
+                transform: translate(0,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s;
+            }
+    </style>
+</body>
 </html>
