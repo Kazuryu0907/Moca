@@ -16,6 +16,8 @@
     </head>
     <body class="bg-green-500" style="background-color: rgba(51, 255, 0, 0);">
         <video preload="none" src="./gbc.mp4" id="mv_goal" hidden muted></video>
+        <video preload="none" src="./gbc_transition2.mp4" id="mv_2" hidden muted></video>
+        <video preload="none" src="" id="mv_winner" hidden muted></video>
         <img id="dummy_img" hidden src="" alt="">
         <div class="screen hidden">
             <div class="relative">
@@ -94,7 +96,7 @@
                     </div>
                 </div>
 
-                <img src="http://absolute/C:\Users\kazum\Desktop\GBC_dev\graphics\images\きんちゃま.png" id="player_icon" class="-z-20 absolute" alt="">
+                <img src="" id="player_icon" class="-z-20 absolute" alt="">
             </div>
 
             <div class="flex z-10">
@@ -250,7 +252,8 @@
                                         <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
                                             <span id="abbr" class="mx-auto my-auto justify-center items-center"></span>
                                         </div>
-                                        <div id="team_name" class="fit-team-name mx-3 font-bold text-white text-[30px]">
+                                        <div class="fit-team-name mx-3 font-bold text-white text-[30px] flex items-center justify-center">
+                                            <span id="team_name"></span>
                                         </div>
                                     </div>
                                     <div class="absolute font-bold text-white  text-[50px] w-[442px] flex">
@@ -416,12 +419,14 @@
             let matchInfo = {};
             let teamData = [];
             let imgPath = "";
+            let _bo = "";
+            let _setPoint = {};
             let preFocusIndex = 0;
             //右下のBoostゲージ Index
             let watchingBoostIndex = null;
             webSocket = new WebSocket("ws://localhost:8001/boost");
 
-            webSocket.onmessage = function(message){
+            webSocket.onmessage = async function(message){
                 
                 const msg = JSON.parse(message.data);
                 const cmd = msg["cmd"];
@@ -505,6 +510,7 @@
                     const blueTeamName = data.blue;
                     const orangeTeamName = data.orange;
                     const title = data.name;
+                    _bo = data.bo;
                     const bo = data.bo;
                     document.getElementById("blue_team_name").textContent = blueTeamName;
                     document.getElementById("orange_team_name").textContent = orangeTeamName;
@@ -554,6 +560,7 @@
                 }
                 else if(cmd == "setPoint"){
                     //bluePoint,orangePoint
+                    _setPoint = JSON.parse(JSON.stringify(data));
                     const {blue,orange} = data;
                     if(blue == 0)[0,1].forEach(i => $(`#setPoint_blue_${i}`).addClass("bg-gray-500").removeClass("bg-blue-500"));
                     if(orange == 0)[0,1].forEach(i => $(`#setPoint_orange_${i}`).addClass("bg-gray-500").removeClass("bg-orange-500"));
@@ -573,7 +580,7 @@
                     setTimeout(() => {playTransition("#mv_goal")},3000);
                 }
                 else if(cmd == "endReplay"){
-                    playTransition("#mv_goal");
+                    // playTransition("#mv_2");
                 }
                 //RESET
                 else if(cmd == "end"){//旧endStats
@@ -586,6 +593,33 @@
                     opa0Table.map(id => opa0(id));
 
                     $("#time").text("5:00");
+
+                    //勝利チームMV用
+                    //detect winner team
+                    const playTransitionWithNoHide = (id) => {
+                            $(id).show();
+                            const v = $(id).get(0);
+                            v.play();
+                    }
+                    const {blue,orange} = _setPoint;
+                    const biggerPoint = Math.max(blue,orange);
+                    const blueTeamScore = Number(document.getElementById("score_blue").textContent);
+                    const orangeTeamScore = Number(document.getElementById("score_orange").textContent);
+                    const winnerTeam = blueTeamScore > orangeTeamScore ? "blue" : "orange";
+                    const winnerTeamName = document.getElementById(`${winnerTeam}_team_name`).textContent;
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/winner` : `${imgPath}/winner`;
+                    console.log("bo");
+                    if(_bo == "Bo1" && biggerPoint == 1){
+                        console.log("1");
+                        $("#mv_winner").attr("src",`${path}/${winnerTeamName}.mp4`);
+                        console.log("fire");
+                        setTimeout(() => playTransitionWithNoHide("#mv_winner"),8000);
+                    }else if(_bo == "Bo3" && biggerPoint == 2){
+                        $("#mv_winner").attr("src",`${path}/${winnerTeamName}.mp4`);
+                        setTimeout(() => playTransitionWithNoHide("#mv_winner"),8000);
+                    }
+                }
+                else if(cmd == "endStats"){
 
                 }
                 else if(cmd == "teamData"){

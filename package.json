@@ -12,7 +12,10 @@
 		},
 		"files":[
 			"dist/**/*"
-		]
+		],
+		"win":{
+			"icon":"./moca.png"
+		}
 	},
 	"repository": {
 		"url": "https://github.com/kazum/electron-react-ts.git"
