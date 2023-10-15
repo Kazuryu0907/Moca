@@ -141,6 +141,8 @@ export class socketComm{
     }else if(cmd == "setPoint"){
       this.sendData("/boost",{cmd:"setPoint",data:input.data});
       this.caches.setPoint = JSON.parse(JSON.stringify(input.data));
+    }else if(cmd == "end"){
+      this.sendData("/boost",{cmd:"end",data:0});
     }
   }
 

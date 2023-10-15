@@ -13,22 +13,24 @@
                     @apply w-[280px] h-[280px] object-cover object-top border rounded-2xl;
                 }
                 .w-team{
-                    @apply w-[900px];
+                    @apply w-[850px];
                 }
             }
         </style>
     </head>
-    <body class="bg-gray-700 ">
+    <body style="background-color: rgba(51, 255, 0, 0);">
         <div class="relative w-full h-[200px] ">
             <div id="bo" class="absolute font-bold text-gray-100 text-[50px] text-center inset-0 top-[50px]">bo3</div>
-            <div id="matchName" class="absolute font-bold text-gray-100 text-[100px] text-center inset-0 top-[100px]">Grand Final</div>
+            <div class="absolute font-bold text-gray-100 text-[100px] text-center inset-0 top-[106px]">
+                <span id="matchName" class="fit-title">Grand Final</span>
+            </div>
         </div>
-        <div class="font-bold  text-gray-100 text-[100px] flex mt-[150px] mx-10">
-            <div class="grid place-items-center h-[150px] fit w-team text-center my-auto">
+        <div class="font-bold  text-gray-100 text-[100px] flex mt-[153px] mx-[0px]">
+            <div class="ml-[10px] h-[150px] fit w-team text-center my-auto flex items-center justify-center">
                 <div class="teamName teamName_blue"><span id="blueTeamName">地上戦隊アカレンジャイ∠(　˙-˙ )／</span></div>
             </div>
             <div class="flex-auto"></div>
-            <div class="grid place-items-center h-[150px] fit  w-team text-center my-auto">
+            <div class="h-[150px] fit  w-team text-center my-auto flex items-center justify-center">
                 <div class="teamName teamName_orange"><span id="orangeTeamName">総プレイ40時間</span></div>
             </div>
         </div>
@@ -94,6 +96,7 @@
                     document.getElementById("bo").textContent = bo;
                     document.getElementById("matchName").textContent = matchName;
                     fit();
+                    fit_title();
                     const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
                     for(let i = 0;i<3;i++){
                         //Blue
@@ -115,6 +118,7 @@
                     let size = defaultTextSize;
                     for(;textElm.scrollHeight > divHeight && size > 1;size--){
                         textElm.style.fontSize = size + "px";
+                        console.log(className,size);
                     }
                 }
             }
@@ -122,6 +126,7 @@
             const fitInit = () => {
                 fit();
                 fit_Vname();
+                fit_title();
             }
 
             const fit = () => {
@@ -130,6 +135,10 @@
 
             const fit_Vname = () => {
                 _fit("fit-Vname",50,75);
+            }
+
+            const fit_title = () => {
+                _fit("fit-title",100,100);
             }
 
 
@@ -172,6 +181,9 @@
         </script>
 
         <style>
+            body{
+                background-image: url("./assets/NextMatch.png");
+            }
             .player_frame_blue{
                 background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10C0.5 4.75329 4.7533 0.5 10 0.5H140C145.247 0.5 149.5 4.7533 149.5 10V74C149.5 79.799 154.201 84.5 160 84.5H320C325.247 84.5 329.5 88.7533 329.5 94V140C329.5 145.247 325.247 149.5 320 149.5H150H10C4.75329 149.5 0.5 145.247 0.5 140V10Z" fill="rgb(31,41,58)" stroke="rgb(31,41,58)"/></svg>');
             }

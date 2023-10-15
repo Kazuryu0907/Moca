@@ -35,9 +35,9 @@
 <!-- 
     {"cmd":"stats","data":[{"assists":0,"ballTouches":0,"demos":0,"goals":0,"id":"0","saves":0,"scores":0,"shots":0,"teams":1},{"assists":0,"ballTouches":3,"demos":0,"goals":0,"id":"3","saves":0,"scores":0,"shots":0,"teams":1},{"assists":0,"ballTouches":1,"demos":0,"goals":0,"id":"5","saves":0,"scores":0,"shots":0,"teams":1},{"assists":0,"ballTouches":4,"demos":0,"goals":1,"id":"4","saves":0,"scores":112,"shots":1,"teams":0},{"assists":0,"ballTouches":3,"demos":0,"goals":0,"id":"2","saves":0,"scores":2,"shots":0,"teams":0},{"assists":0,"ballTouches":0,"demos":0,"goals":0,"id":"1","saves":0,"scores":0,"shots":0,"teams":0}]}
  -->
-<body class="font-sans bg-black">
+<body class="font-sans">
     <div class="screen hidden">
-        <div class="mt-[55px] grid  mx-[150px] h-[95px]">
+        <div class="mt-[40px] grid  mx-[150px] h-[95px]">
             <div class="flex h-[95px]">
                 <div class="flex-auto"></div>
                 <div class="fit team-name">
@@ -96,7 +96,7 @@
                 <div id="names_5" class="player-name">Player6</div>
             </div>
         </div>
-        <div class="grid mt-5 mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+        <div class="grid mt-6 mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
             style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="scores_0" class="stats-score">41</div>
             <div id="scores_1" class="stats-score">82</div>
@@ -329,6 +329,12 @@
             @font-face{
                 font-family: "DSEG7 Classic";
                 src: url("./DSEG7Classic-Bold.woff2");
+            }
+
+            html{
+                background-image: url("assets/Stats.png");
+                width: 1920px;
+                height: 1090px;
             }
 
             .teamName_blue{

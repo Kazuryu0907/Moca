@@ -4,6 +4,15 @@
         <title>Moca Matching Overlay</title>
         <meta charset="utf-8">
         <script src="https://cdn.tailwindcss.com"></script>
+        <style type="text/tailwindcss">
+            @layer utilities{
+                .player-img{
+                    /* fit用のflex items-center */
+                    @apply w-[140px] h-[140px] mx-[5px] my-[5px] rounded-lg;
+                }
+            }
+        </style>
+        <!-- w-[142px] h-[142px] mx-[4px] my-[4px] rounded-lg -->
     </head>
     <body class="bg-green-500" style="background-color: rgba(51, 255, 0, 0);">
         <video preload="none" src="./gbc.mp4" id="mv_goal" hidden muted></video>
@@ -27,13 +36,17 @@
 
                         <div class="w-[300px] mt-0">
                             <div class="flex text-center">
-                                <div id="score_blue" class="text-center w-[70px] h-[70px] font-bold text-gray-100 text-[50px]">0</div>
+                                <div class="text-center w-[70px] h-[80px] flex items-center justify-center">
+                                    <span id="score_blue" class="font-bold text-gray-100 text-[50px] font-['DSEG7_Classic']">0</span>
+                                </div>
                                 <div class="flex-auto">
                                     <div id="time" class="text-[50px] text-center font-bold text-white bottom-0 top-0">
                                         5:00
                                     </div>
                                 </div>
-                                <div id="score_orange" class="text-center w-[70px] h-[70px] font-bold text-gray-100 text-[50px]">0</div>
+                                <div class="text-center w-[70px] h-[80px] flex items-center justify-center">
+                                    <span id="score_orange" class="font-bold text-gray-100 text-[50px] font-['DSEG7_Classic']">0</span>
+                                </div>
                             </div>
                         </div>
 
@@ -85,11 +98,11 @@
             </div>
 
             <div class="flex z-10">
-                <div class="mt-5">
-                    <div id="player_0" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                        <div class="ml-5 player_frame_blue">
+                <div class="mt-5 w-[700px]">
+                    <div id="player_0" class="mt-6 w-[350px] h-[150px] rounded-r-[0.2rem]">
+                        <div id="player_frame0" class="ml-5 player_frame_blue">
                             <div class="flex">
-                                <img id="player_icon0" class="w-[150px] rounded-lg" alt="">
+                                <img id="player_icon0" class="player-img" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
                                         <div id="player_name0" class="text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Uni</div>
@@ -102,9 +115,9 @@
                         </div>
                     </div>
                     <div id="player_1" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                        <div class="ml-5 player_frame_blue">
+                        <div id="player_frame1" class="ml-5 player_frame_blue">
                             <div class="flex">
-                                <img id="player_icon1" class="w-[150px] rounded-lg" alt="">
+                                <img id="player_icon1" class="player-img" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
                                         <div id="player_name1" class="fit-icon text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kani</div>
@@ -117,9 +130,9 @@
                         </div>
                     </div>
                     <div id="player_2" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                        <div class="ml-5 player_frame_blue">
+                        <div id="player_frame2" class="ml-5 player_frame_blue">
                             <div class="flex">
-                                <img id="player_icon2" class="w-[150px] rounded-lg" alt="">
+                                <img id="player_icon2" class="player-img" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
                                         <div id="player_name2" class="fit-icon text-left text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">天ノ川寝夢</div>
@@ -137,11 +150,11 @@
 
                 <!-- Dummy -->
                 <div class="flex-auto"></div>
-                <div class="mt-5 right-0">
-                    <div id="player_3" class="mt-2 w-[350px] h-[150px] rounded-r-[0.2rem]">
-                        <div class="mr-5 player_frame_orange">
+                <div class="mt-5 right-0 w-[700px]">
+                    <div id="player_3" class="mt-2 mr-0 ml-auto w-[350px] h-[150px] rounded-r-[0.2rem]">
+                        <div id="player_frame3" class="mr-5 player_frame_orange">
                             <div class="flex flex-row-reverse">
-                                <img id="player_icon3" class="w-[150px] rounded-lg" alt="">
+                                <img id="player_icon3" class="player-img" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
                                         <div id="player_name3" class="fit-icon text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Inu</div>
@@ -153,10 +166,10 @@
                             </div>
                         </div>
                     </div>
-                    <div id="player_4" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
-                        <div class="mr-5 player_frame_orange">
+                    <div id="player_4" class="mt-2 mr-0 ml-auto w-[350px] h-[150px] rounded-l-[0.2rem]">
+                        <div id="player_frame4" class="mr-5 player_frame_orange">
                             <div class="flex flex-row-reverse">
-                                <img id="player_icon4" class="w-[150px] rounded-lg" alt="">
+                                <img id="player_icon4" class="player-img" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
                                         <div id="player_name4" class="fit-icon text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kaniiiiiiiiii</div>
@@ -168,10 +181,10 @@
                             </div>
                         </div>
                     </div>
-                    <div id="player_5" class="mt-2 w-[350px] h-[150px] rounded-l-[0.2rem]">
-                        <div class="mr-5 player_frame_orange">
+                    <div id="player_5" class="mt-2 mr-0 ml-auto w-[350px] h-[150px] rounded-l-[0.2rem]">
+                        <div id="player_frame5" class="mr-5 player_frame_orange h-[150px] w-[330px]">
                             <div class="flex flex-row-reverse">
-                                <img id="player_icon5" class="w-[150px] rounded-lg" alt="">
+                                <img id="player_icon5" class="player-img" alt="">
                                 <div class="ml-2 mr-2 w-full relative">
                                     <div class="w-full absolute bottom-2">
                                         <div id="player_name5" class="fit-icon text-right text-[25px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Wani</div>
@@ -220,7 +233,8 @@
                             cy="100"
                             />
                         </svg>
-                        <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700 font-['DSEG7 Classic']">33</span>
+                        <!-- font-['DSEG7_Classic'] -->
+                        <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700 ">33</span>
                     </div>
                 </div>
                 <img src="./assets/Boost_scale.png" class="absolute w-full h-full"></img>
@@ -234,14 +248,13 @@
                                 <div class="pl-3 h-[130px]">
                                     <div class="mb-3 flex h-[45px] w-[442px]">
                                         <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
-                                            <span id="abbr" class="mx-auto my-auto justify-center items-center">5G</span>
+                                            <span id="abbr" class="mx-auto my-auto justify-center items-center"></span>
                                         </div>
                                         <div id="team_name" class="fit-team-name mx-3 font-bold text-white text-[30px]">
-                                            ガチガバガバゴールゲーミング
                                         </div>
                                     </div>
                                     <div class="absolute font-bold text-white  text-[50px] w-[442px] flex">
-                                        <span id="player_name" class="my-auto">獅子美夜ふぇりえ</span>
+                                        <span id="player_name" class="my-auto"></span>
                                     </div>
                                     <!-- <div id="sub_stats_hr" class="h-[4px] bg-blue-600 w-full"></div> -->
                                 </div>
@@ -396,12 +409,14 @@
             }
 
 
+
             let webSocket;
             let playerTable = {};
             let idTable = {};
             let matchInfo = {};
             let teamData = [];
             let imgPath = "";
+            let preFocusIndex = 0;
             //右下のBoostゲージ Index
             let watchingBoostIndex = null;
             webSocket = new WebSocket("ws://localhost:8001/boost");
@@ -444,7 +459,21 @@
                     $("#team_name").text(teamName);
                     fit_team_name();
 
-                    //Icon
+                    //FoCus
+                    const currentFrameElm = document.getElementById(`player_frame${playerIndex}`);
+                    currentFrameElm.classList.remove(`player_frame_${team}`);currentFrameElm.classList.add(`focusing_player_frame_${team}`);
+                    const preFrameElm = document.getElementById(`player_frame${preFocusIndex}`);
+                    const preFrameTeam = preFocusIndex < 3 ? "blue" : "orange";
+                    preFrameElm.classList.remove(`focusing_player_frame_${preFrameTeam}`);preFrameElm.classList.add(`player_frame_${preFrameTeam}`);
+                    ////margin
+                    const currentFocusElm = document.getElementById(`player_${playerIndex}`);
+                    const preFocusElm = document.getElementById(`player_${preFocusIndex}`);
+                    const getMargin = (team) => {return(team == "blue" ? "ml-16" : "mr-16")};
+                    currentFocusElm.classList.add(getMargin(team));
+                    preFocusElm.classList.remove(getMargin(preFrameTeam));
+                    
+                    preFocusIndex = playerIndex;
+                    //images
                     const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/images/` : `${imgPath}/images/`;
                     $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
                     gsap.to("#player_icon",{opacity:1});
@@ -457,7 +486,8 @@
                     $("#sub_stats").css("background-image",`url('./assets/Focus_${team}.png')`);
                     let textElm = document.getElementById("circle-text");
                     textElm.classList.remove("text-blue-700");textElm.classList.remove("text-orange-700");
-                    textElm.classList.add(boostTextColor);
+                    // textElm.classList.add(boostTextColor);
+                    textElm.classList.add("text-white");
                 }
                 else if(cmd == "score"){
                     const {score} = data;
@@ -480,10 +510,10 @@
                     document.getElementById("orange_team_name").textContent = orangeTeamName;
                     document.getElementById("title").textContent = title;
                     document.getElementById("bo").textContent = bo;
-                    // if(bo == "Bo1"){
-                    //     document.getElementById("setPoint_blue_1").hidden = true;
-                    //     document.getElementById("setPoint_orange_1").hidden = true;
-                    // }
+                    if(bo == "Bo1"){
+                        document.getElementById("setPoint_blue_1").hidden = true;
+                        document.getElementById("setPoint_orange_1").hidden = true;
+                    }
                     fit();
                     // V用立ち絵のpreLoad
                     const blueTeamMembers = teamData.find(t => t.teamName == blueTeamName).playerNames;
@@ -546,11 +576,14 @@
                     playTransition("#mv_goal");
                 }
                 //RESET
-                else if(cmd == "endStats"){
+                else if(cmd == "end"){//旧endStats
                     // $("#score_blue").text("0");
                     // $("#score_orange").text("0");
                     const score_blue = document.getElementById("score_blue").textContent;
                     const score_orange = document.getElementById("score_orange").textContent;
+                    const playerElms = [...Array(6).keys()].map(i => `#player_${i}`);
+                    const opa0Table = [...playerElms,"#boost_gauge","#sub_stats","#player_icon"];
+                    opa0Table.map(id => opa0(id));
 
                     $("#time").text("5:00");
 
@@ -587,10 +620,17 @@
                 background-image: url("./assets/Boost_scale.png");
             }
             .player_frame_blue{
-                background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10C0.5 4.75329 4.7533 0.5 10 0.5H140C145.247 0.5 149.5 4.7533 149.5 10V74C149.5 79.799 154.201 84.5 160 84.5H320C325.247 84.5 329.5 88.7533 329.5 94V140C329.5 145.247 325.247 149.5 320 149.5H150H10C4.75329 149.5 0.5 145.247 0.5 140V10Z" fill="rgb(31,41,58)" stroke="rgb(31,41,58)"/></svg>');
+                background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10C0.5 4.75329 4.7533 0.5 10 0.5H140C145.247 0.5 149.5 4.7533 149.5 10V74C149.5 79.799 154.201 84.5 160 84.5H320C325.247 84.5 329.5 88.7533 329.5 94V140C329.5 145.247 325.247 149.5 320 149.5H150H10C4.75329 149.5 0.5 145.247 0.5 140V10Z" fill="rgb(31,41,58)" stroke="rgb(31,41,58)" stroke-width="5px"/></svg>');
+                background-repeat: no-repeat;
             }
             .player_frame_orange{
                 background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path fill="rgb(31,41,58)" fill-rule="evenodd" clip-rule="evenodd" d="M180 10C180 4.47715 184.477 0 190 0H320C325.523 0 330 4.47715 330 10V140C330 145.523 325.523 150 320 150H180H10C4.47716 150 0 145.523 0 140V94C0 88.4771 4.47715 84 10 84H170C175.523 84 180 79.5229 180 74V10Z"/><path d="M190 -1C183.925 -1 179 3.92487 179 10H181C181 5.02944 185.029 1 190 1V-1ZM320 -1H190V1H320V-1ZM331 10C331 3.92487 326.075 -1 320 -1V1C324.971 1 329 5.02944 329 10H331ZM331 140V10H329V140H331ZM320 151C326.075 151 331 146.075 331 140H329C329 144.971 324.971 149 320 149V151ZM180 151H320V149H180V151ZM10 151H180V149H10V151ZM-1 140C-1 146.075 3.92487 151 10 151V149C5.02944 149 1 144.971 1 140H-1ZM-1 94V140H1V94H-1ZM10 83C3.92487 83 -1 87.9249 -1 94H1C1 89.0294 5.02944 85 10 85V83ZM170 83H10V85H170V83ZM170 85C176.075 85 181 80.0751 181 74H179C179 78.9706 174.971 83 170 83V85ZM179 10V74H181V10H179Z" fill="rgb(31,41,58)"/></svg>');
+            }
+            .focusing_player_frame_blue{
+                background-image: url("./assets/focusing_player_frame_blue.png");
+            }
+            .focusing_player_frame_orange{
+                background-image: url("./assets/focusing_player_frame_orange.png");
             }
 
 
