@@ -1,4 +1,4 @@
-# Mugi
+# Moca
 
 ## Todo
 ### envファイルの編集
@@ -12,7 +12,7 @@
 SpreadSheetの共有をONに．
 
 ### GoogleDrive
-Mugiの初回起動時に，Google認証が入るので，GoogleDriveで使用するアカウントで認証.
+Mocaの初回起動時に，Google認証が入るので，GoogleDriveで使用するアカウントで認証.
 
 
 ### Overlayについて
@@ -20,7 +20,7 @@ Overlayは `./graphics/`の中にあり，それぞれ以下のよう．
 | ファイル | 説明 |
 | ---- | ---- |
 | nextMatch.html |対戦のマッチアップ |
-|  matching.html | 試合中のboost,スコア,アイコン,トランジションを担う |
+| matching.html | 試合中のboost,スコア,アイコン,トランジションを担う |
 | stats.html |試合終了後のstats画面|  
 
 ### 起動後
