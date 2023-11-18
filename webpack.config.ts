@@ -75,4 +75,5 @@ const renderer: Configuration = {
   ],
 };
 
+
 export default [main, preload, renderer];

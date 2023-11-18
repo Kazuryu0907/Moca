@@ -1,14 +1,12 @@
 import { readFile, writeFile } from "fs/promises";
 import * as fs from "fs";
-import * as path from "path";
 import { authenticate } from "./local_auth";
 import { google, drive_v3 } from "googleapis";
-import { BrowserWindow } from "electron";
 import { OAuth2Client } from "googleapis-common";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
-console.log(process.cwd())
+console.log(process.cwd());
 // const TOKEN_PATH = path.resolve(__dirname, "./../src", "token.json");
 // const CREDENTIAL_PATH = path.resolve(__dirname, "./../src", "credentials.json");
 const TOKEN_PATH = "./token.json";
@@ -19,13 +17,13 @@ export class DriveService {
 
   constructor() {
     this.drive = undefined;
-    this.authorize().then(c => {
-      const client:any = c;
+    this.authorize().then((c) => {
+      const client: any = c;
       this.drive = client
-      ? google.drive({ version: "v3", auth: client })
-      : undefined;    });
+        ? google.drive({ version: "v3", auth: client })
+        : undefined;
+    });
   }
-
 
   /*
         load saved credentials if exitst.
@@ -55,7 +53,7 @@ export class DriveService {
     });
     await writeFile(TOKEN_PATH, payload);
   }
-  
+
   async authorize() {
     let loadedClient = await this.loadSavedCredentialsIfExist();
     this.isAuthed = true;
@@ -73,9 +71,9 @@ export class DriveService {
     return client;
   }
 
-  async clientCheck(folderID:string){
+  async clientCheck(folderID: string) {
     const params: drive_v3.Params$Resource$Files$List = {
-      pageSize:1,
+      pageSize: 1,
       //フォルダ除外
       q: `\'${folderID}\' in parents and trashed = false`,
       fields:
@@ -103,12 +101,12 @@ export class DriveService {
     if (this.drive === undefined) return [];
     const res = await this.drive.files.list(params);
     const files = res.data.files?.filter(
-      (f) => f.mimeType !== "application/vnd.google-apps.folder"
+      (f) => f.mimeType !== "application/vnd.google-apps.folder",
     );
     //確定したのを格納
     if (files) filesArray.push({ dir: base, files: files });
     const folders = res.data.files?.filter(
-      (f) => f.mimeType === "application/vnd.google-apps.folder"
+      (f) => f.mimeType === "application/vnd.google-apps.folder",
     );
     if (folders) {
       for (const f of folders) {
@@ -116,7 +114,7 @@ export class DriveService {
           const dir = base + "/" + f.name;
           //再帰
           const subFiles = await this.filesFromFolderID(f.id, dir);
-          
+
           if (subFiles) filesArray.push(...subFiles);
         }
       }
@@ -137,7 +135,6 @@ export class DriveService {
     res.data.on("data", (chunk) => dest.write(chunk));
     res.data.on("end", () => dest.end());
   }
-
 }
 
 // if(require.main === module)(async ()=>{

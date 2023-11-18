@@ -15,14 +15,14 @@
  * This is used by several samples to easily provide an oauth2 workflow.
  */
 
-import {OAuth2Client} from 'google-auth-library';
+import { OAuth2Client } from 'google-auth-library';
 import * as http from 'http';
-import {URL} from 'url';
+import { URL } from 'url';
 import * as opn from 'open';
 import * as arrify from 'arrify';
 import destroyer from 'server-destroy';
-import {AddressInfo} from 'net';
-import fs from "fs/promises";
+import { AddressInfo } from 'net';
+import fs from 'fs/promises';
 
 const invalidRedirectUri = `The provided keyfile does not define a valid
 redirect URI. There must be at least one redirect URI defined, and this sample
@@ -75,7 +75,7 @@ export async function authenticate(
   // create an oAuth client to authorize the API call
   const client = new OAuth2Client({
     clientId: keys.client_id,
-    clientSecret: keys.client_secret,
+    clientSecret: keys.client_secret
   });
 
   return new Promise((resolve, reject) => {
@@ -99,9 +99,9 @@ export async function authenticate(
         }
 
         const code = searchParams.get('code');
-        const {tokens} = await client.getToken({
+        const { tokens } = await client.getToken({
           code: code!,
-          redirect_uri: redirectUri.toString(),
+          redirect_uri: redirectUri.toString()
         });
         client.credentials = tokens;
         resolve(client);
@@ -132,9 +132,9 @@ export async function authenticate(
       const authorizeUrl = client.generateAuthUrl({
         redirect_uri: redirectUri.toString(),
         access_type: 'offline',
-        scope: scopes.join(' '),
+        scope: scopes.join(' ')
       });
-      opn.openApp(authorizeUrl, {wait: false}).then(cp => cp.unref());
+      opn.openApp(authorizeUrl, { wait: false }).then((cp) => cp.unref());
     });
     destroyer(server);
   });
