@@ -34,7 +34,7 @@ class Moca {
   private createWindow = () => {
     const mainWindow = new BrowserWindow({
       width: 995,
-      height: 514,
+      height: 514+100,
       webPreferences: {
         preload: path.resolve(__dirname, 'preload.js')
       }
