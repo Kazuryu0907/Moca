@@ -11,7 +11,7 @@
 https://github.com/Kazuryu0907/Moca/assets/41988990/ddfe44ad-627e-456f-b152-b375bc38a588  
 
 アーカイブ
-GracesBlazeCup#8 本配信【Vtuber限定ロケットリーグ大会】[link](https://www.youtube.com/watch?v=7LQ8lHAPrzM)
+[GracesBlazeCup#8 本配信【Vtuber限定ロケットリーグ大会】](https://www.youtube.com/watch?v=7LQ8lHAPrzM)
 
 ## Todo
 ### envファイルの編集
