@@ -9,7 +9,6 @@
 
 # イメージ画像
 
-
 ## Todo
 ### envファイルの編集
 | conifig | 説明 |
@@ -30,7 +29,7 @@ Overlayは `./graphics/`の中にあり，それぞれ以下のよう．
 | ファイル | 説明 |
 | ---- | ---- |
 | nextMatch.html |対戦のマッチアップ |
-|  matching.html | 試合中のboost,スコア,アイコン,トランジションを担う |
+| matching.html | 試合中のboost,スコア,アイコン,トランジションを担う |
 | stats.html |試合終了後のstats画面|  
 
 ### 起動後
@@ -40,5 +39,5 @@ Overlayは `./graphics/`の中にあり，それぞれ以下のよう．
 4. Overlayに関しては，特にMoca側での操作は必要ないです．
 
 
-# Mugi
+# Moca
 Prasに変わるbakkesmod plugin．
