@@ -4,6 +4,7 @@
 <head>
     <title>Moca stats</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./global.css">
     <!-- <link rel="stylesheet" href="./stats.css"> -->
     <style type="text/tailwindcss">
         @layer utilities {
@@ -26,7 +27,10 @@
                     @apply text-gray-100 col-span-2 mt-3 z-0;
                 }
                 .team-name{
-                    @apply mx-5 w-[600px] h-[95px] grid place-items-center font-bold text-gray-100 text-center my-auto text-[40px];
+                    @apply mx-5 w-[600px] h-[77px] grid place-items-center font-bold text-gray-100 text-center mt-[3px] text-[40px];
+                }
+                .score-colums{
+                    @apply grid mx-[150px] h-[96px] text-center font-bold text-[45px] text-white;
                 }
             }
           </style>
@@ -41,7 +45,7 @@
             <div class="flex h-[95px]">
                 <div class="flex-auto"></div>
                 <div class="fit team-name">
-                    <div class="teamName teamName_blue"><span id="blue_team_name">GENGMOBILE1</span></div>
+                    <div class="teamName teamName_blue font-['IseMin'] text-[50px]"><span id="blue_team_name">GENGMOBILE1</span></div>
                 </div>
                 <div class="w-[330px] h-[95px]">
                     <div class="">
@@ -58,7 +62,7 @@
                     </div>
                 </div>
                 <div class="fit team-name">
-                    <div class="teamName teamName_orange "><span id="orange_team_name">FAZE CLAN</span></div>
+                    <div class="teamName teamName_orange font-['IseMin']"><span id="orange_team_name">FAZE CLAN</span></div>
                 </div>
                 <div class="flex-auto"></div>
             </div>
@@ -112,7 +116,7 @@
             <div id="scores_4" class="stats-score">9</div>
             <div id="scores_5" class="stats-score">0</div>
         </div>
-        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+        <div class="score-colums"
             style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="goals_0" class="stats-score">41</div>
             <div id="goals_1" class="stats-score">82</div>
@@ -128,7 +132,7 @@
             <div id="goals_4" class="stats-score">9</div>
             <div id="goals_5" class="stats-score">0</div>
         </div>
-        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+        <div class="score-colums"
             style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="assists_0" class="stats-score">41</div>
             <div id="assists_1" class="stats-score">82</div>
@@ -144,7 +148,7 @@
             <div id="assists_4" class="stats-score">9</div>
             <div id="assists_5" class="stats-score">0</div>
         </div>
-        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+        <div class="score-colums"
             style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="shots_0" class="stats-score">41</div>
             <div id="shots_1" class="stats-score">82</div>
@@ -160,7 +164,7 @@
             <div id="shots_4" class="stats-score">9</div>
             <div id="shots_5" class="stats-score">0</div>
         </div>
-        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+        <div class="score-colums"
             style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="saves_0" class="stats-score">41</div>
             <div id="saves_1" class="stats-score">82</div>
@@ -176,7 +180,7 @@
             <div id="saves_4" class="stats-score">9</div>
             <div id="saves_5" class="stats-score">0</div>
         </div>
-        <div class="grid mx-[150px] h-[95px] text-center font-bold text-[45px] text-white"
+        <div class="score-colums"
             style="grid-template-columns: repeat(15, minmax(0, 1fr));">
             <div id="demos_0" class="stats-score">41</div>
             <div id="demos_1" class="stats-score">82</div>
@@ -308,7 +312,7 @@
 
         const fit = () => {
             const defaultTextSize = 60;
-            const divHeight = 95;
+            const divHeight = 77;
             let resizeText = document.getElementsByClassName('fit');
             for (let i = 0; i < resizeText.length; i++) {
                 let textElm = resizeText[i];

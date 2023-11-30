@@ -13,6 +13,7 @@
       "@/*": ["./src/*"]
     },
     "allowSyntheticDefaultImports": true,
+    "sourceMap": true
   },
   "include": ["src","src/**/*.json"],
   "ts-node": {

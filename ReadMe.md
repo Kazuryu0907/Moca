@@ -1,4 +1,13 @@
 # Moca
+- For [GracesBlaze](https://gracesblaze.com/)
+- Vtuber用のRocketleagueの大会オーバーレイに特化したアプリケーション
+- Rocketleague pluginの[Mugi](https://github.com/Kazuryu0907/Mugi)を使用
+- Google DriveとGoogle SpreadSheetでチーム情報，Vtuberモデル画像を管理
+
+# 技術スタック
+![Moca tech](https://github.com/Kazuryu0907/Moca/assets/41988990/73395187-60cf-46d8-8860-923b5512c0cf)
+
+# イメージ画像
 
 ## Todo
 ### envファイルの編集

@@ -6,15 +6,15 @@
 	"author": {
 		"name": "kazum"
 	},
-	"build":{
-		"extraMetadata":{
-			"main":"./dist/main.js"
+	"build": {
+		"extraMetadata": {
+			"main": "./dist/main.js"
 		},
-		"files":[
+		"files": [
 			"dist/**/*"
 		],
-		"win":{
-			"icon":"./moca.png"
+		"win": {
+			"icon": "./moca.png"
 		}
 	},
 	"repository": {
@@ -28,7 +28,8 @@
 		"dev:webpack": "cross-env NODE_ENV=\"development\" webpack --progress",
 		"dev:electron": "wait-on dist/main.js dist/index.html && electronmon  --trace-warnings . --trace-warnings",
 		"pack": "electron-builder --dir --win --x64",
-		"dist":"electron-builder"
+		"dist": "electron-builder",
+		"debug": "webpack-dev-server --config webpack.debug.config.js "
 	},
 	"electronmon": {
 		"patterns": [
@@ -65,19 +66,30 @@
 		"@types/react-dom": "^18.2.4",
 		"@types/server-destroy": "^1.0.1",
 		"@types/ws": "^8.5.5",
+		"@typescript-eslint/eslint-plugin": "^6.11.0",
+		"@typescript-eslint/parser": "^6.11.0",
 		"cross-env": "^7.0.3",
 		"css-loader": "^6.8.1",
 		"electron": "^25.0.1",
+		"electron-builder": "^24.6.4",
 		"electron-load-devtool": "^1.2.0",
 		"electron-packager": "^17.1.1",
-		"electron-builder":"^24.6.4",
 		"electronmon": "^2.0.2",
 		"esbuild-loader": "^3.0.1",
+		"eslint": "^8.53.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-config-standard-with-typescript": "^39.1.1",
+		"eslint-plugin-import": "^2.25.2",
+		"eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+		"eslint-plugin-prettier": "^5.0.1",
+		"eslint-plugin-promise": "^6.0.0",
+		"eslint-plugin-react": "^7.33.2",
 		"html-webpack-plugin": "^5.5.1",
 		"mini-css-extract-plugin": "^2.7.6",
 		"npm-run-all": "^4.1.5",
 		"postcss": "^8.4.24",
 		"postcss-loader": "^7.3.2",
+		"prettier": "^3.1.0",
 		"rimraf": "^5.0.1",
 		"tailwindcss": "^3.3.2",
 		"ts-loader": "^9.4.3",
@@ -86,6 +98,7 @@
 		"typescript": "^5.1.3",
 		"wait-on": "^7.0.1",
 		"webpack": "^5.85.1",
-		"webpack-cli": "^5.1.3"
+		"webpack-cli": "^5.1.3",
+		"webpack-dev-server": "^4.15.1"
 	}
 }

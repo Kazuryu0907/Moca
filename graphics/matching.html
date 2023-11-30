@@ -4,11 +4,15 @@
         <title>Moca Matching Overlay</title>
         <meta charset="utf-8">
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" type="text/css" href="./global.css">
         <style type="text/tailwindcss">
             @layer utilities{
                 .player-img{
                     /* fit用のflex items-center */
                     @apply w-[140px] h-[140px] mx-[5px] my-[5px] rounded-lg;
+                }
+                .teamName-div{
+                    @apply my-auto font-['IseMin'] font-bold text-gray-100 text-center text-[50px]
                 }
             }
         </style>
@@ -17,8 +21,8 @@
     <body class="bg-green-500" style="background-color: rgba(51, 255, 0, 0);">
         <video preload="none" src="./gbc.mp4" id="mv_goal" hidden muted></video>
         <video preload="none" src="./gbc_transition2.mp4" id="mv_2" hidden muted></video>
-        <video preload="none" src="" id="mv_winner" hidden muted></video>
-        <img id="dummy_img" hidden src="" alt="">
+        <video preload="none" id="mv_winner" hidden muted></video>
+        <img id="dummy_img" hidden alt="">
         <div class="screen hidden">
             <div class="relative">
                 <div class="absolute w-full flex top-[0px]">
@@ -33,7 +37,7 @@
                         <div class="flex-auto"></div>
                         <!-- Dummy -->
                         <div class="mx-5 w-[500px] flex items-center justify-center">
-                            <div class="teamName teamName_blue fit  font-bold text-gray-100 text-center text-[50px]"><span  id="blue_team_name">GENG</span></div>
+                            <div class="fit teamName teamName-div teamName_blue"><span  id="blue_team_name">GENG</span></div>
                         </div>
 
                         <div class="w-[300px] mt-0">
@@ -53,7 +57,7 @@
                         </div>
 
                         <div class="mx-5 w-[500px] flex items-center justify-center">
-                            <div class="teamName teamName_orange fit font-bold text-gray-100 text-center text-[50px] my-auto"><span id="orange_team_name">FAZE</span></div>
+                            <div class="fit teamName teamName-div teamName_orange"><span id="orange_team_name">FAZE</span></div>
                         </div>
                         <!-- Dummy -->
                         <div class="flex-auto"></div>
@@ -96,7 +100,7 @@
                     </div>
                 </div>
 
-                <img src="" id="player_icon" class="-z-20 absolute" alt="">
+                <img id="player_icon" class="-z-20 absolute" alt="">
             </div>
 
             <div class="flex z-10">
@@ -236,7 +240,7 @@
                             />
                         </svg>
                         <!-- font-['DSEG7_Classic'] -->
-                        <span id="circle-text" class="absolute text-[80px] font-bold text-blue-700 ">33</span>
+                        <span id="circle-text" class="font-['Inter'] absolute text-[80px] font-bold text-white opacity-70">33</span>
                     </div>
                 </div>
                 <img src="./assets/Boost_scale.png" class="absolute w-full h-full"></img>
@@ -470,12 +474,13 @@
                     const preFrameElm = document.getElementById(`player_frame${preFocusIndex}`);
                     const preFrameTeam = preFocusIndex < 3 ? "blue" : "orange";
                     preFrameElm.classList.remove(`focusing_player_frame_${preFrameTeam}`);preFrameElm.classList.add(`player_frame_${preFrameTeam}`);
+                    //Focus，背景変えるDOMと，margin追加するDOMが違うっぽい
                     ////margin
                     const currentFocusElm = document.getElementById(`player_${playerIndex}`);
                     const preFocusElm = document.getElementById(`player_${preFocusIndex}`);
                     const getMargin = (team) => {return(team == "blue" ? "ml-16" : "mr-16")};
-                    currentFocusElm.classList.add(getMargin(team));
-                    preFocusElm.classList.remove(getMargin(preFrameTeam));
+                    currentFocusElm.classList.remove(`closing_margin_${team}`);currentFocusElm.classList.add(`focusing_margin_${team}`);
+                    preFocusElm.classList.remove(`focusing_margin_${preFrameTeam}`);preFocusElm.classList.add(`closing_margin_${preFrameTeam}`);
                     
                     preFocusIndex = playerIndex;
                     //images
@@ -632,6 +637,9 @@
 
         </script>
         <style>
+            :root{
+                --asset-path: "";
+            }
             @font-face{
                 font-family: "DSEG7 Classic";
                 src: url("./DSEG7Classic-Bold.woff2");
@@ -666,14 +674,23 @@
             .focusing_player_frame_orange{
                 background-image: url("./assets/focusing_player_frame_orange.png");
             }
-
-
-            /* .setPoint_blue{
-                background-image: url('data:image/svg+xml;utf8,<svg width="265" height="44" viewBox="0 0 265 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 43.5H264.5V0.5H0.5V4C0.5 25.8152 18.1848 43.5 40 43.5Z" stroke="black" fill="rgb(38,38,38)"/></svg>');
+            .focusing_margin_blue{
+                margin-left: 4rem;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
             }
-            .setPoint_orange{
-                background-image: url('data:image/svg+xml;utf8,<svg width="265" height="44" viewBox="0 0 265 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 43.5H225C246.815 43.5 264.5 25.8152 264.5 4V0.5H0.5V43.5Z" stroke="black" fill="rgb(38,38,38)"/></svg>');
-            } */
+            .focusing_margin_orange{
+                margin-right: 4rem;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
+            }
+            .closing_margin_blue{
+                margin-left: 0;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
+            }
+            .closing_margin_orange{
+                margin-right: 0;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
+            }
+
 
             .blue_boost{
                 background-image: linear-gradient(90deg, rgba(65, 164, 253, 1), rgba(14, 244, 255, 1));
@@ -681,7 +698,6 @@
             .orange_boost{
                 background-image: linear-gradient(to left, #fc4a1a, #f7b733);
             }
-            
 
 
             .teamName_blue{
