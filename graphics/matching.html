@@ -156,7 +156,7 @@
 
                 <!-- Dummy -->
                 <div class="flex-auto"></div>
-                <div class="mt-5 right-0 w-[700px]">
+                <div class="mt-5 right-0 w-[700px] font-['Inter']">
                     <div id="player_3" class="mt-2 mr-0 ml-auto w-[350px] h-[150px] rounded-r-[0.2rem]">
                         <div id="player_frame3" class="mr-5 player_frame_orange">
                             <div class="flex flex-row-reverse">
@@ -517,8 +517,8 @@
                     const title = data.name;
                     _bo = data.bo;
                     const bo = data.bo;
-                    document.getElementById("blue_team_name").textContent = blueTeamName;
-                    document.getElementById("orange_team_name").textContent = orangeTeamName;
+                    document.getElementById("blue_team_name").innerText = blueTeamName;
+                    document.getElementById("orange_team_name").innerText = orangeTeamName;
                     document.getElementById("title").textContent = title;
                     document.getElementById("bo").textContent = bo;
                     if(bo == "Bo1"){
@@ -558,10 +558,12 @@
                     }
                 }
                 else if(cmd == "time"){
-                    const time = data;
+                    const {time,isOvertime} = data;
+                    // const time = data;
                     const minutes = Math.floor(time/60);
                     const seconds = time % 60;
-                    document.getElementById("time").textContent = `${minutes}:${seconds < 10 ? "0"+seconds : seconds}`; 
+                    const sign = isOvertime ? "+" : "";
+                    document.getElementById("time").textContent = `${sign}${minutes}:${seconds < 10 ? "0"+seconds : seconds}`; 
                 }
                 else if(cmd == "setPoint"){
                     //bluePoint,orangePoint
