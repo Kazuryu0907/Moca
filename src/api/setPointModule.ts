@@ -76,10 +76,18 @@ export class setPointModule {
     }
   }
 
+  set setMatchingScore(score: { blue: number; orange: number }) {
+    this.matchingScore = {...score};
+  }
+
   get getMatchingScore() {
     return this.matchingScore;
   }
 
+  set setGameScore(score: { blue: number; orange: number }) {
+    this.gameScore = {...score};
+  }
+  
   get getGameScore() {
     return this.gameScore;
   }

@@ -33,21 +33,21 @@ export const start = async (
     mainWindow.webContents.send('startStepper', props);
   };
 
-  if (spreadId == null) {
+  if (!spreadId) {
     setEnvStatus({
       ...envStatus,
       env: 'fail',
       errorText: 'spreadID is null!'
     });
   }
-  if (driveId == null) {
+  if (!driveId) {
     setEnvStatus({
       ...envStatus,
       env: 'fail',
       errorText: 'driveID is null!'
     });
   }
-  if (spreadId == null || driveId == null) return;
+  if (!spreadId || !driveId) return;
   setEnvStatus({ ...envStatus, env: 'success', auth: 'loading' });
   ss.setSheetID(spreadId);
   let res = await ss.auth().catch((e) => {
