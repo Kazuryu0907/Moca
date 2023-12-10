@@ -241,7 +241,7 @@
                         </svg>
                         <!-- font-['DSEG7_Classic'] -->
                         <!--  style="-webkit-text-stroke: 0.2px #1F2937;" -->
-                        <span id="circle-text" class="font-['Inter'] absolute text-[80px] font-bold text-black opacity-30">33</span>
+                        <span id="circle-text" class="font-['Inter'] absolute text-[80px] font-bold text-white">33</span>
                     </div>
                 </div>
                 <img src="./assets/Boost_scale.png" class="absolute w-full h-full"></img>
@@ -619,6 +619,7 @@
                     console.log("bo");
                     if(_bo == "Bo1" && biggerPoint == 1){
                         console.log("1");
+
                         $("#mv_winner").attr("src",`${path}/${winnerTeamName}.mp4`);
                         console.log("fire");
                         setTimeout(() => playTransitionWithNoHide("#mv_winner"),8000);
@@ -672,10 +673,10 @@
                 background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path fill="rgb(31,41,58)" fill-rule="evenodd" clip-rule="evenodd" d="M180 10C180 4.47715 184.477 0 190 0H320C325.523 0 330 4.47715 330 10V140C330 145.523 325.523 150 320 150H180H10C4.47716 150 0 145.523 0 140V94C0 88.4771 4.47715 84 10 84H170C175.523 84 180 79.5229 180 74V10Z"/><path d="M190 -1C183.925 -1 179 3.92487 179 10H181C181 5.02944 185.029 1 190 1V-1ZM320 -1H190V1H320V-1ZM331 10C331 3.92487 326.075 -1 320 -1V1C324.971 1 329 5.02944 329 10H331ZM331 140V10H329V140H331ZM320 151C326.075 151 331 146.075 331 140H329C329 144.971 324.971 149 320 149V151ZM180 151H320V149H180V151ZM10 151H180V149H10V151ZM-1 140C-1 146.075 3.92487 151 10 151V149C5.02944 149 1 144.971 1 140H-1ZM-1 94V140H1V94H-1ZM10 83C3.92487 83 -1 87.9249 -1 94H1C1 89.0294 5.02944 85 10 85V83ZM170 83H10V85H170V83ZM170 85C176.075 85 181 80.0751 181 74H179C179 78.9706 174.971 83 170 83V85ZM179 10V74H181V10H179Z" fill="rgb(31,41,58)"/></svg>');
             }
             .focusing_player_frame_blue{
-                background-image: url("./assets/focusing_player_frame_blue.png");
+                background-image: url("./assets/focusing_player_frame_blue.gif");
             }
             .focusing_player_frame_orange{
-                background-image: url("./assets/focusing_player_frame_orange.png");
+                background-image: url("./assets/focusing_player_frame_orange.gif");
             }
             .focusing_margin_blue{
                 margin-left: 4rem;
