@@ -77,6 +77,20 @@ class Moca {
   };
 
   private setHandles = () => {
+
+    ipcMain.handle('setMatchingScore', (e, input) => {
+      this.setPointModule.setMatchingScore = input;
+      this.socket.sendData('/boost', {
+        cmd: 'currentScore',
+        data: this.setPointModule.matchingScore
+      });
+    });
+
+    ipcMain.handle('setGameScore', (e, input) => {
+      this.setPointModule.setGameScore = input;
+      this.socket.sendData('/boost', { cmd: 'setPoint', data: this.setPointModule.gameScore });
+    });
+
     ipcMain.handle('sendSocketCommunication', (e, input) => {
       return this.socket.sendSocket(input);
     });

@@ -258,8 +258,8 @@
                 imgPath = data;
             }else if (cmd == "matchInfo") {
                 const { blue, bo, name, orange } = data;
-                document.getElementById("blue_team_name").textContent = blue;
-                document.getElementById("orange_team_name").textContent = orange;
+                document.getElementById("blue_team_name").innerText = blue;
+                document.getElementById("orange_team_name").innerText = orange;
                 fit();
             } else if (cmd == "playerTable") {
                 playerTable = { ...data };

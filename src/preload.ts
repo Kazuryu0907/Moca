@@ -15,6 +15,8 @@ contextBridge.exposeInMainWorld('app', {
     if (data) ipcRenderer.send(cmd, data);
     else ipcRenderer.send(cmd);
   },
+  setMatchingScore: (score:any) => ipcRenderer.invoke('setMatchingScore',score),
+  setGameScore: (score:any) => ipcRenderer.invoke('setGameScore',score),
   connectedBrowsers: () => ipcRenderer.invoke('connectedBrowsers'),
   cachedMatchInfo: () => ipcRenderer.invoke('cachedMatchInfo'),
   getIdTable: () => ipcRenderer.invoke('getIdTable'),

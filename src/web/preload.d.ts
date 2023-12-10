@@ -9,6 +9,8 @@ export interface IMainProcess {
   on: (channel: string, callback: any) => void;
   index2render: (cmd: string, data?: any) => any;
   render2index: (cmd: string, data?: any) => any;
+  setMatchingScore: (score:{blue:number,orange:number}) => Promise<void>;
+  setGameScore: (score:{blue:number,orange:number}) => Promise<void>;
   getTeamInfo: () => Promise<any>;
   getIdTable: () => Promise<Record<string, string>>;
   connectedBrowsers: () => Promise<Record<string, boolean>>;
