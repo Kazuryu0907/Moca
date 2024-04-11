@@ -43,17 +43,30 @@ export class SheetService {
   hasPrivateKey() {
     return this.privateKey ? true : false;
   }
-
+  /**
+   * SheetIDを設定 
+   * @param id スプレッドシートID
+   * @return void
+   */
   setSheetID(id: string) {
     this.doc = new GoogleSpreadsheet(id,this.serviceAccountAuth);
     this.isAuthorized = false;
   }
+  
+  /**
+   * 認証(スプシ読み込み) 
+   * @return void
+   */
   //auth Run this first
   async auth() {
     await this.doc.loadInfo();
     this.isAuthorized = true;
   }
 
+    /**
+   * 全チームの{名前,略称,選手名,アカウントID}を取得 
+   * @return void
+   */
   //thisに残すようにした
   async loadTeams() {
     this.sheet = this.doc.sheetsByIndex[0];
@@ -86,6 +99,10 @@ export class SheetService {
     this.teamData = teamData;
   }
 
+  /**
+   * 進行管理から試合情報を取得 
+   * @return matchInfo
+   */
   //thisに残すようにした
   async getMatchInfo() {
     this.sheet = this.doc.sheetsByTitle['進行管理'];
@@ -108,6 +125,10 @@ export class SheetService {
     return this.matchInfo;
   }
 
+   /**
+   * アカウントIDとプレイヤー名の対応表を取得 
+   * @return idTable
+   */ 
   //loadTeamsに依存
   getIds() {
     //それぞれ一次元
