@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Browser } from "./components/Brower";
 import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
@@ -6,7 +5,7 @@ import { Start } from "./components/Start";
 import { IdTable } from "./components/IdTable";
 import { Debug } from "./components/Debug";
 import {MemoryRouter as Router,Routes,Route,Navigate} from "react-router-dom";
-import { Main,Topper } from "./components/Main";
+import { Topper } from "./components/Main";
 
 
 const Spread = () => {

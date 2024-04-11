@@ -1,81 +1,25 @@
-import { readFile, writeFile } from "fs/promises";
 import * as fs from "fs";
-import { authenticate } from "./local_auth";
 import { google, drive_v3 } from "googleapis";
-import { OAuth2Client } from "googleapis-common";
+import path from "path";
 
-// If modifying these scopes, delete token.json.
-const SCOPES = ["https://www.googleapis.com/auth/drive"];
 console.log(process.cwd());
-// const TOKEN_PATH = path.resolve(__dirname, "./../src", "token.json");
-// const CREDENTIAL_PATH = path.resolve(__dirname, "./../src", "credentials.json");
-const TOKEN_PATH = "./token.json";
 const CREDENTIAL_PATH = "./credentials.json";
+
 export class DriveService {
-  drive: drive_v3.Drive | undefined;
-  isAuthed: boolean = false;
+  isAuthorized: boolean = false;
+  // Need Debug
+  auth = new google.auth.GoogleAuth({
+    keyFile: path.join(process.cwd(), CREDENTIAL_PATH),
+    scopes: ['https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/drive.metadata.readonly'],
+  });
+  drive: drive_v3.Drive = google.drive({version:'v3',auth:this.auth});
 
-  constructor() {
-    this.drive = undefined;
-    this.authorize().then((c) => {
-      const client: any = c;
-      this.drive = client
-        ? google.drive({ version: "v3", auth: client })
-        : undefined;
-    });
-  }
-
-  /*
-        load saved credentials if exitst.
-
-        return:
-            JSONClient or null
-    */
-  async loadSavedCredentialsIfExist() {
-    try {
-      const token = await readFile(TOKEN_PATH, "utf8");
-      const credentials = JSON.parse(token);
-      return google.auth.fromJSON(credentials);
-    } catch (err) {
-      return null;
-    }
-  }
-
-  async saveCredentials(client: OAuth2Client) {
-    const credentials = await readFile(CREDENTIAL_PATH, "utf-8");
-    const keys = JSON.parse(credentials);
-    const key = keys.installed || keys.web;
-    const payload = JSON.stringify({
-      type: "authorized_user",
-      client_id: key.client_id,
-      client_secret: key.client_secret,
-      refresh_token: client.credentials.refresh_token,
-    });
-    await writeFile(TOKEN_PATH, payload);
-  }
-
-  async authorize() {
-    let loadedClient = await this.loadSavedCredentialsIfExist();
-    this.isAuthed = true;
-    if (loadedClient) {
-      return loadedClient;
-    }
-    console.log(CREDENTIAL_PATH);
-    let client = await authenticate({
-      scopes: SCOPES,
-      keyfilePath: CREDENTIAL_PATH,
-    });
-    if (client.credentials) {
-      await this.saveCredentials(client);
-    }
-    return client;
-  }
 
   async clientCheck(folderID: string) {
     const params: drive_v3.Params$Resource$Files$List = {
       pageSize: 1,
       //フォルダ除外
-      q: `\'${folderID}\' in parents and trashed = false`,
+      q: `'${folderID}' in parents and trashed = false`,
       fields:
         "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)",
     };
@@ -94,7 +38,7 @@ export class DriveService {
     let filesArray: globType[] = [];
     const params: drive_v3.Params$Resource$Files$List = {
       //フォルダ除外
-      q: `\'${folderID}\' in parents and trashed = false`,
+      q: `'${folderID}' in parents and trashed = false`,
       fields:
         "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)",
     };

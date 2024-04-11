@@ -92,7 +92,7 @@ export const start = async (
 
   // console.log(teamData,matchInfo);
   console.log(idTable);
-  //Succes!
+  //Success!
   setEnvStatus({ ...envStatus, fetch: 'success' });
   const playerTable = { cmd: 'idTable', data: idTable };
   socket.stream(playerTable);

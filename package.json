@@ -1,104 +1,105 @@
 {
-	"name": "electron-react-ts",
-	"description": "electron-react-ts",
-	"version": "0.1.0",
-	"license": "MIT",
-	"author": {
-		"name": "kazum"
-	},
-	"build": {
-		"extraMetadata": {
-			"main": "./dist/main.js"
-		},
-		"files": [
-			"dist/**/*"
-		],
-		"win": {
-			"icon": "./moca.png"
-		}
-	},
-	"repository": {
-		"url": "https://github.com/kazum/electron-react-ts.git"
-	},
-	"main": "dist/main.js",
-	"scripts": {
-		"dev": "rimraf dist && run-p dev:webpack dev:electron",
-		"check": "tsc --noEmit",
-		"build": "rimraf dist && cross-env NODE_ENV=\"production\" webpack --progress",
-		"dev:webpack": "cross-env NODE_ENV=\"development\" webpack --progress",
-		"dev:electron": "wait-on dist/main.js dist/index.html && electronmon  --trace-warnings . --trace-warnings",
-		"pack": "electron-builder --dir --win --x64",
-		"dist": "electron-builder",
-		"debug": "webpack-dev-server --config webpack.debug.config.js "
-	},
-	"electronmon": {
-		"patterns": [
-			"dist/**/*"
-		]
-	},
-	"dependencies": {
-		"@emotion/react": "^11.11.1",
-		"@emotion/styled": "^11.11.0",
-		"@google-cloud/local-auth": "^2.1.1",
-		"@heroicons/react": "^2.0.18",
-		"@mui/material": "^5.14.4",
-		"arrify": "^3.0.0",
-		"dotenv": "^16.1.4",
-		"dseg": "^0.46.0",
-		"google-auth-library": "^8.8.0",
-		"google-spreadsheet": "^3.3.0",
-		"googleapis": "^118.0.0",
-		"googleapis-common": "^6.0.4",
-		"iconv-lite": "^0.6.3",
-		"open": "^9.1.0",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"react-router": "^6.14.2",
-		"react-router-dom": "^6.14.2",
-		"server-destroy": "^1.0.1",
-		"ws": "^8.13.0"
-	},
-	"devDependencies": {
-		"@types/electron-load-devtool": "^1.2.1",
-		"@types/google-spreadsheet": "^3.3.2",
-		"@types/node": "^20.2.5",
-		"@types/react": "^18.2.8",
-		"@types/react-dom": "^18.2.4",
-		"@types/server-destroy": "^1.0.1",
-		"@types/ws": "^8.5.5",
-		"@typescript-eslint/eslint-plugin": "^6.11.0",
-		"@typescript-eslint/parser": "^6.11.0",
-		"cross-env": "^7.0.3",
-		"css-loader": "^6.8.1",
-		"electron": "^25.0.1",
-		"electron-builder": "^24.9.1",
-		"electron-load-devtool": "^1.2.0",
-		"electron-packager": "^17.1.1",
-		"electronmon": "^2.0.2",
-		"esbuild-loader": "^3.0.1",
-		"eslint": "^8.53.0",
-		"eslint-config-prettier": "^9.0.0",
-		"eslint-config-standard-with-typescript": "^39.1.1",
-		"eslint-plugin-import": "^2.25.2",
-		"eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
-		"eslint-plugin-prettier": "^5.0.1",
-		"eslint-plugin-promise": "^6.0.0",
-		"eslint-plugin-react": "^7.33.2",
-		"html-webpack-plugin": "^5.5.1",
-		"mini-css-extract-plugin": "^2.7.6",
-		"npm-run-all": "^4.1.5",
-		"postcss": "^8.4.24",
-		"postcss-loader": "^7.3.2",
-		"prettier": "^3.1.0",
-		"rimraf": "^5.0.1",
-		"tailwindcss": "^3.3.2",
-		"ts-loader": "^9.4.3",
-		"ts-node": "^10.9.1",
-		"tsconfig-paths-webpack-plugin": "^4.0.1",
-		"typescript": "^5.1.3",
-		"wait-on": "^7.0.1",
-		"webpack": "^5.85.1",
-		"webpack-cli": "^5.1.3",
-		"webpack-dev-server": "^4.15.1"
-	}
+  "name": "electron-react-ts",
+  "description": "electron-react-ts",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "kazum"
+  },
+  "build": {
+    "extraMetadata": {
+      "main": "./dist/main.js"
+    },
+    "files": [
+      "dist/**/*"
+    ],
+    "win": {
+      "icon": "./moca.png"
+    }
+  },
+  "repository": {
+    "url": "https://github.com/kazum/electron-react-ts.git"
+  },
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "rimraf dist && run-p dev:webpack dev:electron",
+    "check": "tsc --noEmit",
+    "build": "rimraf dist && cross-env NODE_ENV=\"production\" webpack --progress",
+    "dev:webpack": "cross-env NODE_ENV=\"development\" webpack --progress",
+    "dev:electron": "wait-on dist/main.js dist/index.html && electronmon  --trace-warnings . --trace-warnings",
+    "pack": "electron-builder --dir --win --x64",
+    "dist": "electron-builder",
+    "debug": "webpack-dev-server --config webpack.debug.config.js "
+  },
+  "electronmon": {
+    "patterns": [
+      "dist/**/*"
+    ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@google-cloud/local-auth": "^3.0.1",
+    "@heroicons/react": "^2.0.18",
+    "@mui/material": "^5.14.4",
+    "ajv": "^8.12.0",
+    "arrify": "^3.0.0",
+    "dotenv": "^16.1.4",
+    "dseg": "^0.46.0",
+    "google-auth-library": "^8.8.0",
+    "google-spreadsheet": "^4.1.1",
+    "googleapis": "^118.0.0",
+    "googleapis-common": "^6.0.4",
+    "iconv-lite": "^0.6.3",
+    "open": "^9.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.14.2",
+    "react-router-dom": "^6.14.2",
+    "server-destroy": "^1.0.1",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/electron-load-devtool": "^1.2.1",
+    "@types/google-spreadsheet": "^3.3.2",
+    "@types/node": "^20.2.5",
+    "@types/react": "^18.2.8",
+    "@types/react-dom": "^18.2.4",
+    "@types/server-destroy": "^1.0.1",
+    "@types/ws": "^8.5.5",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.8.1",
+    "electron": "^25.0.1",
+    "electron-builder": "^24.9.1",
+    "electron-load-devtool": "^1.2.0",
+    "electron-packager": "^17.1.1",
+    "electronmon": "^2.0.2",
+    "esbuild-loader": "^3.0.1",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "html-webpack-plugin": "^5.5.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.24",
+    "postcss-loader": "^7.3.2",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.1",
+    "tailwindcss": "^3.3.2",
+    "ts-loader": "^9.4.3",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.1",
+    "typescript": "^5.1.3",
+    "wait-on": "^7.0.1",
+    "webpack": "^5.85.1",
+    "webpack-cli": "^5.1.3",
+    "webpack-dev-server": "^4.15.1"
+  }
 }
