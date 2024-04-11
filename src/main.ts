@@ -31,6 +31,7 @@ class Moca {
     this.setHandles();
   }
 
+  
   private createWindow = () => {
     const mainWindow = new BrowserWindow({
       width: 995,

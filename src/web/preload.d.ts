@@ -24,7 +24,6 @@ export interface IMainProcess {
   readFile: (path: string) => Promise<string>;
   sendSocket: (data: { path: string; data: dataType }) => Promise<void>;
   getDrive: (id: string) => Promise<any>;
-  getTeam: () => Promise<any>;
   glob: () => Promise<any>;
   download: (data: string[]) => Promise<any>;
   // invokeはArrayしか受け取れないっぽい

@@ -29,7 +29,6 @@ contextBridge.exposeInMainWorld('app', {
     ipcRenderer.invoke('sendSocketCommunication', data),
   stream: (data: any) => ipcRenderer.invoke('stream', data),
   getDrive: (id: string) => ipcRenderer.invoke('getDrive', id),
-  // getTeam: () => ipcRenderer.invoke("getTeam"),
   glob: () => ipcRenderer.invoke('glob'),
   readFile: (path: string) => ipcRenderer.invoke('readFile', path),
   download: (data: string[]) => ipcRenderer.invoke('download', data),
