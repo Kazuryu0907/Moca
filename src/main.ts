@@ -14,7 +14,7 @@ require('dotenv').config();
 class Moca {
   ss = new SheetService(process.env);
   ds = new DriveService();
-  setPointModule = new setPointModule(this.ss);
+  setPointModule = new setPointModule();
   mainWindow: BrowserWindow;
   socket: socketComm;
   constructor() {
