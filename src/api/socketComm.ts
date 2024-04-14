@@ -41,13 +41,23 @@ export class socketComm {
   //接続時に実行するHook
   onConnection: onConnectionType = (ws: WebSocket) => {};
   socket: dgram.Socket = dgram.createSocket('udp4');
+  // setPointModuleはDebugで使用できるように外で宣言
   constructor(mainWindow: BrowserWindow,setPointModule: setPointModule) {
     this.mainWindow = mainWindow;
     this.setPointModule = setPointModule;
   }
 
-  sendData(path: BrowserType, data: DataType) {
-    this.clients[path]?.send(JSON.stringify(data));
+  sendData(path: BrowserType | BrowserType[], data: DataType) {
+    // BrowserType[]の時
+    if(Array.isArray(path)){
+      path.forEach((p) => {
+        this.clients[p]?.send(JSON.stringify(data));
+      });
+      return;
+    // BrowserTypeの時
+    }else {
+      this.clients[path]?.send(JSON.stringify(data));
+    }
   }
 
   stream(data: DataType) {
@@ -115,7 +125,7 @@ export class socketComm {
 
   sortingData(input: { cmd: string; data: any }) {
     const cmd = input.cmd;
-    //Hook Here
+    // setPointModuleへUDPを横流し
     this.setPointModule.hook(input,this);
     if (cmd == 'start') {
       //得点管理
@@ -156,6 +166,10 @@ export class socketComm {
     } else if(cmd == "matchId") {
       const data: {matchId: string} = input.data;
       this.sendData("/boost",{cmd: "matchId",data:data});
+    } else if(cmd == "teamNames"){
+      const data: {blue: string,orange: string,matchId:string} = input.data;
+      this.sendData("/boost",{cmd: "teamNames",data:data});
+    
     }
   }
 
