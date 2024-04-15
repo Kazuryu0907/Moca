@@ -1,0 +1,19 @@
+# .github/workflows/kiriban.yml
+
+name: kiriban
+
+on:
+  issues:
+    types: [ opened ]
+  pull_request:
+    types: [ opened ]
+
+jobs:
+  kiriban:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kumackey/kiriban@v1
+        with:
+          LOCALE: 'ja'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

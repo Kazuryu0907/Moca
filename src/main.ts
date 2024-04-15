@@ -14,7 +14,7 @@ require('dotenv').config();
 class Moca {
   ss = new SheetService(process.env);
   ds = new DriveService();
-  setPointModule = new setPointModule(this.ss);
+  setPointModule = new setPointModule();
   mainWindow: BrowserWindow;
   socket: socketComm;
   constructor() {
@@ -31,6 +31,7 @@ class Moca {
     this.setHandles();
   }
 
+  
   private createWindow = () => {
     const mainWindow = new BrowserWindow({
       width: 995,

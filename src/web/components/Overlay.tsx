@@ -106,21 +106,15 @@ const calcFilesDiff = (drive: gdriveFile[],localFiles: Map<string, string>): [st
   return [diffPlusFiles, diffMinusFiles, name2IdTable];
 };
 
-//function conponentのほうがいいかお gdrive:isAuthedが複数セットされる
+//function componentのほうがいいかお gdrive:isAuthedが複数セットされる
 export const Overlay = () => {
   const [props, setProps] = useState<PropsType>({
-    isAuthed: undefined,
+    isAuthed: true,
     inputError: "none",
     isLoading: false,
   });
   const [diffPlusState, setDiffPlusState] = useState<string[]>([]);
   const [diffMinusState, setDiffMinusState] = useState<string[]>([]);
-  //コンストラクタとして使用する
-  useMemo(() => {
-    window.app.on("gdrive:isAuthed", (_e: any, d: any) => {
-      setProps({ ...props, isAuthed: d });
-    });
-  }, []);
 
   const onclick = async () => {
     //Loading表示
