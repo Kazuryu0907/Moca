@@ -36,7 +36,7 @@ export const Browser = () => {
         <p className="font-normal text-gray-700 mb-4">
           OBS is good software.
         </p>
-          {badges.map(p => {return <BrowserBands {...p} key={p.path}/>})}
+          {badges.map(p => {return <BrowserBands key={p.path} {...p}/>})}
       </div>
     );
 
