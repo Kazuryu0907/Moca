@@ -1,19 +1,28 @@
 import * as fs from "fs";
 import { google, drive_v3 } from "googleapis";
-import path from "path";
+import { GoogleAuth } from "google-auth-library";
+import type {} from "googleapis";
 
-console.log(process.cwd());
-const CREDENTIAL_PATH = "./credentials.json";
+export type drive_credential_type = {
+    credential_full_path:string
+};
 
 export class DriveService {
-  isAuthorized: boolean = false;
   // Need Debug
-  auth = new google.auth.GoogleAuth({
-    keyFile: path.join(process.cwd(), CREDENTIAL_PATH),
-    scopes: ['https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/drive.metadata.readonly'],
-  });
-  drive: drive_v3.Drive = google.drive({version:'v3',auth:this.auth});
+  google_auth : GoogleAuth | undefined;
+  drive: drive_v3.Drive | undefined;
 
+  constructor() {
+  }
+
+  //auth Run this first
+  auth({credential_full_path}:drive_credential_type){
+    this.google_auth = new google.auth.GoogleAuth({
+      keyFile: credential_full_path,
+      scopes: ['https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/drive.metadata.readonly'],
+    });
+    this.drive = google.drive({version:'v3',auth:this.google_auth});
+  }
 
   async clientCheck(folderID: string) {
     const params: drive_v3.Params$Resource$Files$List = {
@@ -52,15 +61,14 @@ export class DriveService {
     const folders = res.data.files?.filter(
       (f) => f.mimeType === "application/vnd.google-apps.folder",
     );
-    if (folders) {
-      for (const f of folders) {
-        if (f.id && f.name) {
-          const dir = base + "/" + f.name;
-          //再帰
-          const subFiles = await this.filesFromFolderID(f.id, dir);
+    if(!folders)return;
+    for (const f of folders) {
+      if (f.id && f.name) {
+        const dir = base + "/" + f.name;
+        //再帰
+        const subFiles = await this.filesFromFolderID(f.id, dir);
 
-          if (subFiles) filesArray.push(...subFiles);
-        }
+        if (subFiles) filesArray.push(...subFiles);
       }
     }
     return filesArray.flat();
