@@ -2,6 +2,7 @@ import { Browser } from "./components/Brower";
 import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
 import { Start } from "./components/Start";
+import { New_start } from "./components/New_start";
 import { IdTable } from "./components/IdTable";
 import { Debug } from "./components/Debug";
 import {MemoryRouter as Router,Routes,Route,Navigate} from "react-router-dom";
@@ -25,7 +26,8 @@ export const App = () => {
       {/* {useLocation().pathname !== "/" ?? <Topper/>} */}
         <Router>
           <Routes>
-            <Route path="/" element={<Start/>} />
+            {/* <Route path="/" element={<Start/>} /> */}
+            <Route path="/" element={<New_start/>} />
             {/* Topperと下のDynamicで分ける */}
             <Route path="/overlay" element={<Topper/>}>
               <Route index element={<Navigate to="/overlay/browser" replace/>}/>

@@ -69,9 +69,10 @@ export class SheetService {
    * @param id スプレッドシートID
    * @return void
    */
-  setSheetID(id: string) {
+  async setSheetID(id: string) {
     this.doc = new GoogleSpreadsheet(id,this.serviceAccountAuth);
-    this.isAuthorized = false;
+    // this.isAuthorized = false;
+    await this.doc.loadInfo();
   }
 
 

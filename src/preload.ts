@@ -40,5 +40,7 @@ contextBridge.exposeInMainWorld('app', {
   spreadHasPrivateKey: () => ipcRenderer.invoke('spread:hasPrivateKey'),
   driveAuth: (folderID: string) => ipcRenderer.invoke('gdrive:auth', folderID),
   graphicsDir: () => ipcRenderer.invoke('graphics_dir'),
-  mkdir: (path: string) => ipcRenderer.invoke('mkdir', path)
+  mkdir: (path: string) => ipcRenderer.invoke('mkdir', path),
+
+  send_to_main: (value:any) => ipcRenderer.send("start:send_to_main", value)
 });

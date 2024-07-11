@@ -7,12 +7,13 @@ import { encode, decode } from 'iconv-lite';
 import path from 'path';
 import { socketComm, onConnectionType } from './api/socketComm';
 import { start as MocaApiInit } from './api/start';
+import { New_start } from "./new_start"
 import { setPointModule } from './api/setPointModule';
 
 require('dotenv').config();
 
 class Moca {
-  ss = new SheetService(process.env);
+  ss = new SheetService();
   ds = new DriveService();
   setPointModule = new setPointModule();
   mainWindow: BrowserWindow;
@@ -26,7 +27,8 @@ class Moca {
     this.socket.onConnection = this.createSocketOnConnectionCallback();
     //あとでDIみたいにする
     this.mainWindow.webContents.on('did-finish-load', () =>
-      MocaApiInit(process.env, this.ss, this.ds, this.socket, this.mainWindow)
+      new New_start(this.ss,this.ds,this.mainWindow).authorization()
+      // MocaApiInit(process.env, this.ss, this.ds, this.socket, this.mainWindow)
     );
     this.setHandles();
   }
