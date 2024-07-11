@@ -1,19 +1,15 @@
 import { SheetService,sheet_credential_type } from "./api/spread"
 import { DriveService,drive_credential_type } from "./api/gdrive"
 
-import {existsSync,readFileSync,write,writeFileSync} from "fs"
+import {existsSync,readFileSync,writeFileSync} from "fs"
 import {join} from "path";
 import { ipcMain } from "electron";
 import {ErrorHandleType,return_error,handle_error_async2,handle_error2} from "./common/handle_error";
 
 const env_base_path = "./env";
-const sheet_credential_path = "./sheet_credential.json";
-const drive_credential_path = "./drive_credential.json";
 const credential_path = "./credential.json";
 const service_id_path = "./config.json";
 
-const full_sheet_credential_path = join(process.cwd(),env_base_path,sheet_credential_path);
-const full_drive_credential_path = join(process.cwd(),env_base_path,drive_credential_path);
 const full_credential_path = join(process.cwd(),env_base_path,credential_path);
 const full_service_id_path = join(process.cwd(),env_base_path,service_id_path);
 
@@ -51,14 +47,6 @@ export class New_start{
         });
     }
 
-    private is_exit_credentials(
-        full_sheet_credential_path:string,
-        full_drive_credential_path:string):{sheet:boolean,drive:boolean} {
-        return {
-            sheet:existsSync(full_sheet_credential_path),
-            drive:existsSync(full_drive_credential_path)
-        };
-    }
     private read_sheet_credential(full_sheet_credential_path:string):ErrorHandleType<sheet_credential_type>{
         // TODO parseとkeyのエラーハンドリング
         // ファイルなかったら作る
@@ -124,11 +112,6 @@ export class New_start{
             return;
         }
 
-        // credentialファイルの存在確認
-        // const exit_res = this.is_exit_credentials(full_sheet_credential_path,full_drive_credential_path);
-        // console.log(exit_res);
-        // if(!exit_res.sheet){send_to_main("sheet");return;}
-        // if(!exit_res.drive){send_to_main("drive");return;}
 
         const [,err_sheet] = await this.auth_sheet_from_exist_file(full_credential_path);
         const [,err_drive] = await this.auth_drive_from_exist_file(full_credential_path);
