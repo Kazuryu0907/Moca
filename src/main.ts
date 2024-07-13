@@ -9,7 +9,7 @@ import { socketComm } from './api/socketComm';
 import { ws_onConnection_type } from "./common/types";
 import {Caches } from "./api/caches"
 // import { start as MocaApiInit } from './api/start';
-import { New_start } from "./new_start"
+import { New_start } from "./api/new_start"
 import { setPointModule } from './api/setPointModule';
 
 require('dotenv').config();
@@ -39,9 +39,9 @@ class Moca {
     //あとでDIみたいにする
     this.mainWindow.webContents.on('did-finish-load', () =>
       new New_start(this.ss,this.ds,this.mainWindow).authorization()
-      // MocaApiInit(process.env, this.ss, this.ds, this.socket, this.mainWindow)
     );
     this.setHandles();
+
   }
 
   
@@ -62,29 +62,6 @@ class Moca {
     const onConnection: ws_onConnection_type = (ws) => {
       ws.send(
         JSON.stringify({ cmd: 'imgPath', data: process.env.GRAPHICS_DIR })
-      );
-      // ws.send(JSON.stringify({ cmd: 'idTable', data: this.ss.idTable }));
-      // ws.send(JSON.stringify({ cmd: 'teamData', data: this.ss.teamData }));
-      // ws.send(JSON.stringify({ cmd: 'matchInfo', data: this.ss.matchInfo }));
-      // ws.send(JSON.stringify({ cmd: 'stats', data: this.socket.caches.stats }));
-      //Moduleここに導入
-      ws.send(
-        JSON.stringify({
-          cmd: 'setPoint',
-          data: this.setPointModule.getGameScore
-        })
-      );
-      ws.send(
-        JSON.stringify({
-          cmd: 'preMatchId',
-          data: this.setPointModule.matchId
-        })
-      );
-      ws.send(
-        JSON.stringify({
-          cmd: 'currentScore',
-          data: this.setPointModule.matchingScore
-        })
       );
     };
     return onConnection;
@@ -192,6 +169,7 @@ class Moca {
 
 (async () => {
   app.whenReady().then(() => {
+    console.log("app loaded!")
     const moca = new Moca();
     moca.main();
   });

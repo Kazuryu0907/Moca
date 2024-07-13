@@ -55,6 +55,10 @@ export class setPointModule {
   // /boostに再接続したときにscoreリセット
   create_onConnection_function(){
     const func:ws_onConnection_type = (ws,path) => {
+      ws.send(JSON.stringify({ cmd: 'setPoint', data: this.gameScore }));
+      ws.send(JSON.stringify({ cmd: 'preMatchId', data: this.preMatchId }));
+      ws.send(JSON.stringify({ cmd: 'currentScore', data: this.matchingScore }));
+
       if(path === "/boost"){
         ws.send(JSON.stringify({ cmd: 'currentScore', data: this.matchingScore }));
       }

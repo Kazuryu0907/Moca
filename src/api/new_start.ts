@@ -1,10 +1,10 @@
-import { SheetService,sheet_credential_type } from "./api/spread"
-import { DriveService,drive_credential_type } from "./api/gdrive"
+import { SheetService,sheet_credential_type } from "./spread"
+import { DriveService,drive_credential_type } from "./gdrive"
 
 import {existsSync,readFileSync,writeFileSync} from "fs"
 import {join} from "path";
 import { ipcMain } from "electron";
-import {ErrorHandleType,return_error,handle_error_async2,handle_error2} from "./common/handle_error";
+import {ErrorHandleType,return_error,handle_error_async2,handle_error2} from "../common/handle_error";
 
 const env_base_path = "./env";
 const credential_path = "./credential.json";
@@ -55,7 +55,7 @@ export class New_start{
         const [json,err] = handle_error2(() => JSON.parse(data));
         // parse error
         if(err)return return_error("parse error");
-        console.log(json);
+        // console.log(json);
         if(!json?.client_email|| !json?.private_key)return return_error("key is not found");
         const sheet_credential:sheet_credential_type = {client_email:json.client_email,private_key:json.private_key};
         return [sheet_credential,undefined]
@@ -92,19 +92,23 @@ export class New_start{
 
 
     private async auth_sheet_from_exist_file(full_path:string):Promise<ErrorHandleType<void>>{
+        console.time("read_sheet_credential")
         const [sheet_credential,err] = this.read_sheet_credential(full_path);
+        console.timeEnd("read_sheet_credential")
         if(err)return return_error(err.error_message);
-        const [res,err2] = await handle_error_async2(this.sheet_service.auth(sheet_credential));
+        console.time("_auth_sheet")
+        const [res_auth,err2] = await handle_error_async2(this.sheet_service.auth(sheet_credential));
+        console.timeEnd("_auth_sheet")
         if(err2)return return_error(err2.error_message);
-        console.log(res);
-        return [res,undefined];
+        // console.log(res);
+        return [res_auth,undefined];
     }
     private async auth_drive_from_exist_file(full_path:string):Promise<ErrorHandleType<void>>{
         const drive_credential = this.read_drive_credential(full_path);
-        const [res,err] = await handle_error2(() => this.drive_service.auth(drive_credential));
+        const [res_auth,err] = await handle_error2(() => this.drive_service.auth(drive_credential));
         if(err)return return_error(err.error_message);
-        console.log(res);
-        return [res,undefined];
+        // console.log(res);
+        return [res_auth,undefined];
     }
     async authorization(){
         const send_to_main = (data:auth_process_connection_type["auth_type"]) => {
@@ -112,9 +116,12 @@ export class New_start{
             return;
         }
 
-
+        console.time("auth_sheet")
         const [,err_sheet] = await this.auth_sheet_from_exist_file(full_credential_path);
+        console.timeEnd("auth_sheet")
+        console.time("auth_drive")
         const [,err_drive] = await this.auth_drive_from_exist_file(full_credential_path);
+        console.timeEnd("auth_drive")
         if(err_sheet){
             console.log(err_sheet.error_message);
             send_to_main("credential");
