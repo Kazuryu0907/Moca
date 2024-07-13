@@ -3,6 +3,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { BrowserWindow } from 'electron';
 import { Browsers, BrowserType } from '../web/components/types';
 import { setPointModule } from './setPointModule';
+import { socket_command_type } from "../common/types";
 
 export type DataType = {
   cmd: string;
@@ -10,6 +11,9 @@ export type DataType = {
 };
 
 export type onConnectionType = (ws: WebSocket) => void;
+export type cmd_type = {cmd:socket_command_type,data:any};
+export type cmd_func_type = (input:cmd_type) => void;
+export type add_cmd_listener_type = ((input:cmd_type) => void)|((input:cmd_type) => void)[];
 //Record初期化
 function initRecord<Y>(arr: readonly string[], defaultVal: Y) {
   const toReturn: Record<string, Y> = {};
@@ -37,14 +41,18 @@ export class socketComm {
   );
   caches: Caches = new Caches();
   setPointModule:setPointModule;
+  event_cmds:cmd_func_type[] = [];
+  onConnection_cmds:Function[] = [];
+
 
   //接続時に実行するHook
-  onConnection: onConnectionType = (ws: WebSocket) => {};
+  onConnection: onConnectionType = () => {};
   socket: dgram.Socket = dgram.createSocket('udp4');
   // setPointModuleはDebugで使用できるように外で宣言
   constructor(mainWindow: BrowserWindow,setPointModule: setPointModule) {
     this.mainWindow = mainWindow;
     this.setPointModule = setPointModule;
+    this.set_websocket_listener();
   }
 
   sendData(path: BrowserType | BrowserType[], data: DataType) {
@@ -77,12 +85,13 @@ export class socketComm {
 
     const s = new WebSocketServer({ port: 8001 });
 
-    this.socket.on('message', (msg, remote) => {
+    this.socket.on('message', (msg, ) => {
       // console.log(`${remote.address}:${remote.port} - ${msg}`);
       const data = msg.toString();
       try {
         if (JSON.parse(data).cmd != 'boost') console.log(data);
-        this.sortingData(JSON.parse(data));
+        this.run_cmd_listener(JSON.parse(data));
+        // this.sortingData(JSON.parse(data));
       } catch (e) {
         console.error(e);
       }
@@ -106,10 +115,11 @@ export class socketComm {
           this.connectedBrowsers
         );
         // console.log(this.connectedBrowsers);
-        this.onConnection(ws);
+        // this.onConnection(ws);
+        this.onConnection_cmds.forEach((func) => func(ws));
       }
 
-      ws.on('close', (s) => {
+      ws.on('close', () => {
         if (isBrowser(path)) {
           this.clients[path] = null;
           this.connectedBrowsers[path] = false;
@@ -123,55 +133,31 @@ export class socketComm {
     });
   }
 
-  sortingData(input: { cmd: string; data: any }) {
-    const cmd = input.cmd;
-    // setPointModuleへUDPを横流し
-    this.setPointModule.hook(input,this);
-    if (cmd == 'start') {
-      //得点管理
-      this.sendData('/boost', { cmd: 'start', data: 0 });
-    } else if (cmd == 'playerTable') {
-      this.stream({ cmd: 'playerTable', data: input.data });
-    } else if (cmd == 'boost') {
-      const data: { boost: number; index: number } = input.data;
-      this.sendData('/boost', { cmd: 'boost', data: data });
-    } else if (cmd == 'stats') {
-      this.sendData('/stats', { cmd: 'stats', data: input.data });
-      //deepcopy
-      this.caches.stats = JSON.parse(JSON.stringify(input.data));
-    } else if (cmd == 'player') {
-      this.sendData('/boost', { cmd: 'player', data: input.data });
-    } else if (cmd == 'score') {
-      this.sendData('/boost', { cmd: 'score', data: input.data });
-    } else if (cmd == 'subScore') {
-      this.sendData('/boost', { cmd: 'subScore', data: input.data });
-    } else if (cmd == 'time') {
-      this.sendData('/boost', { cmd: 'time', data: input.data });
-    } else if (cmd == 'goals') {
-      const data: {
-        assistId: string;
-        scoreId: string;
-        team: 'blue' | 'orange';
-      } = input.data;
-      this.sendData('/boost', { cmd: 'goals', data: data });
-    } else if (cmd == 'endStats') {
-      this.sendData('/boost', { cmd: 'endStats', data: 0 });
-    } else if (cmd == 'endReplay') {
-      this.sendData('/boost', { cmd: 'endReplay', data: 0 });
-    // } else if (cmd == 'setPoint') {
-    //   this.sendData('/boost', { cmd: 'setPoint', data: input.data });
-    //   this.caches.setPoint = JSON.parse(JSON.stringify(input.data));
-    } else if (cmd == 'end') {
-      this.sendData('/boost', { cmd: 'end', data: 0 });
-    } else if(cmd == "matchId") {
-      const data: {matchId: string} = input.data;
-      this.sendData("/boost",{cmd: "matchId",data:data});
-    } else if(cmd == "teamNames"){
-      const data: {blue: string,orange: string,matchId:string} = input.data;
-      this.sendData("/boost",{cmd: "teamNames",data:data});
-    
+  add_cmd_listener(input:add_cmd_listener_type){
+    if(Array.isArray(input)){
+      input.forEach((func) => this.event_cmds.push(func));
+    }else{
+      this.event_cmds.push(input);
     }
   }
+
+  add_onConnection_listener(func:() => void){
+    this.onConnection_cmds.push(func);
+  }
+  private run_cmd_listener(input:{cmd:socket_command_type,data:any}){
+    this.event_cmds.forEach((func) => func(input));
+  }
+  private set_websocket_listener(){
+    const cmd_func = (input:cmd_type) => {
+      const cmd = input.cmd;
+      const data = input.data;
+      this.sendData("/boost",{cmd:cmd,data:data});
+      if(cmd == "playerTable"){
+        this.stream({cmd:"playerTable",data:data});
+      }
+    }
+    this.add_cmd_listener(cmd_func);
+}
 
   sendSocket(data: string) {
     this.socket.send(data, 12345, '127.0.0.1');
