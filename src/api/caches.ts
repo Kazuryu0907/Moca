@@ -1,21 +1,22 @@
+import { ws_cmd_func_type,ws_onConnection_type} from "@/common/types";
+
 export class Caches {
     stats: Object = {};
     setPoint: Object = {};
     currentScore: { blue: number; orange: number } = { blue: 0, orange: 0 };
 
-    constructor() {
-    }
     
     create_cmd_function() {
-        const cmd = (input:{cmd:string,data:any}) => {
+        const cmd:ws_cmd_func_type = (input) => {
             // deep copy
-            this.stats = JSON.parse(JSON.stringify(input.data));
+            if(input.cmd === "stats")this.stats = JSON.parse(JSON.stringify(input.data));
         }
         return cmd;
     }
 
     create_onConnection_function(){
-        const func = (ws:WebSocket) => {
+        const func:ws_onConnection_type = (ws) => {
+            // 接続時にstats cacheを送りつける
             ws.send(JSON.stringify({ cmd: 'stats', data: this.stats }));
         }
         return func;

@@ -5,7 +5,9 @@ import { unlink, mkdirSync, PathLike, readFileSync } from 'fs';
 import { getHashesFromFolder } from './api/hash';
 import { encode, decode } from 'iconv-lite';
 import path from 'path';
-import { socketComm, onConnectionType } from './api/socketComm';
+import { socketComm } from './api/socketComm';
+import { ws_onConnection_type } from "./common/types";
+import {Caches } from "./api/caches"
 import { start as MocaApiInit } from './api/start';
 import { New_start } from "./new_start"
 import { setPointModule } from './api/setPointModule';
@@ -18,13 +20,20 @@ class Moca {
   setPointModule = new setPointModule();
   mainWindow: BrowserWindow;
   socket: socketComm;
+  caches: Caches = new Caches();
   constructor() {
     this.mainWindow = this.createWindow();
-    this.socket = new socketComm(this.mainWindow, this.setPointModule);
+    this.socket = new socketComm();
   }
   main() {
     this.socket.bind();
-    this.socket.onConnection = this.createSocketOnConnectionCallback();
+    // Cacheのイベントリスナー設置
+    this.socket.add_cmd_listener(this.caches.create_cmd_function());
+    // onConnectionのイベントリスナー設置
+    this.socket.add_onConnection_listener(this.ss.create_onConnection_func());
+    this.socket.add_onConnection_listener(this.caches.create_onConnection_function());
+    this.socket.add_onConnection_listener(this.createSocketOnConnectionCallback());
+    // this.socket.onConnection = this.createSocketOnConnectionCallback();
     //あとでDIみたいにする
     this.mainWindow.webContents.on('did-finish-load', () =>
       new New_start(this.ss,this.ds,this.mainWindow).authorization()
@@ -47,15 +56,15 @@ class Moca {
     return mainWindow;
   };
 
-  createSocketOnConnectionCallback = (): onConnectionType => {
-    const onConnection: onConnectionType = (ws) => {
+  createSocketOnConnectionCallback = (): ws_onConnection_type => {
+    const onConnection: ws_onConnection_type = (ws) => {
       ws.send(
         JSON.stringify({ cmd: 'imgPath', data: process.env.GRAPHICS_DIR })
       );
-      ws.send(JSON.stringify({ cmd: 'idTable', data: this.ss.idTable }));
-      ws.send(JSON.stringify({ cmd: 'teamData', data: this.ss.teamData }));
-      ws.send(JSON.stringify({ cmd: 'matchInfo', data: this.ss.matchInfo }));
-      ws.send(JSON.stringify({ cmd: 'stats', data: this.socket.caches.stats }));
+      // ws.send(JSON.stringify({ cmd: 'idTable', data: this.ss.idTable }));
+      // ws.send(JSON.stringify({ cmd: 'teamData', data: this.ss.teamData }));
+      // ws.send(JSON.stringify({ cmd: 'matchInfo', data: this.ss.matchInfo }));
+      // ws.send(JSON.stringify({ cmd: 'stats', data: this.socket.caches.stats }));
       //Moduleここに導入
       ws.send(
         JSON.stringify({

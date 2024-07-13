@@ -5,6 +5,7 @@ import type {
   GoogleSpreadsheet as GoogleSpreadsheetType
 } from 'google-spreadsheet';
 import { spreadMatchInfoType as matchInfoType } from '../web/components/types';
+import { ws_onConnection_type } from '@/common/types';
 
 export class TeamType {
   teamName: string = '';
@@ -75,6 +76,16 @@ export class SheetService {
     await this.doc.loadInfo();
   }
 
+  // ws接続時にこれを送りつける
+  create_onConnection_func(){
+    const func:ws_onConnection_type = (ws) => {
+      ws.send(JSON.stringify({ cmd: 'idTable', data: this.idTable }));
+      ws.send(JSON.stringify({ cmd: 'teamData', data: this.teamData }));
+      ws.send(JSON.stringify({ cmd: 'matchInfo', data: this.matchInfo }));
+    }
+    return func;
+  }
+
 
     /**
    * 全チームの{名前,略称,選手名,アカウントID}を取得 
@@ -87,13 +98,13 @@ export class SheetService {
     // console.log(this.sheet.rowCount);
     //15チーム分は取得
     await this.sheet.loadCells(`A1:O${(3 + 1) * 15}`);
-    let teamData: TeamType[] = [];
+    const teamData: TeamType[] = [];
     let sheetIndex = 2;
     let loopCount = 0;
     // ESLintで怒られるから50チーム分取得
     while (loopCount < 50) {
       if (!this.sheet.getCellByA1(`B${sheetIndex}`).formattedValue) break;
-      let teamOb: TeamType = new TeamType();
+      const teamOb: TeamType = new TeamType();
       teamOb.teamName = this.sheet.getCellByA1(`B${sheetIndex}`).formattedValue ?? "";
       teamOb.teamAbbreviation = this.sheet.getCellByA1(
         `C${sheetIndex}`
