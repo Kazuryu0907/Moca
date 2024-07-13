@@ -8,7 +8,7 @@ import path from 'path';
 import { socketComm } from './api/socketComm';
 import { ws_onConnection_type } from "./common/types";
 import {Caches } from "./api/caches"
-import { start as MocaApiInit } from './api/start';
+// import { start as MocaApiInit } from './api/start';
 import { New_start } from "./new_start"
 import { setPointModule } from './api/setPointModule';
 
@@ -29,10 +29,12 @@ class Moca {
     this.socket.bind();
     // Cacheのイベントリスナー設置
     this.socket.add_cmd_listener(this.caches.create_cmd_function());
+    this.socket.add_cmd_listener(this.setPointModule.create_cmd_function(this.socket));
     // onConnectionのイベントリスナー設置
-    this.socket.add_onConnection_listener(this.ss.create_onConnection_func());
+    this.socket.add_onConnection_listener(this.ss.create_onConnection_function());
     this.socket.add_onConnection_listener(this.caches.create_onConnection_function());
     this.socket.add_onConnection_listener(this.createSocketOnConnectionCallback());
+    this.socket.add_onConnection_listener(this.setPointModule.create_onConnection_function());
     // this.socket.onConnection = this.createSocketOnConnectionCallback();
     //あとでDIみたいにする
     this.mainWindow.webContents.on('did-finish-load', () =>
@@ -168,22 +170,22 @@ class Moca {
     ipcMain.handle('removeFile', (e, d: string) =>
       unlink(d, (e) => console.error(e))
     );
-    ipcMain.handle('spread:setSheetID', (e, d: string) =>
-      this.ss.setSheetID(d)
-    );
-    ipcMain.handle('spread:auth', () =>
-      this.ss.auth().catch((e) => {
-        console.log(e);
-        return false;
-      })
-    );
-    ipcMain.handle('spread:hasPrivateKey', () => this.ss.hasPrivateKey());
-    ipcMain.handle('gdrive:auth', (e, d: string) =>
-      this.ds.clientCheck(d).catch((e) => {
-        console.log(e);
-        return false;
-      })
-    );
+    // ipcMain.handle('spread:setSheetID', (e, d: string) =>
+    //   this.ss.setSheetID(d)
+    // );
+    // ipcMain.handle('spread:auth', () =>
+    //   this.ss.auth().catch((e) => {
+    //     console.log(e);
+    //     return false;
+    //   })
+    // );
+    // ipcMain.handle('spread:hasPrivateKey', () => this.ss.hasPrivateKey());
+    // ipcMain.handle('gdrive:auth', (e, d: string) =>
+    //   this.ds.clientCheck(d).catch((e) => {
+    //     console.log(e);
+    //     return false;
+    //   })
+    // );
     ipcMain.handle('graphics_dir', () => process.env.GRAPHICS_DIR!);
   };
 }

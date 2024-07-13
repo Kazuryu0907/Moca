@@ -1,10 +1,13 @@
 
-import { FC,ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {auth_process_connection_type} from "@/common/types";
-export const New_start:FC = () => {
+import { useNavigate } from "react-router";
+export const New_start = () => {
     const [id_input,set_id_input] = useState("");
     const [auth_type,set_auth_type] = useState("" as auth_process_connection_type["auth_type"] | "");
-    window.app.on("start:send_from_main",(_event,value:auth_process_connection_type["auth_type"]) => {
+    const navigate = useNavigate();
+
+    window.app.on("start:send_from_main",(_event:any,value:auth_process_connection_type["auth_type"]) => {
         set_auth_type(value);
         console.log(value);
     })
@@ -15,6 +18,10 @@ export const New_start:FC = () => {
             text:id_input
         }
         window.app.send_to_main(send_data);
+    }
+    // 成功時遷移
+    if(auth_type === "success"){
+        setTimeout(() => navigate("/overlay") ,2000);
     }
 
     return (
@@ -43,6 +50,9 @@ export const New_start:FC = () => {
                 <input type="text" value={id_input} onChange={e => set_id_input(e.target.value)}/>
                 <button type="submit" className="btn btn-primary" onClick={submit}>Submit</button>
             </div>
+        }
+        {
+            (auth_type === "success") && <h1>Success</h1>
         }
         </div>
     );

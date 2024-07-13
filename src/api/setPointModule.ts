@@ -1,4 +1,6 @@
 import { socketComm } from './socketComm';
+import { ws_cmd_func_type, ws_onConnection_type } from "../common/types";
+
 export class setPointModule {
   //GameScoreはsetPointの方の数字
   matchingScore = { blue: 0, orange: 0 };
@@ -9,47 +11,59 @@ export class setPointModule {
   preMatchId = '';
 
   //cmd:goalsが来たら点数をincrement
-  hook(input: { cmd: string; data: any }, sock: socketComm) {
-    const cmd = input.cmd;
-    // cmd:TeamNames
-    // プラベ入室時に発火
-    if(cmd == "teamNames"){
-        const teamNamesData: {blue: string,orange: string,matchId:string} = input.data;
+  create_cmd_function(ws:socketComm) {
+    const func:ws_cmd_func_type = (input) => {
+      const {cmd,data} = input;
+      if(cmd === "teamNames"){
+        const teamNamesData: {blue: string,orange: string,matchId:string} = data;
         this.matchId = teamNamesData.matchId;
-        // ゲームScoreリセット
+        // スコアリセット
         this.resetScore();
         // チーム名が違うプラベに入ったとき
-        if(this.matchingTeams.blue != teamNamesData.blue || this.matchingTeams.orange != teamNamesData.orange){
-          //setPointリセット
+        if(!this.is_same_teams()){
           this.resetGameScore();
-          //明示的に送信
-          sock.sendData("/boost",{cmd: "currentScore",data: this.matchingScore});
-          sock.sendData("/boost",{cmd: "setPoint",data: this.gameScore});
+          // 更新
+          ws.sendData("/boost",{cmd: "currentScore",data: this.matchingScore});
+          ws.sendData("/boost",{cmd: "setPoint",data: this.gameScore});
         }
-        //
+        // pre系更新
         this.matchingTeams.blue = teamNamesData.blue;this.matchingTeams.orange = teamNamesData.orange;
         this.preMatchId = this.matchId;
-    // 得点時
-    } else if(cmd == "goals"){
-        const data: {
+      }else if(cmd === "goals"){
+        const goal_data: {
             assistId: string;
             scoreId: string;
             team: 'blue' | 'orange';
-        } = input.data;
-        const scoredTeam = data.team;
-        //add Score
+        } = data;
+        const scoredTeam = goal_data.team;
         this.matchingScore[scoredTeam]++;
-        sock.sendData(['/boost',"/stats"], {
+        ws.sendData(['/boost',"/stats"], {
             cmd: 'currentScore',
             data: this.matchingScore
         });
-    // Match終了時
-    }else if(cmd == "end"){
+      // Match終了時
+      }else if(cmd === "end"){
         const winnerTeam = this.matchingScore.blue > this.matchingScore.orange ? 'blue' : 'orange';
         this.gameScore[winnerTeam]++;
         //setPoint送信
-        sock.sendData('/boost', { cmd: 'setPoint', data: this.gameScore });
+        ws.sendData('/boost', { cmd: 'setPoint', data: this.gameScore });
+      }
     }
+    return func;
+  }
+
+  // /boostに再接続したときにscoreリセット
+  create_onConnection_function(){
+    const func:ws_onConnection_type = (ws,path) => {
+      if(path === "/boost"){
+        ws.send(JSON.stringify({ cmd: 'currentScore', data: this.matchingScore }));
+      }
+    }
+    return func;
+  }
+
+  private is_same_teams(){
+    return this.matchingTeams.blue === this.preMatchingTeams.blue && this.matchingTeams.orange === this.preMatchingTeams.orange;
   }
 
   resetScore() {
@@ -59,25 +73,6 @@ export class setPointModule {
   resetGameScore() {
     this.gameScore.blue = 0;
     this.gameScore.orange = 0;
-  }
-  // /boostに再接続したときにscoreリセット
-  onAccessHtml(path: string, sock: socketComm) {
-    if (path == '/boost') {
-    //   const cachedMatchInfo = this.ss.cachedMatchInfo;
-    //   const currentMatchingTeams =
-    //     cachedMatchInfo.blue + cachedMatchInfo.orange;
-    //   if (this.preMatchingTeams != currentMatchingTeams) {
-    //     this.gameScore.blue = 0;
-    //     this.gameScore.orange = 0;
-    //   }
-      sock.sendData('/boost', {
-        cmd: 'currentScore',
-        data: this.matchingScore
-      });
-
-    //   this.preMatchingTeams = currentMatchingTeams;
-      
-    }
   }
 
   set setMatchingScore(score: { blue: number; orange: number }) {

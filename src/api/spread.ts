@@ -77,7 +77,7 @@ export class SheetService {
   }
 
   // ws接続時にこれを送りつける
-  create_onConnection_func(){
+  create_onConnection_function(){
     const func:ws_onConnection_type = (ws) => {
       ws.send(JSON.stringify({ cmd: 'idTable', data: this.idTable }));
       ws.send(JSON.stringify({ cmd: 'teamData', data: this.teamData }));

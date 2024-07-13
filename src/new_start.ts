@@ -142,6 +142,7 @@ export class New_start{
         }
 
         console.log("Success");
+        send_to_main("success");
         // send_to_main("Success");
 
     }

@@ -1,6 +1,6 @@
 import * as dgram from 'dgram';
 import { WebSocketServer, WebSocket } from 'ws';
-import { Browsers, BrowserType } from '../web/components/types';
+import { Browsers, BrowserType} from "../common/types";
 import { socket_command_type, ws_onConnection_type } from "../common/types";
 import { ws_cmd_type, ws_cmd_func_type, ws_add_cmd_listener_type } from "../common/types";
 
@@ -20,7 +20,6 @@ function initRecord<Y>(arr: readonly string[], defaultVal: Y) {
 }
 
 
-
 export class socketComm {
   connectedBrowsers: Record<BrowserType, boolean> = initRecord<boolean>(
     Browsers,
@@ -32,13 +31,12 @@ export class socketComm {
   );
   socket: dgram.Socket = dgram.createSocket('udp4');
   event_cmds:ws_cmd_func_type[] = [];
-  onConnection_cmds:Function[] = [];
-
+  onConnection_cmds:ws_onConnection_type[] = [];
 
   // setPointModuleはDebugで使用できるように外で宣言
   constructor() {
     // eventlistener設定
-    this.set_websocket_listener();
+    this.add_cmd_listener(this.create_cmd_function());
   }
 
 
@@ -68,13 +66,13 @@ export class socketComm {
 
     //WebSocket
     s.on('connection', (ws, req) => {
-      const path = req.url || '';
+      const path = req.url as BrowserType;
       console.log(path);
       // *onConnected
       if (this.isBrowser(path)) {
         this.clients[path] = ws;
         this.connectedBrowsers[path] = true;
-        this.onConnection_cmds.forEach((func) => func(ws));
+        this.onConnection_cmds.forEach((func) => func(ws,path));
       }
       // *onClosed
       ws.on('close', () => {
@@ -91,7 +89,7 @@ export class socketComm {
     return Browsers.some((v) => v === path);
   }
 
-  private sendData(path: BrowserType | BrowserType[], data: DataType) {
+  sendData(path: BrowserType | BrowserType[], data: DataType) {
     // BrowserType[]の時
     if(Array.isArray(path)){
       path.forEach((p) => {
@@ -104,7 +102,7 @@ export class socketComm {
     }
   }
 
-  private stream(data: DataType) {
+  stream(data: DataType) {
     Browsers.forEach((path) => {
       this.clients[path]?.send(JSON.stringify(data));
     });
@@ -123,16 +121,18 @@ export class socketComm {
   private run_cmd_listener(input:{cmd:socket_command_type,data:any}){
     this.event_cmds.forEach((func) => func(input));
   }
-  private set_websocket_listener(){
+  private create_cmd_function(){
     const cmd_func = (input:ws_cmd_type) => {
       const cmd = input.cmd;
       const data = input.data;
+      // 全cmdそのまま送信
       this.sendData("/boost",{cmd:cmd,data:data});
+      // これだけstream
       if(cmd == "playerTable"){
         this.stream({cmd:"playerTable",data:data});
       }
     }
-    this.add_cmd_listener(cmd_func);
+    return cmd_func;
 }
 
   sendSocket(data: string) {
