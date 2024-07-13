@@ -8,8 +8,8 @@ import { PathLike } from 'fs';
 //calc md5 hash using stream.
 function md5(filePath: PathLike): Promise<string> {
   return new Promise((resolve, reject) => {
-    let readStream = fs.createReadStream(filePath);
-    let md5hash = createHash('md5');
+    const readStream = fs.createReadStream(filePath);
+    const md5hash = createHash('md5');
     md5hash.setEncoding('hex');
     readStream.pipe(md5hash);
     readStream.on('end', () => {
@@ -28,7 +28,7 @@ type globType = {
 
 //glob (再帰あり)
 function glob2(filePath: string, patt: RegExp, base = '') {
-  let filesArray: globType[] = [];
+  const filesArray: globType[] = [];
   const dir = fs.readdirSync(filePath, {
     withFileTypes: true,
     encoding: 'utf-8'
@@ -57,9 +57,9 @@ export type HFFType = {
 //run this.
 export async function getHashesFromFolder(basePath: string, patt: RegExp) {
   const filesArray = glob2(basePath, patt);
-  let outArray: HFFType[] = [];
+  const outArray: HFFType[] = [];
   for (const files of filesArray) {
-    let fileHashMap = new Map<string, string>();
+    const fileHashMap = new Map<string, string>();
     for (const f of files.files) {
       const fullPath = path.join(basePath, files.dir, f);
       const hash = await md5(fullPath);

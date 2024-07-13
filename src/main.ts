@@ -12,6 +12,7 @@ import {Caches } from "./api/caches"
 import { New_start } from "./api/new_start"
 import { setPointModule } from './api/setPointModule';
 
+// TODO env使わないようにしたい
 require('dotenv').config();
 
 class Moca {
@@ -28,14 +29,10 @@ class Moca {
   main() {
     this.socket.bind();
     // Cacheのイベントリスナー設置
-    this.socket.add_cmd_listener(this.caches.create_cmd_function());
-    this.socket.add_cmd_listener(this.setPointModule.create_cmd_function(this.socket));
+    this.set_cmd_listener();
     // onConnectionのイベントリスナー設置
-    this.socket.add_onConnection_listener(this.ss.create_onConnection_function());
-    this.socket.add_onConnection_listener(this.caches.create_onConnection_function());
-    this.socket.add_onConnection_listener(this.createSocketOnConnectionCallback());
-    this.socket.add_onConnection_listener(this.setPointModule.create_onConnection_function());
-    // this.socket.onConnection = this.createSocketOnConnectionCallback();
+    this.set_onConnection_listener();
+
     //あとでDIみたいにする
     this.mainWindow.webContents.on('did-finish-load', () =>
       new New_start(this.ss,this.ds,this.mainWindow).authorization()
@@ -57,6 +54,20 @@ class Moca {
     // mainWindow.webContents.openDevTools({ mode: "detach" });
     return mainWindow;
   };
+
+  // cmd_listenerの設定
+  private set_cmd_listener = () => {
+    this.socket.add_cmd_listener(this.caches.create_cmd_function());
+    this.socket.add_cmd_listener(this.setPointModule.create_cmd_function(this.socket));
+  }
+
+  // onConnectionの設定 
+  private set_onConnection_listener = () => {
+    this.socket.add_onConnection_listener(this.ss.create_onConnection_function());
+    this.socket.add_onConnection_listener(this.caches.create_onConnection_function());
+    this.socket.add_onConnection_listener(this.createSocketOnConnectionCallback());
+    this.socket.add_onConnection_listener(this.setPointModule.create_onConnection_function());
+  }
 
   createSocketOnConnectionCallback = (): ws_onConnection_type => {
     const onConnection: ws_onConnection_type = (ws) => {

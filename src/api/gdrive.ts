@@ -44,7 +44,7 @@ export class DriveService {
       dir: string;
       files: drive_v3.Schema$File[];
     };
-    let filesArray: globType[] = [];
+    const filesArray: globType[] = [];
     const params: drive_v3.Params$Resource$Files$List = {
       //フォルダ除外
       q: `'${folderID}' in parents and trashed = false`,
