@@ -110,26 +110,24 @@ export class New_start{
         // console.log(res);
         return [res_auth,undefined];
     }
-    async authorization(){
-        const send_to_main = (data:auth_process_connection_type["auth_type"]) => {
-            this.mainwindow.webContents.send("start:send_from_main",data);
-            return;
+    private send_to_main(data:auth_process_connection_type["auth_type"],message:string){
+        const send_data:auth_process_connection_type = {
+            auth_type:data,
+            text:message
         }
-
-        console.time("auth_sheet")
+        this.mainwindow.webContents.send("start:send_from_main",send_data);
+    }
+    async authorization(){
         const [,err_sheet] = await this.auth_sheet_from_exist_file(full_credential_path);
-        console.timeEnd("auth_sheet")
-        console.time("auth_drive")
         const [,err_drive] = await this.auth_drive_from_exist_file(full_credential_path);
-        console.timeEnd("auth_drive")
         if(err_sheet){
             console.log(err_sheet.error_message);
-            send_to_main("credential");
+            this.send_to_main("credential","sheet authorization error");
             return;
         }
         if(err_drive){
             console.log(err_drive.error_message);
-            send_to_main("credential");
+            this.send_to_main("credential","drive authorization error");
             return;
         }
 
@@ -137,19 +135,19 @@ export class New_start{
         const [,error_sheet_id] = await this.load_sheet(service_id_config.sheet_id);
         if(error_sheet_id){
             console.log("sheet_id_load_error");
-            send_to_main("sheet_id");
+            this.send_to_main("sheet_id","sheet id load error");
             return;
         }
 
         const [,error_drive_id] = await this.load_drive(service_id_config.drive_id);
         if(error_drive_id){
             console.log(error_drive_id.error_message);
-            send_to_main("drive_id");
+            this.send_to_main("drive_id","drive id load error");
             return;
         }
 
         console.log("Success");
-        send_to_main("success");
+        this.send_to_main("success","Welcome back!");
         // send_to_main("Success");
 
     }
