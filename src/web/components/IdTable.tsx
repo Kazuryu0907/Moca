@@ -1,13 +1,12 @@
-import { FC, useState } from "react";
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Loading, Checked } from "./Loading";
-import { dataType, spreadMatchInfoType as matchInfoType } from "./types";
+import { useState } from "react";
+import { spreadMatchInfoType as matchInfoType } from "./types";
 
 let idTable: Record<string, string> = {};
 
 window.app.on(
   "cachedIdTable",
   (e: Electron.IpcRendererEvent, d: matchInfoType) => {
+    console.log(d);
     idTable = d;
   }
 );
@@ -28,7 +27,7 @@ const createColum = (name: string, id: string) => {
 
 export const IdTable = () => {
   const [Ids, setIds] = useState({});
-  let createdTable: JSX.Element[] = [];
+  const createdTable: JSX.Element[] = [];
   Object.keys(idTable).forEach((id) => {
     const name = idTable[id];
     createdTable.push(createColum(name, id));

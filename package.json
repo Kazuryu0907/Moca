@@ -1,5 +1,6 @@
 {
   "name": "electron-react-ts",
+  "productName": "Moca",
   "description": "electron-react-ts",
   "version": "0.1.0",
   "license": "MIT",
@@ -29,7 +30,10 @@
     "dev:electron": "wait-on dist/main.js dist/index.html && electronmon  --trace-warnings . --trace-warnings",
     "pack": "electron-builder --dir --win --x64",
     "dist": "electron-builder",
-    "debug": "webpack-dev-server --config webpack.debug.config.js "
+    "debug": "webpack-dev-server --config webpack.debug.config.js ",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "electronmon": {
     "patterns": [
@@ -41,25 +45,31 @@
     "@emotion/styled": "^11.11.0",
     "@google-cloud/local-auth": "^3.0.1",
     "@heroicons/react": "^2.0.18",
+    "@hono/node-server": "^1.12.0",
     "@mui/material": "^5.14.4",
     "ajv": "^8.12.0",
     "arrify": "^3.0.0",
+    "axios": "^1.7.2",
     "dotenv": "^16.1.4",
     "dseg": "^0.46.0",
-    "google-auth-library": "^8.8.0",
+    "google-auth-library": "^9.11.0",
     "google-spreadsheet": "^4.1.1",
-    "googleapis": "^118.0.0",
+    "googleapis": "^140.0.1",
     "googleapis-common": "^6.0.4",
+    "hono": "^4.4.12",
     "iconv-lite": "^0.6.3",
     "open": "^9.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.14.2",
     "react-router-dom": "^6.14.2",
+    "react-step-progress": "^1.0.3",
     "server-destroy": "^1.0.1",
-    "ws": "^8.13.0"
+    "ws": "^8.13.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
     "@types/electron-load-devtool": "^1.2.1",
     "@types/google-spreadsheet": "^3.3.2",
     "@types/node": "^20.2.5",
@@ -72,7 +82,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "electron": "^25.0.1",
-    "electron-builder": "^24.9.1",
+    "electron-builder": "^24.13.3",
     "electron-load-devtool": "^1.2.0",
     "electron-packager": "^17.1.1",
     "electronmon": "^2.0.2",

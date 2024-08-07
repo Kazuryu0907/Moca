@@ -36,4 +36,5 @@ export interface IMainProcess {
   driveAuth: (id: string) => Promise<boolean>;
   graphicsDir: () => Promise<string>;
   mkdir: (path: string) => Promise<void>;
+  send_to_main: (value:any) => Promise<void>;
 }

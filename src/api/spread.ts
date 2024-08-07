@@ -5,6 +5,7 @@ import type {
   GoogleSpreadsheet as GoogleSpreadsheetType
 } from 'google-spreadsheet';
 import { spreadMatchInfoType as matchInfoType } from '../web/components/types';
+import { ws_onConnection_type } from '@/common/types';
 
 export class TeamType {
   teamName: string = '';
@@ -13,55 +14,78 @@ export class TeamType {
   accountIds: string[] = [];
 }
 
+export type sheet_credential_type = {
+    client_email:string,
+    private_key:string
+};
+
+const DUMMY_SHEET_ID = "1WNHOaQjfulA5KJzUqcOYM4w5UNDy2YJ9c9mWUGMqitc";
 export class SheetService {
-  doc: GoogleSpreadsheetType;
+  doc: GoogleSpreadsheetType | undefined;
   sheet: GoogleSpreadsheetWorksheetType | undefined;
   isAuthorized: boolean;
   teamData: TeamType[];
   idTable: Record<string, string>;
   matchInfo: matchInfoType;
   sheetId: string;
-  clientEmail: string;
-  privateKey: string;
+  client_email: string;
+  private_key: string;
   serviceAccountAuth: JWT;
 
-  constructor(env: any) {
-    this.sheetId = env.SHEET_ID;
-    this.clientEmail = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-    this.privateKey = env.GOOGLE_PRIVATE_KEY;
-    this.serviceAccountAuth = new JWT({
-      email:env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key:env.GOOGLE_PRIVATE_KEY,
-      scopes:['https://www.googleapis.com/auth/spreadsheets']
-    });
-    this.doc = new GoogleSpreadsheet(this.sheetId,this.serviceAccountAuth);
+  constructor() {
+    // this.sheetId = env.SHEET_ID;
+    this.doc = undefined;
+    this.sheetId = DUMMY_SHEET_ID;
+    this.client_email = "";
+    this.private_key = "";
+    this.serviceAccountAuth = new JWT();
     this.isAuthorized = false;
     this.teamData = [];
     this.idTable = {};
     this.matchInfo = { blue: 'none', orange: 'none', name: '', bo: '' };
   }
+   /**
+   * 認証(スプシ読み込み) 
+   * @return void
+   */
+  //auth Run this first
+  async auth({client_email,private_key}:sheet_credential_type) {
+    this.client_email = client_email;
+    this.private_key = private_key;
+    this.serviceAccountAuth = new JWT({
+      email:this.client_email,
+      key:this.private_key,
+      scopes:['https://www.googleapis.com/auth/spreadsheets']
+    });
+    this.doc = new GoogleSpreadsheet(this.sheetId,this.serviceAccountAuth);
+    await this.doc.loadInfo();
+    this.isAuthorized = true;
+  }
+  // ? What is that?
   hasPrivateKey() {
-    return this.privateKey ? true : false;
+    return this.private_key ? true : false;
   }
   /**
    * SheetIDを設定 
    * @param id スプレッドシートID
    * @return void
    */
-  setSheetID(id: string) {
+  async setSheetID(id: string) {
     this.doc = new GoogleSpreadsheet(id,this.serviceAccountAuth);
-    this.isAuthorized = false;
-  }
-  
-  /**
-   * 認証(スプシ読み込み) 
-   * @return void
-   */
-  //auth Run this first
-  async auth() {
+    // this.isAuthorized = false;
     await this.doc.loadInfo();
-    this.isAuthorized = true;
   }
+
+  // ws接続時にこれを送りつける
+  create_onConnection_function(){
+    const func:ws_onConnection_type = (ws) => {
+      ws.send(JSON.stringify({ cmd: 'idTable', data: this.idTable }));
+      ws.send(JSON.stringify({ cmd: 'teamData', data: this.teamData }));
+      ws.send(JSON.stringify({ cmd: 'matchInfo', data: this.matchInfo }));
+    }
+    return func;
+  }
+
 
     /**
    * 全チームの{名前,略称,選手名,アカウントID}を取得 
@@ -69,17 +93,18 @@ export class SheetService {
    */
   //thisに残すようにした
   async loadTeams() {
-    this.sheet = this.doc.sheetsByIndex[0];
-    console.log(this.sheet.rowCount);
+    if(!this.doc) throw new Error("run auth first");
+    this.sheet = this.doc.sheetsByTitle["エントリー一覧/管理表"];
+    // console.log(this.sheet.rowCount);
     //15チーム分は取得
     await this.sheet.loadCells(`A1:O${(3 + 1) * 15}`);
-    let teamData: TeamType[] = [];
+    const teamData: TeamType[] = [];
     let sheetIndex = 2;
     let loopCount = 0;
     // ESLintで怒られるから50チーム分取得
     while (loopCount < 50) {
       if (!this.sheet.getCellByA1(`B${sheetIndex}`).formattedValue) break;
-      let teamOb: TeamType = new TeamType();
+      const teamOb: TeamType = new TeamType();
       teamOb.teamName = this.sheet.getCellByA1(`B${sheetIndex}`).formattedValue ?? "";
       teamOb.teamAbbreviation = this.sheet.getCellByA1(
         `C${sheetIndex}`
@@ -105,6 +130,7 @@ export class SheetService {
    */
   //thisに残すようにした
   async getMatchInfo() {
+    if(!this.doc) throw new Error("run auth first");
     this.sheet = this.doc.sheetsByTitle['進行管理'];
     //最小サイズLoad
     await this.sheet.loadCells('A1:C4');

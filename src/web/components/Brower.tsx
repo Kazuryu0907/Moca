@@ -1,6 +1,6 @@
 import { FC,ReactElement, useMemo, useState,memo } from "react";
 import { Props as BrowserProps, BrowserBands } from "./BrowserBands";
-import {Browsers} from "./types";
+import {Browsers} from "../../common/types";
 export const defaultProps = ():BrowserProps[] => {
   return Browsers.map(p => {return {path:p,connection:false}});
 }
@@ -17,6 +17,7 @@ const updateState = (setBadges: React.Dispatch<React.SetStateAction<BrowserProps
     }
   );
 };
+
 
 export const Browser = () => {
     const [badges,setbadges] = useState(defaultProps());

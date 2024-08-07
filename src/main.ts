@@ -5,30 +5,43 @@ import { unlink, mkdirSync, PathLike, readFileSync } from 'fs';
 import { getHashesFromFolder } from './api/hash';
 import { encode, decode } from 'iconv-lite';
 import path from 'path';
-import { socketComm, onConnectionType } from './api/socketComm';
-import { start as MocaApiInit } from './api/start';
+import { socketComm } from './api/socketComm';
+import { ws_onConnection_type } from "./common/types";
+import {Caches } from "./api/caches"
+// import { start as MocaApiInit } from './api/start';
+import { New_start } from "./api/new_start"
 import { setPointModule } from './api/setPointModule';
 
+// TODO env使わないようにしたい
 require('dotenv').config();
 
 class Moca {
-  ss = new SheetService(process.env);
+  ss = new SheetService();
   ds = new DriveService();
   setPointModule = new setPointModule();
   mainWindow: BrowserWindow;
   socket: socketComm;
+  caches: Caches = new Caches();
+  new_start: New_start | undefined = undefined;
   constructor() {
     this.mainWindow = this.createWindow();
-    this.socket = new socketComm(this.mainWindow, this.setPointModule);
+    this.socket = new socketComm();
   }
   main() {
     this.socket.bind();
-    this.socket.onConnection = this.createSocketOnConnectionCallback();
+    // Cacheのイベントリスナー設置
+    this.set_cmd_listener();
+    // onConnectionのイベントリスナー設置
+    this.set_onConnection_listener();
+
     //あとでDIみたいにする
-    this.mainWindow.webContents.on('did-finish-load', () =>
-      MocaApiInit(process.env, this.ss, this.ds, this.socket, this.mainWindow)
+    this.mainWindow.webContents.on('did-finish-load', () =>{
+      this.new_start = new New_start(this.ss,this.ds,this.mainWindow);
+      this.new_start.authorization();
+    }
     );
     this.setHandles();
+
   }
 
   
@@ -45,33 +58,24 @@ class Moca {
     return mainWindow;
   };
 
-  createSocketOnConnectionCallback = (): onConnectionType => {
-    const onConnection: onConnectionType = (ws) => {
+  // cmd_listenerの設定
+  private set_cmd_listener = () => {
+    this.socket.add_cmd_listener(this.caches.create_cmd_function());
+    this.socket.add_cmd_listener(this.setPointModule.create_cmd_function(this.socket));
+  }
+
+  // onConnectionの設定 
+  private set_onConnection_listener = () => {
+    this.socket.add_onConnection_listener(this.ss.create_onConnection_function());
+    this.socket.add_onConnection_listener(this.caches.create_onConnection_function());
+    this.socket.add_onConnection_listener(this.createSocketOnConnectionCallback());
+    this.socket.add_onConnection_listener(this.setPointModule.create_onConnection_function());
+  }
+
+  createSocketOnConnectionCallback = (): ws_onConnection_type => {
+    const onConnection: ws_onConnection_type = (ws) => {
       ws.send(
         JSON.stringify({ cmd: 'imgPath', data: process.env.GRAPHICS_DIR })
-      );
-      ws.send(JSON.stringify({ cmd: 'idTable', data: this.ss.idTable }));
-      ws.send(JSON.stringify({ cmd: 'teamData', data: this.ss.teamData }));
-      ws.send(JSON.stringify({ cmd: 'matchInfo', data: this.ss.matchInfo }));
-      ws.send(JSON.stringify({ cmd: 'stats', data: this.socket.caches.stats }));
-      //Moduleここに導入
-      ws.send(
-        JSON.stringify({
-          cmd: 'setPoint',
-          data: this.setPointModule.getGameScore
-        })
-      );
-      ws.send(
-        JSON.stringify({
-          cmd: 'preMatchId',
-          data: this.setPointModule.matchId
-        })
-      );
-      ws.send(
-        JSON.stringify({
-          cmd: 'currentScore',
-          data: this.setPointModule.matchingScore
-        })
       );
     };
     return onConnection;
@@ -138,8 +142,8 @@ class Moca {
 
     ipcMain.handle('glob', async () => {
       return await getHashesFromFolder(
-        process.env.GRAPHICS_DIR!,
-        /.*\.(jpg|png)$/
+        this.new_start?.download_directory_path || "",
+        /.*\.(jpg|png|mp4)$/
       );
     });
 
@@ -157,28 +161,29 @@ class Moca {
     ipcMain.handle('removeFile', (e, d: string) =>
       unlink(d, (e) => console.error(e))
     );
-    ipcMain.handle('spread:setSheetID', (e, d: string) =>
-      this.ss.setSheetID(d)
-    );
-    ipcMain.handle('spread:auth', () =>
-      this.ss.auth().catch((e) => {
-        console.log(e);
-        return false;
-      })
-    );
-    ipcMain.handle('spread:hasPrivateKey', () => this.ss.hasPrivateKey());
-    ipcMain.handle('gdrive:auth', (e, d: string) =>
-      this.ds.clientCheck(d).catch((e) => {
-        console.log(e);
-        return false;
-      })
-    );
-    ipcMain.handle('graphics_dir', () => process.env.GRAPHICS_DIR!);
+    // ipcMain.handle('spread:setSheetID', (e, d: string) =>
+    //   this.ss.setSheetID(d)
+    // );
+    // ipcMain.handle('spread:auth', () =>
+    //   this.ss.auth().catch((e) => {
+    //     console.log(e);
+    //     return false;
+    //   })
+    // );
+    // ipcMain.handle('spread:hasPrivateKey', () => this.ss.hasPrivateKey());
+    // ipcMain.handle('gdrive:auth', (e, d: string) =>
+    //   this.ds.clientCheck(d).catch((e) => {
+    //     console.log(e);
+    //     return false;
+    //   })
+    // );
+    ipcMain.handle('graphics_dir', () => this.new_start?.download_directory_path);
   };
 }
 
 (async () => {
   app.whenReady().then(() => {
+    console.log("app loaded!")
     const moca = new Moca();
     moca.main();
   });

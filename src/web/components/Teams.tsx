@@ -13,7 +13,7 @@ export type Props = {
   tableLen: number;
 };
 
-let teamName: matchInfoType;
+let teamName: matchInfoType = {blue: "None", orange: "None", name: "None", bo: "None"};
 
 window.app.on(
   "cachedMatchInfo",
@@ -27,7 +27,6 @@ const defaultProps = (): Props => ({
   teamNames: teamName,
   tableLen: 0,
 });
-
 
 
 export const Teams = () => {

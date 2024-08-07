@@ -1,15 +1,15 @@
 import * as dgram from 'dgram';
 import { WebSocketServer, WebSocket } from 'ws';
-import { BrowserWindow } from 'electron';
-import { Browsers, BrowserType } from '../web/components/types';
-import { setPointModule } from './setPointModule';
+import { Browsers, BrowserType} from "../common/types";
+import { socket_command_type, ws_onConnection_type } from "../common/types";
+import { ws_cmd_type, ws_cmd_func_type, ws_add_cmd_listener_type } from "../common/types";
 
 export type DataType = {
   cmd: string;
   data: any;
 };
 
-export type onConnectionType = (ws: WebSocket) => void;
+
 //Record初期化
 function initRecord<Y>(arr: readonly string[], defaultVal: Y) {
   const toReturn: Record<string, Y> = {};
@@ -19,14 +19,8 @@ function initRecord<Y>(arr: readonly string[], defaultVal: Y) {
   return toReturn;
 }
 
-class Caches {
-  stats: Object = {};
-  setPoint: Object = {};
-  currentScore: { blue: number; orange: number } = { blue: 0, orange: 0 };
-}
 
 export class socketComm {
-  mainWindow: BrowserWindow;
   connectedBrowsers: Record<BrowserType, boolean> = initRecord<boolean>(
     Browsers,
     false
@@ -35,16 +29,64 @@ export class socketComm {
     Browsers,
     null
   );
-  caches: Caches = new Caches();
-  setPointModule:setPointModule;
-
-  //接続時に実行するHook
-  onConnection: onConnectionType = (ws: WebSocket) => {};
   socket: dgram.Socket = dgram.createSocket('udp4');
+  event_cmds:ws_cmd_func_type[] = [];
+  onConnection_cmds:ws_onConnection_type[] = [];
+
   // setPointModuleはDebugで使用できるように外で宣言
-  constructor(mainWindow: BrowserWindow,setPointModule: setPointModule) {
-    this.mainWindow = mainWindow;
-    this.setPointModule = setPointModule;
+  constructor() {
+    // eventlistener設定
+    this.add_cmd_listener(this.create_cmd_function());
+  }
+
+
+  bind() {
+    const port = 12345;
+    const host = '127.0.0.1';
+
+    this.socket.on('listening', () => {
+      const addr = this.socket.address();
+      console.log(`UDP socket listening on ${addr.address}:${addr.port}`);
+    });
+
+    const s = new WebSocketServer({ port: 8001 });
+
+    this.socket.on('message', (msg, ) => {
+      const data = msg.toString();
+      try {
+        if (JSON.parse(data).cmd != 'boost') console.log(data);
+        this.run_cmd_listener(JSON.parse(data));
+        // this.sortingData(JSON.parse(data));
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    this.socket.bind(port, host);
+
+    //WebSocket
+    s.on('connection', (ws, req) => {
+      const path = req.url as BrowserType;
+      console.log(path);
+      // *onConnected
+      if (this.isBrowser(path)) {
+        this.clients[path] = ws;
+        this.connectedBrowsers[path] = true;
+        this.onConnection_cmds.forEach((func) => func(ws,path));
+      }
+      // *onClosed
+      ws.on('close', () => {
+        if (this.isBrowser(path)) {
+          this.clients[path] = null;
+          this.connectedBrowsers[path] = false;
+        }
+        // console.log(clients);
+      });
+    });
+  }
+
+  private isBrowser(path:string): path is BrowserType{
+    return Browsers.some((v) => v === path);
   }
 
   sendData(path: BrowserType | BrowserType[], data: DataType) {
@@ -65,113 +107,33 @@ export class socketComm {
       this.clients[path]?.send(JSON.stringify(data));
     });
   }
-
-  bind() {
-    const port = 12345;
-    const host = '127.0.0.1';
-
-    this.socket.on('listening', () => {
-      const addr = this.socket.address();
-      console.log(`UDP socket listening on ${addr.address}:${addr.port}`);
-    });
-
-    const s = new WebSocketServer({ port: 8001 });
-
-    this.socket.on('message', (msg, remote) => {
-      // console.log(`${remote.address}:${remote.port} - ${msg}`);
-      const data = msg.toString();
-      try {
-        if (JSON.parse(data).cmd != 'boost') console.log(data);
-        this.sortingData(JSON.parse(data));
-      } catch (e) {
-        console.error(e);
-      }
-    });
-
-    this.socket.bind(port, host);
-    const isBrowser = (path: string): path is BrowserType => {
-      return Browsers.some((v) => v === path);
-    };
-
-    //WebSocket
-    s.on('connection', (ws, req) => {
-      const path = req.url || '';
-      console.log(path);
-      if (isBrowser(path)) {
-        this.setPointModule.onAccessHtml(path,this);
-        this.clients[path] = ws;
-        this.connectedBrowsers[path] = true;
-        this.mainWindow!.webContents.send(
-          'connections',
-          this.connectedBrowsers
-        );
-        // console.log(this.connectedBrowsers);
-        this.onConnection(ws);
-      }
-
-      ws.on('close', (s) => {
-        if (isBrowser(path)) {
-          this.clients[path] = null;
-          this.connectedBrowsers[path] = false;
-          this.mainWindow.webContents.send(
-            'connections',
-            this.connectedBrowsers
-          );
-        }
-        // console.log(clients);
-      });
-    });
-  }
-
-  sortingData(input: { cmd: string; data: any }) {
-    const cmd = input.cmd;
-    // setPointModuleへUDPを横流し
-    this.setPointModule.hook(input,this);
-    if (cmd == 'start') {
-      //得点管理
-      this.sendData('/boost', { cmd: 'start', data: 0 });
-    } else if (cmd == 'playerTable') {
-      this.stream({ cmd: 'playerTable', data: input.data });
-    } else if (cmd == 'boost') {
-      const data: { boost: number; index: number } = input.data;
-      this.sendData('/boost', { cmd: 'boost', data: data });
-    } else if (cmd == 'stats') {
-      this.sendData('/stats', { cmd: 'stats', data: input.data });
-      //deepcopy
-      this.caches.stats = JSON.parse(JSON.stringify(input.data));
-    } else if (cmd == 'player') {
-      this.sendData('/boost', { cmd: 'player', data: input.data });
-    } else if (cmd == 'score') {
-      this.sendData('/boost', { cmd: 'score', data: input.data });
-    } else if (cmd == 'subScore') {
-      this.sendData('/boost', { cmd: 'subScore', data: input.data });
-    } else if (cmd == 'time') {
-      this.sendData('/boost', { cmd: 'time', data: input.data });
-    } else if (cmd == 'goals') {
-      const data: {
-        assistId: string;
-        scoreId: string;
-        team: 'blue' | 'orange';
-      } = input.data;
-      this.sendData('/boost', { cmd: 'goals', data: data });
-    } else if (cmd == 'endStats') {
-      this.sendData('/boost', { cmd: 'endStats', data: 0 });
-    } else if (cmd == 'endReplay') {
-      this.sendData('/boost', { cmd: 'endReplay', data: 0 });
-    // } else if (cmd == 'setPoint') {
-    //   this.sendData('/boost', { cmd: 'setPoint', data: input.data });
-    //   this.caches.setPoint = JSON.parse(JSON.stringify(input.data));
-    } else if (cmd == 'end') {
-      this.sendData('/boost', { cmd: 'end', data: 0 });
-    } else if(cmd == "matchId") {
-      const data: {matchId: string} = input.data;
-      this.sendData("/boost",{cmd: "matchId",data:data});
-    } else if(cmd == "teamNames"){
-      const data: {blue: string,orange: string,matchId:string} = input.data;
-      this.sendData("/boost",{cmd: "teamNames",data:data});
-    
+  add_cmd_listener(input:ws_add_cmd_listener_type){
+    if(Array.isArray(input)){
+      input.forEach((func) => this.event_cmds.push(func));
+    }else{
+      this.event_cmds.push(input);
     }
   }
+
+  add_onConnection_listener(func:ws_onConnection_type){
+    this.onConnection_cmds.push(func);
+  }
+  private run_cmd_listener(input:{cmd:socket_command_type,data:any}){
+    this.event_cmds.forEach((func) => func(input));
+  }
+  private create_cmd_function(){
+    const cmd_func = (input:ws_cmd_type) => {
+      const cmd = input.cmd;
+      const data = input.data;
+      // 全cmdそのまま送信
+      this.sendData("/boost",{cmd:cmd,data:data});
+      // これだけstream
+      if(cmd == "playerTable"){
+        this.stream({cmd:"playerTable",data:data});
+      }
+    }
+    return cmd_func;
+}
 
   sendSocket(data: string) {
     this.socket.send(data, 12345, '127.0.0.1');

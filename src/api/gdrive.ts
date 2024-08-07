@@ -1,19 +1,28 @@
 import * as fs from "fs";
 import { google, drive_v3 } from "googleapis";
-import path from "path";
+import { GoogleAuth } from "google-auth-library";
+import type {} from "googleapis";
 
-console.log(process.cwd());
-const CREDENTIAL_PATH = "./credentials.json";
+export type drive_credential_type = {
+    credential_full_path:string
+};
 
 export class DriveService {
-  isAuthorized: boolean = false;
   // Need Debug
-  auth = new google.auth.GoogleAuth({
-    keyFile: path.join(process.cwd(), CREDENTIAL_PATH),
-    scopes: ['https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/drive.metadata.readonly'],
-  });
-  drive: drive_v3.Drive = google.drive({version:'v3',auth:this.auth});
+  google_auth : GoogleAuth | undefined;
+  drive: drive_v3.Drive | undefined;
 
+  constructor() {
+  }
+
+  //auth Run this first
+  auth({credential_full_path}:drive_credential_type){
+    this.google_auth = new google.auth.GoogleAuth({
+      keyFile: credential_full_path,
+      scopes: ['https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/drive.metadata.readonly'],
+    });
+    this.drive = google.drive({version:'v3',auth:this.google_auth});
+  }
 
   async clientCheck(folderID: string) {
     const params: drive_v3.Params$Resource$Files$List = {
@@ -35,7 +44,7 @@ export class DriveService {
       dir: string;
       files: drive_v3.Schema$File[];
     };
-    let filesArray: globType[] = [];
+    const filesArray: globType[] = [];
     const params: drive_v3.Params$Resource$Files$List = {
       //フォルダ除外
       q: `'${folderID}' in parents and trashed = false`,
@@ -45,22 +54,22 @@ export class DriveService {
     if (this.drive === undefined) return [];
     const res = await this.drive.files.list(params);
     const files = res.data.files?.filter(
-      (f) => f.mimeType !== "application/vnd.google-apps.folder",
+      (f) => f.mimeType === "video/mp4" || f.mimeType === "image/png",
     );
+
     //確定したのを格納
     if (files) filesArray.push({ dir: base, files: files });
     const folders = res.data.files?.filter(
       (f) => f.mimeType === "application/vnd.google-apps.folder",
     );
-    if (folders) {
-      for (const f of folders) {
-        if (f.id && f.name) {
-          const dir = base + "/" + f.name;
-          //再帰
-          const subFiles = await this.filesFromFolderID(f.id, dir);
+    if(!folders)return;
+    for (const f of folders) {
+      if (f.id && f.name) {
+        const dir = base + "/" + f.name;
+        //再帰
+        const subFiles = await this.filesFromFolderID(f.id, dir);
 
-          if (subFiles) filesArray.push(...subFiles);
-        }
+        if (subFiles) filesArray.push(...subFiles);
       }
     }
     return filesArray.flat();
@@ -74,7 +83,9 @@ export class DriveService {
     };
     if (this.drive === undefined) return;
     //streamでbuffer溢れに対応
-    const res = await this.drive.files.get(params, { responseType: "stream" });
+    const res = await this.drive.files.get(params, { responseType: "stream" }).catch(console.error);
+    // sheet Downloadしないように条件分岐
+    if (res === undefined) return;
     const dest = fs.createWriteStream(outName, "utf8");
     res.data.on("data", (chunk) => dest.write(chunk));
     res.data.on("end", () => dest.end());
