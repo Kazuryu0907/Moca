@@ -262,12 +262,22 @@
         let playerTable = {};
         let idTable = {};
         let imgPath = "";
+        let playerNames = [];
+        const setImg = () => {
+            if (imgPath == ""){console.log("imgPath is null");return;}
+            if (playerNames.length == 0){console.log("playerNames is null");return;}
+            const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+            for(let i = 0;i<6;i++){
+                $(`#img_${i}`).attr("src",path+`${playerNames[i]}.png`);
+            }
+        }
         webSocket.onmessage = function (message) {
             const msg = JSON.parse(message.data);
             const { cmd, data } = msg;
             console.log(msg);
             if(cmd == "imgPath"){
                 imgPath = data;
+                setImg();
             }else if (cmd == "matchInfo") {
                 const { blue, bo, name, orange } = data;
                 document.getElementById("blue_team_name").innerText = blue;
@@ -291,12 +301,15 @@
                 //data array
                 const table = ["scores", "goals", "assists", "shots", "saves", "demos"];
                 const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                // setImg用
+                playerNames = [];
                 for (let i = 0; i < 6; i++) {
                     const state = data[i];
                     table.forEach(t => {
                         document.getElementById(`${t}_${i}`).textContent = state[t];
                     })
-                    const playerName = idTable[state["id"]];
+                    let playerName = idTable[state["id"]];
+                    playerNames.push(playerName);
                     document.getElementById(`names_${i}`).textContent = playerName;
                     document.getElementById(`img_${i}`).setAttribute("src",path+`${playerName}.png`);
                 }

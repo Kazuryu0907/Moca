@@ -427,9 +427,20 @@
             let _bo = "";
             let _setPoint = {};
             let preFocusIndex = 0;
+            // setImg用
+            let playerNames = [];
             //右下のBoostゲージ Index
             let watchingBoostIndex = null;
             webSocket = new WebSocket("ws://localhost:8001/boost");
+
+            const setImg = () => {
+                if(imgPath == ""){console.log("imgPath is null");return;}
+                console.log("setImg");
+                const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                playerNames.forEach((name,i) => {
+                    $(`#player_icon${i}`).attr("src",path+`${name}.png`);
+                });
+            }
             // overlayInit();
             webSocket.onmessage = async function(message){
                 
@@ -442,6 +453,7 @@
                 }
                 else if(cmd == "imgPath"){
                     imgPath = data;
+                    setImg();
                 }
                 else if(cmd == "boost"){// Boost
                     // document.getElementById("boosts").style.visibility = "visible";
@@ -487,6 +499,7 @@
                     preFocusIndex = playerIndex;
                     //images
                     const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/images/` : `${imgPath}/images/`;
+                    console.log("player img set");
                     $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
                     gsap.to("#player_icon",{opacity:1});
                     //Change Boost Color
@@ -556,6 +569,7 @@
                         const name = idTable[id];
                         const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
                         document.getElementById("player_name"+i).textContent = name;
+                        playerNames.push(name);
                        $("#player_icon"+i).attr("src",path+`${name}.png`);
                     }
                 }

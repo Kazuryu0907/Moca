@@ -28,16 +28,16 @@ class Moca {
     this.socket = new socketComm();
   }
   main() {
-    this.socket.bind();
-    // Cacheのイベントリスナー設置
-    this.set_cmd_listener();
-    // onConnectionのイベントリスナー設置
-    this.set_onConnection_listener();
-
     //あとでDIみたいにする
-    this.mainWindow.webContents.on('did-finish-load', () =>{
+    this.mainWindow.webContents.on('did-finish-load', async () =>{
       this.new_start = new New_start(this.ss,this.ds,this.mainWindow);
-      this.new_start.authorization();
+      await this.new_start.authorization();
+
+      this.socket.bind();
+      // Cacheのイベントリスナー設置
+      this.set_cmd_listener();
+      // onConnectionのイベントリスナー設置
+      this.set_onConnection_listener();
     }
     );
     this.setHandles();
@@ -75,7 +75,7 @@ class Moca {
   createSocketOnConnectionCallback = (): ws_onConnection_type => {
     const onConnection: ws_onConnection_type = (ws) => {
       ws.send(
-        JSON.stringify({ cmd: 'imgPath', data: process.env.GRAPHICS_DIR })
+        JSON.stringify({ cmd: 'imgPath', data: this.new_start?.download_directory_path })
       );
     };
     return onConnection;
