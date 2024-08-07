@@ -1,5 +1,5 @@
 import {WebSocket} from "ws";
-export type auth_type = "credential" | "sheet_id" | "drive_id" | "success";
+export type auth_type = "credential" | "sheet_id" | "drive_id" | "download_directory" | "success";
 
 export type auth_process_connection_type = {
     auth_type:auth_type,

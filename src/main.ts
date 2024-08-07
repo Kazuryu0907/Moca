@@ -22,6 +22,7 @@ class Moca {
   mainWindow: BrowserWindow;
   socket: socketComm;
   caches: Caches = new Caches();
+  new_start: New_start | undefined = undefined;
   constructor() {
     this.mainWindow = this.createWindow();
     this.socket = new socketComm();
@@ -34,8 +35,10 @@ class Moca {
     this.set_onConnection_listener();
 
     //あとでDIみたいにする
-    this.mainWindow.webContents.on('did-finish-load', () =>
-      new New_start(this.ss,this.ds,this.mainWindow).authorization()
+    this.mainWindow.webContents.on('did-finish-load', () =>{
+      this.new_start = new New_start(this.ss,this.ds,this.mainWindow);
+      this.new_start.authorization();
+    }
     );
     this.setHandles();
 
@@ -139,7 +142,7 @@ class Moca {
 
     ipcMain.handle('glob', async () => {
       return await getHashesFromFolder(
-        process.env.GRAPHICS_DIR!,
+        this.new_start?.download_directory_path || "",
         /.*\.(jpg|png|mp4)$/
       );
     });
@@ -174,7 +177,7 @@ class Moca {
     //     return false;
     //   })
     // );
-    ipcMain.handle('graphics_dir', () => process.env.GRAPHICS_DIR!);
+    ipcMain.handle('graphics_dir', () => this.new_start?.download_directory_path);
   };
 }
 

@@ -3,7 +3,7 @@ import { DriveService,drive_credential_type } from "./gdrive"
 
 import {existsSync,readFileSync,writeFileSync} from "fs"
 import {join} from "path";
-import { ipcMain } from "electron";
+import { ipcMain, dialog } from "electron";
 import {ErrorHandleType,return_error,handle_error_async2,handle_error2} from "../common/handle_error";
 
 const env_base_path = "./env";
@@ -16,6 +16,7 @@ const full_service_id_path = join(process.cwd(),env_base_path,service_id_path);
 interface ServiceIDConfig {
     sheet_id:string;
     drive_id:string;
+    download_directory:string;
 }
 
 
@@ -25,10 +26,12 @@ export class New_start{
     sheet_service:SheetService;
     drive_service:DriveService;
     mainwindow:BrowserWindow;
+    private download_directory:string;
     constructor(sheet_service:SheetService,drive_service:DriveService,mainwindow:BrowserWindow){
         this.sheet_service = sheet_service;
         this.drive_service = drive_service;
         this.mainwindow = mainwindow; 
+        this.download_directory = "";
         ipcMain.on("start:send_to_main",async(_event,value:auth_process_connection_type) => {
             console.log(value);
             if(value.auth_type === "credential"){
@@ -70,14 +73,17 @@ export class New_start{
 
     private read_service_id_config(full_service_id_path:string):ServiceIDConfig{
         if(!existsSync(full_service_id_path)){
-            writeFileSync(full_service_id_path,JSON.stringify({sheet_id:"",drive_id:""}));
+            writeFileSync(full_service_id_path,JSON.stringify({sheet_id:"",drive_id:"",download_directory:""}));
         }
         const data = readFileSync(full_service_id_path).toString();
         const json = JSON.parse(data);
-        const service_id_config:ServiceIDConfig = {sheet_id:json.sheet_id,drive_id:json.drive_id};
+        const service_id_config:ServiceIDConfig = {sheet_id:json.sheet_id,drive_id:json.drive_id,download_directory:json.download_directory};
         return service_id_config;
     }
 
+    private is_exist_download_directory(download_directory:string):boolean{
+        return existsSync(download_directory);
+    }
     private async load_sheet(sheet_id:string):Promise<ErrorHandleType<void>>{
         const[config,err] = await handle_error_async2(this.sheet_service.setSheetID(sheet_id));
         if(err)return return_error(err.error_message);
@@ -154,9 +160,29 @@ export class New_start{
             return;
         }
 
+        const is_exits_download_directory = this.is_exist_download_directory(service_id_config.download_directory);
+        if(!is_exits_download_directory){
+            console.log("download directory not found");
+            this.send_to_main("download_directory","Download directoryを入力してください");
+            const res = await dialog.showOpenDialog(this.mainwindow,{properties:["openDirectory"],title:"Download directoryを選択してください"});
+            // cancelされたら再帰
+            if(res.canceled)this.authorization();
+            // download_directory更新
+            service_id_config.download_directory = res.filePaths[0];
+            console.log(service_id_config);
+            writeFileSync(full_service_id_path,JSON.stringify(service_id_config));
+        }
+
+        // mainで使う用に保存
+        this.download_directory = service_id_config.download_directory;
+
         console.log("Success");
         this.send_to_main("success","Welcome back!");
         // send_to_main("Success");
 
+    }
+
+    get download_directory_path(){
+        return this.download_directory;
     }
 }
