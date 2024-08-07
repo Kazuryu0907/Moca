@@ -84,6 +84,7 @@ export class New_start{
 
         // Sheetタブの初期化用
         const match_info = await this.sheet_service.getMatchInfo();
+        await this.sheet_service.loadTeams();
         const id_table = await this.sheet_service.getIds();
         this.mainwindow.webContents.send("cachedMatchInfo",match_info);
         this.mainwindow.webContents.send("cachedIdTable",id_table);

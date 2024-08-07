@@ -212,6 +212,17 @@
                 if(diffx == null)gsap.from(tar,{y:diffy,duration:duration,opacity:0,ease:"expo.out"});
                 else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:"expo.out"});
             }
+        const _fit = (className,defaultTextSize,divHeight) => {
+            let resizeText = document.getElementsByClassName(className);
+            for (let i = 0; i < resizeText.length; i++) {
+                let textElm = resizeText[i];
+                textElm.style.fontSize = `${defaultTextSize}px`;
+                let size = defaultTextSize;
+                for(;textElm.scrollHeight > divHeight && size > 1;size--){
+                    textElm.style.fontSize = size + "px";
+                }
+            }
+        }
         window.onload = () => {
             const fadeinit = async() => {
                 [...Array(6).keys()].forEach(i => {opa0(`#player_${i}`);opa0(`#names_${i}`);opa0(`#scores_${i}`);opa0("#scores_text")});
@@ -226,6 +237,7 @@
                 $(".screen").removeClass("hidden");
                 fit();
 
+                _fit("player-name",30,45);
                 await sleep(1000);
                 $(".teamName").addClass("fade");
                 await sleep(1000);

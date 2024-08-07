@@ -12,7 +12,7 @@
                     @apply w-[140px] h-[140px] mx-[5px] my-[5px] rounded-lg;
                 }
                 .teamName-div{
-                    @apply my-auto font-['IseMin'] font-bold text-gray-100 text-center text-[50px]
+                    @apply my-auto font-['IseMin'] font-bold text-gray-100 text-center text-[50px] break-words;
                 }
             }
         </style>
@@ -255,14 +255,14 @@
                                 <div class="pl-3 h-[130px]">
                                     <div class="mb-3 flex h-[45px] w-[442px] ">
                                         <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
-                                            <span id="abbr" class="mx-auto my-auto justify-center items-center">BDS</span>
+                                            <span id="abbr" class="mx-auto my-auto justify-center items-center"></span>
                                         </div>
-                                        <div class="fit-team-name mx-3 font-bold text-white text-[30px] flex items-center justify-center ">
-                                            <span id="team_name">ぶーぶDOGS</span>
+                                        <div class="fit-team-name mx-3 font-bold text-white text-[30px] flex items-center justify-center break-words">
+                                            <div id="team_name" class="w-[300px]"></div>
                                         </div>
                                     </div>
                                     <div class="absolute font-bold text-white  text-[50px] w-[442px] flex ">
-                                        <span id="player_name" class="my-auto">AAAAAAAA</span>
+                                        <span id="player_name" class="my-auto"></span>
                                     </div>
                                     <!-- <div id="sub_stats_hr" class="h-[4px] bg-blue-600 w-full"></div> -->
                                 </div>
@@ -461,7 +461,8 @@
                     setBoost(Number(boost));
                     const teamName = matchInfo[team];
                     const teamOb = teamData.find(t => t.teamName == teamName);
-                    const teamAbbr = teamOb.teamAbbrevitation;
+                    console.log("teamOb"    ,teamOb);
+                    const teamAbbr = teamOb.teamAbbreviation;
                     const boostColor = team == "blue" ? "text-blue-600" : "text-orange-600";
                     const hrColor = team == "blue" ? "bg-blue-600" : "bg-orange-600";
                     const boostTextColor = team == "blue" ? "text-blue-700" : "text-orange-700";
@@ -591,7 +592,7 @@
                     // playTransition("#mv_2");
                 }
                 //RESET
-                else if(cmd == "end"){//旧endStats
+                else if(cmd == "END_GAME"){//旧endStats
                     // $("#score_blue").text("0");
                     // $("#score_orange").text("0");
                     const score_blue = document.getElementById("score_blue").textContent;
@@ -610,6 +611,7 @@
                             v.play();
                     }
                     const {blue,orange} = _setPoint;
+                    console.log(_setPoint);
                     const biggerPoint = Math.max(blue,orange);
                     const blueTeamScore = Number(document.getElementById("score_blue").textContent);
                     const orangeTeamScore = Number(document.getElementById("score_orange").textContent);

@@ -49,6 +49,7 @@ export class setPointModule {
         this.gameScore[winnerTeam]++;
         //setPoint送信
         ws.sendData('/boost', { cmd: 'setPoint', data: this.gameScore });
+        ws.sendData('/boost', { cmd: 'END_GAME', data: "" });
       }
     }
     return func;

@@ -1,7 +1,7 @@
 import { Browser } from "./components/Brower";
 import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
-import { Start } from "./components/Start";
+// import { Start } from "./components/Start";
 import { New_start } from "./components/New_start";
 import { IdTable } from "./components/IdTable";
 import { Debug } from "./components/Debug";
@@ -31,7 +31,7 @@ export const App = () => {
             {/* Topperと下のDynamicで分ける */}
             <Route path="/overlay" element={<Topper/>}>
               <Route index element={<Navigate to="/overlay/browser" replace/>}/>
-              <Route path="browser" element={<Browser/>}/>
+              <Route index path="browser" element={<Browser/>}/>
               <Route path="spread" element={<Spread/>}/>
               <Route path="drive" element={<Overlay/>}/>
               <Route path="debug" element={<Debug/>}></Route>
