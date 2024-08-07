@@ -128,12 +128,12 @@ class Moca {
       return this.ss.matchInfo;
     });
 
-    ipcMain.handle('SPREADSHEET_ID', () => {
-      return process.env.SPREADSHEET_ID;
-    });
+    // ipcMain.handle('SPREADSHEET_ID', () => {
+    //   return process.env.SPREADSHEET_ID;
+    // });
 
     ipcMain.handle('GOOGLEDRIVE_ID', () => {
-      return process.env.GOOGLEDRIVE_ID;
+      return this.new_start?.drive_id || "";
     });
 
     ipcMain.handle('getDrive', async (e, d: string) => {

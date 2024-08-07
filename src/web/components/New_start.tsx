@@ -32,6 +32,7 @@ export const New_start = () => {
         {/* <h1>{auth_process_connection.text}</h1> */}
         {(auth_process_connection.auth_type === "credential") &&
             <div>
+                <h1>Credential.jsonを選択してください</h1>
                 <input type="file"
                 // /* @ts-expect-error */
                 // webkitdirectory=""

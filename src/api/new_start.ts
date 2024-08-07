@@ -26,12 +26,12 @@ export class New_start{
     sheet_service:SheetService;
     drive_service:DriveService;
     mainwindow:BrowserWindow;
-    private download_directory:string;
+    private download_directory:string = "";
+    private _drive_id:string = "";
     constructor(sheet_service:SheetService,drive_service:DriveService,mainwindow:BrowserWindow){
         this.sheet_service = sheet_service;
         this.drive_service = drive_service;
         this.mainwindow = mainwindow; 
-        this.download_directory = "";
         ipcMain.on("start:send_to_main",async(_event,value:auth_process_connection_type) => {
             console.log(value);
             if(value.auth_type === "credential"){
@@ -174,6 +174,7 @@ export class New_start{
         }
 
         // mainで使う用に保存
+        this._drive_id = service_id_config.drive_id;
         this.download_directory = service_id_config.download_directory;
 
         console.log("Success");
@@ -182,6 +183,9 @@ export class New_start{
 
     }
 
+    get drive_id(){
+        return this._drive_id;
+    }
     get download_directory_path(){
         return this.download_directory;
     }
