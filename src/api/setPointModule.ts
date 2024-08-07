@@ -5,7 +5,7 @@ export class setPointModule {
   //GameScoreはsetPointの方の数字
   matchingScore = { blue: 0, orange: 0 };
   gameScore = { blue: 0, orange: 0 };
-  preMatchingTeams  = {blue:'',orange:''};
+  preMatchingTeams:{blue:string | undefined,orange:string | undefined}  = {blue:'',orange:''};
   matchingTeams = {blue:'',orange:''};
   matchId = '';
   preMatchId = '';
@@ -17,17 +17,19 @@ export class setPointModule {
       if(cmd === "teamNames"){
         const teamNamesData: {blue: string,orange: string,matchId:string} = data;
         this.matchId = teamNamesData.matchId;
+        this.matchingTeams = {blue: teamNamesData.blue, orange: teamNamesData.orange};
         // スコアリセット
         this.resetScore();
         // チーム名が違うプラベに入ったとき
         if(!this.is_same_teams()){
           this.resetGameScore();
+          console.log("teamNames changed");
           // 更新
           ws.sendData("/boost",{cmd: "currentScore",data: this.matchingScore});
           ws.sendData("/boost",{cmd: "setPoint",data: this.gameScore});
         }
         // pre系更新
-        this.matchingTeams.blue = teamNamesData.blue;this.matchingTeams.orange = teamNamesData.orange;
+        this.preMatchingTeams.blue = teamNamesData.blue;this.preMatchingTeams.orange = teamNamesData.orange;
         this.preMatchId = this.matchId;
       }else if(cmd === "goals"){
         const goal_data: {
@@ -67,6 +69,9 @@ export class setPointModule {
   }
 
   private is_same_teams(){
+    console.log("is_same_teams");
+    console.log(this.matchingTeams,this.preMatchingTeams);
+    if (this.preMatchingTeams.blue === undefined)return true;
     return this.matchingTeams.blue === this.preMatchingTeams.blue && this.matchingTeams.orange === this.preMatchingTeams.orange;
   }
 

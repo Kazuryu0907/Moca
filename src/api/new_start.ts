@@ -81,6 +81,13 @@ export class New_start{
     private async load_sheet(sheet_id:string):Promise<ErrorHandleType<void>>{
         const[config,err] = await handle_error_async2(this.sheet_service.setSheetID(sheet_id));
         if(err)return return_error(err.error_message);
+
+        // Sheetタブの初期化用
+        const match_info = await this.sheet_service.getMatchInfo();
+        const id_table = await this.sheet_service.getIds();
+        this.mainwindow.webContents.send("cachedMatchInfo",match_info);
+        this.mainwindow.webContents.send("cachedIdTable",id_table);
+
         return [config,undefined];
     }
 

@@ -140,7 +140,7 @@ class Moca {
     ipcMain.handle('glob', async () => {
       return await getHashesFromFolder(
         process.env.GRAPHICS_DIR!,
-        /.*\.(jpg|png)$/
+        /.*\.(jpg|png|mp4)$/
       );
     });
 

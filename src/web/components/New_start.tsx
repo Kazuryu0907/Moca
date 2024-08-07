@@ -2,6 +2,8 @@
 import { ChangeEvent, useState } from "react";
 import {auth_process_connection_type} from "@/common/types";
 import { useNavigate } from "react-router";
+//https://www.npmjs.com/package/react-step-progress 
+import StepProgressBar from "react-step-progress";
 export const New_start = () => {
     const [id_input,set_id_input] = useState("");
     const [auth_process_connection,set_auth_connection] = useState({} as auth_process_connection_type);

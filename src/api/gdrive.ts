@@ -54,8 +54,9 @@ export class DriveService {
     if (this.drive === undefined) return [];
     const res = await this.drive.files.list(params);
     const files = res.data.files?.filter(
-      (f) => f.mimeType !== "application/vnd.google-apps.folder",
+      (f) => f.mimeType === "video/mp4" || f.mimeType === "image/png",
     );
+
     //確定したのを格納
     if (files) filesArray.push({ dir: base, files: files });
     const folders = res.data.files?.filter(
@@ -82,7 +83,9 @@ export class DriveService {
     };
     if (this.drive === undefined) return;
     //streamでbuffer溢れに対応
-    const res = await this.drive.files.get(params, { responseType: "stream" });
+    const res = await this.drive.files.get(params, { responseType: "stream" }).catch(console.error);
+    // sheet Downloadしないように条件分岐
+    if (res === undefined) return;
     const dest = fs.createWriteStream(outName, "utf8");
     res.data.on("data", (chunk) => dest.write(chunk));
     res.data.on("end", () => dest.end());

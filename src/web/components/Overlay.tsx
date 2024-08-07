@@ -1,4 +1,4 @@
-import { Component, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { Loading, Checked } from "./Loading";
 import {gdriveFile, gdriveGlobType, localGlobType} from "./types";
 
@@ -96,7 +96,7 @@ const calcFilesDiff = (drive: gdriveFile[],localFiles: Map<string, string>): [st
   //ハッシュが違うname取得
   const changedHashes = existedFiles.filter((d) => d.md5Checksum !== localFiles.get(d.name)).map((d) => d.name);
   //name => idテーブル
-  let name2IdTable: Map<string, string> = new Map();
+  const name2IdTable: Map<string, string> = new Map();
   drive.map((d) => name2IdTable.set(d.name, d.id));
   //drive && localFiles(ベン図) からname取り出したやつ
   const localAndDriveNames = drive.filter((d) => localFiles.has(d.name)).map((d) => d.name);
@@ -144,10 +144,10 @@ export const Overlay = () => {
     const localFiles:localGlobType[] = await window.app.glob().catch(console.error);
     console.log("glob");
     console.log(localFiles);
-    let downloadPromise: Promise<any>[] = [];
-    let removePromise:Promise<void>[] = [];
-    let allDiffPlusFiles:string[] = [];
-    let allDiffMinusFiles:string[] = [];
+    const downloadPromise: Promise<any>[] = [];
+    const removePromise:Promise<void>[] = [];
+    const allDiffPlusFiles:string[] = [];
+    const allDiffMinusFiles:string[] = [];
     const graphicsPath = await window.app.graphicsDir();
     //Diff計算するよ
     for(const dg of gdriveFolders){
