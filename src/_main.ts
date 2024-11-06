@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { BrowserWindow, app } from 'electron';
 import { DriveService } from './api/gdrive';
 import { SheetService } from './api/spread';
 import { authorization } from "./new_start"
