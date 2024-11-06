@@ -1,8 +1,8 @@
 import { ws_cmd_func_type,ws_onConnection_type} from "@/common/types";
 
 export class Caches {
-    stats: Object = {};
-    setPoint: Object = {};
+    stats: object = {};
+    setPoint: object = {};
     currentScore: { blue: number; orange: number } = { blue: 0, orange: 0 };
 
     
