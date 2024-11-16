@@ -1,7 +1,12 @@
+import React from "react";
+
 export const Debug = () => {
   return (
     <>
-      <DebugSocket/>
+      <div className="flex">
+        <DebugSocket/>
+        <DebugStart/>
+      </div>
       <div className="flex">
         <DebugMatchingScore/>
         <DebugGameScore/>
@@ -11,7 +16,20 @@ export const Debug = () => {
 
 }
 
-
+const DebugStart = () => {
+  const onclick = async () => {
+    await window.app.sendSocketCommunication(JSON.stringify({ cmd: 'start', data:"" }));
+  };
+  return (
+    <div className="m-6 max-w-sm p-6 border-gray-200 bg-white border rounded-lg shadow">
+      <h1 className="font-bold text-lg">Open Boost</h1>
+      <button
+        onClick={onclick}
+        className="ml-3 mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-lg"
+      >Open</button>
+    </div>
+  );
+};
 const DebugSocket = () => {
   const onclick = async () => {
     const elm = document.getElementById('input')! as HTMLInputElement;
