@@ -17,11 +17,12 @@
             }
         </style>
         <!-- w-[142px] h-[142px] mx-[4px] my-[4px] rounded-lg -->
+
     </head>
     <body class="bg-green-500" style="background-color: rgba(51, 255, 0, 0);">
         <video preload="none" src="./gbc.mp4" id="mv_goal" hidden muted></video>
         <video preload="none" src="./gbc_transition2.mp4" id="mv_2" hidden muted></video>
-        <video preload="none" id="mv_winner" hidden muted></video>
+        <!-- <video preload="none" id="mv_winner" hidden muted></video> -->
         <img id="dummy_img" hidden alt="">
         <div class="screen hidden">
             <div class="relative">
@@ -191,7 +192,7 @@
                         </div>
                     </div>
                     <div id="player_5" class="mt-2 mr-0 ml-auto w-[350px] h-[73px] rounded-l-[0.2rem]">
-                        <div id="player_frame5" class="mr-5 player_frame_orange h-[150px] w-[330px]">
+                        <div id="player_frame5" class="mr-5 player_frame_orange">
                             <div class="flex flex-row-reverse">
                                 <!-- <img id="player_icon5" class="player-img" alt=""> -->
                                 <div class="ml-2 mr-2 w-full relative">
@@ -431,6 +432,7 @@
             let _bo = "";
             let _setPoint = {};
             let preFocusIndex = 0;
+            let displayNames = [];
             // setImg用
             let playerNames = [];
             //右下のBoostゲージ Index
@@ -445,13 +447,20 @@
                     $(`#player_icon${i}`).attr("src",path+`${name}.png`);
                 });
             }
-            overlayInit();
+            // overlayInit();
             webSocket.onmessage = async function(message){
-                
                 const msg = JSON.parse(message.data);
                 const cmd = msg["cmd"];
                 const data = msg["data"];
                 if(cmd != "boost" && cmd != "time")console.log(msg);
+                if(cmd == "displayNames"){
+                    displayNames = data;
+                    for(let i = 0;i<6;i++){
+                        const name = displayNames[i];
+                        document.getElementById("player_name"+i).textContent = name;
+                    }
+                    fit_icon();
+                }
                 if(cmd == "start"){
                     overlayInit();
                 }
@@ -471,18 +480,19 @@
                     console.log(playerIndex,playerTable);
                     watchingBoostIndex = playerIndex;
                     const watchingPlayerId = playerTable[playerIndex];
-                    const spreadPlayerName = idTable[watchingPlayerId];
-                    document.getElementById("player_name").textContent = spreadPlayerName;
+                    // const spreadPlayerName = idTable[watchingPlayerId];
+                    document.getElementById("player_name").textContent = playerName;
                     const boost = document.getElementById("boost_bar"+playerIndex).style.width.slice(0,-1);
                     setBoost(Number(boost));
                     const teamName = matchInfo[team];
+                    // const teamName = document.getElementById()
                     const teamOb = teamData.find(t => t.teamName == teamName);
                     console.log("teamOb"    ,teamOb);
                     const teamAbbr = teamOb.teamAbbreviation;
                     const boostColor = team == "blue" ? "text-blue-600" : "text-orange-600";
                     const hrColor = team == "blue" ? "bg-blue-600" : "bg-orange-600";
                     const boostTextColor = team == "blue" ? "text-blue-700" : "text-orange-700";
-                    $("#abbr").text(teamAbbr);
+                    // $("#abbr").text(teamAbbr);
                     $("#team_name").text(teamName);
                     fit_team_name();
 
@@ -500,12 +510,13 @@
                     currentFocusElm.classList.remove(`closing_margin_${team}`);currentFocusElm.classList.add(`focusing_margin_${team}`);
                     preFocusElm.classList.remove(`focusing_margin_${preFrameTeam}`);preFocusElm.classList.add(`closing_margin_${preFrameTeam}`);
                     
+
                     preFocusIndex = playerIndex;
                     //images
-                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/images/` : `${imgPath}/images/`;
-                    console.log("player img set");
-                    $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
-                    gsap.to("#player_icon",{opacity:1});
+                    // const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/images/` : `${imgPath}/images/`;
+                    // console.log("player img set");
+                    // $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
+                    // gsap.to("#player_icon",{opacity:1});
                     //Change Boost Color
                     let circleElm = document.getElementById("inner-circle");
                     circleElm.classList.remove("text-blue-600");circleElm.classList.remove("text-orange-600");
@@ -558,25 +569,26 @@
                         $(`#player_icon${i+3}`).attr("src",path+`${name}.png`);
                         $(`#player_name${i+3}`).text(name);
                     });
+
                     fit_icon();
                 }
                 // ? ここバグってそう
                 /*
                 {"cmd":"playerTable","data":["49de3a89b8564d8dba3b2f9c994ac52f","76561198127881181","76561198174543701","b70cd508b0874599a0f8d36c8ce1088f","76561198241218630","76561198273898935"]}
                 */
-                else if(cmd == "playerTable"){// teamTable
-                    const ids = data;
-                    console.log(ids,idTable);
-                    playerTable = {...ids};
-                    for(let i = 0;i<6;i++){
-                        const id = ids[i];
-                        const name = idTable[id];
-                        const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
-                        document.getElementById("player_name"+i).textContent = name;
-                        playerNames.push(name);
-                       $("#player_icon"+i).attr("src",path+`${name}.png`);
-                    }
-                }
+                // else if(cmd == "playerTable"){// teamTable
+                //     const ids = data;
+                //     console.log(ids,idTable);
+                //     playerTable = {...ids};
+                //     for(let i = 0;i<6;i++){
+                //         const id = ids[i];
+                //         const name = idTable[id];
+                //         const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                //         document.getElementById("player_name"+i).textContent = name;
+                //         playerNames.push(name);
+                //        $("#player_icon"+i).attr("src",path+`${name}.png`);
+                //     }
+                // }
                 else if(cmd == "time"){
                     const {time,isOvertime} = data;
                     // const time = data;
@@ -669,9 +681,10 @@
                 src: url("./DSEG7Classic-Bold.woff2");
             }
 
-
             .player_frame_orange,
-            .player_frame_blue{
+            .player_frame_blue,
+            .focusing_player_frame_orange,
+            .focusing_player_frame_blue{
                 width: 330px;
                 height: 73px;
             }
@@ -690,7 +703,6 @@
                 /* background-image: url('data:image/svg+xml;utf8,<svg width="329" height="73" viewBox="0 0 329 73" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="329" height="73" rx="10" fill="#1F293A"/></svg>'); */
                 background-image: url('./player_frame_ascent.png');
                 background-repeat: no-repeat;
-                
             }
             .player_frame_orange{
                 /* background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path fill="rgb(31,41,58)" fill-rule="evenodd" clip-rule="evenodd" d="M180 10C180 4.47715 184.477 0 190 0H320C325.523 0 330 4.47715 330 10V140C330 145.523 325.523 150 320 150H180H10C4.47716 150 0 145.523 0 140V94C0 88.4771 4.47715 84 10 84H170C175.523 84 180 79.5229 180 74V10Z"/><path d="M190 -1C183.925 -1 179 3.92487 179 10H181C181 5.02944 185.029 1 190 1V-1ZM320 -1H190V1H320V-1ZM331 10C331 3.92487 326.075 -1 320 -1V1C324.971 1 329 5.02944 329 10H331ZM331 140V10H329V140H331ZM320 151C326.075 151 331 146.075 331 140H329C329 144.971 324.971 149 320 149V151ZM180 151H320V149H180V151ZM10 151H180V149H10V151ZM-1 140C-1 146.075 3.92487 151 10 151V149C5.02944 149 1 144.971 1 140H-1ZM-1 94V140H1V94H-1ZM10 83C3.92487 83 -1 87.9249 -1 94H1C1 89.0294 5.02944 85 10 85V83ZM170 83H10V85H170V83ZM170 85C176.075 85 181 80.0751 181 74H179C179 78.9706 174.971 83 170 83V85ZM179 10V74H181V10H179Z" fill="rgb(31,41,58)"/></svg>'); */
@@ -699,10 +711,12 @@
                 /* background-position: 150px 0px; */
             }
             .focusing_player_frame_blue{
-                background-image: url("./assets/focusing_player_frame_blue.gif");
+                /* background-image: url("./assets/focusing_player_frame_blue.gif"); */
+                background-image: url("./player_frame_ascent.png");
             }
             .focusing_player_frame_orange{
-                background-image: url("./assets/focusing_player_frame_orange.gif");
+                /* background-image: url("./assets/focusing_player_frame_orange.gif"); */
+                background-image: url("./player_frame_ascent.png");
             }
             .focusing_margin_blue{
                 margin-left: 4rem;
