@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Moca Matching Overlay</title>
+        <meta charset="utf-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" type="text/css" href="./global.css">
+        <style type="text/tailwindcss">
+            @layer utilities{
+                .player-img{
+                    /* fit用のflex items-center */
+                    @apply w-[140px] h-[140px] mx-[5px] my-[5px] rounded-lg;
+                }
+                .teamName-div{
+                    @apply my-auto font-['IseMin'] font-bold text-gray-100 text-center text-[50px] break-words;
+                }
+            }
+        </style>
+        <!-- w-[142px] h-[142px] mx-[4px] my-[4px] rounded-lg -->
+    </head>
+    <body class="bg-green-500" style="background-color: rgba(51, 255, 0, 0);">
+        <video preload="none" src="./gbc.mp4" id="mv_goal" hidden muted></video>
+        <video preload="none" src="./gbc_transition2.mp4" id="mv_2" hidden muted></video>
+        <video preload="none" id="mv_winner" hidden muted></video>
+        <img id="dummy_img" hidden alt="">
+        <div class="screen hidden">
+            <div class="relative">
+                <div class="absolute w-full flex top-[0px]">
+                    <div class="mx-auto ">
+                        <img src="./assets/scoreboard.png" alt="">
+                    </div>                    
+                </div>
+                <div class="absolute w-full mt-5">
+                    <!-- <div class="flex-auto"></div> -->
+                    <div class="flex  h-[80px]">
+                        <!-- Dummy -->
+                        <div class="flex-auto"></div>
+                        <!-- Dummy -->
+                        <div class="mx-5 w-[500px] flex items-center justify-center ">
+                            <div class="fit fit-team-name teamName teamName-div teamName_blue"><span  id="blue_team_name">GENG</span></div>
+                        </div>
+
+                        <div class="w-[300px] mt-0">
+                            <div class="flex text-center">
+                                <div class="text-center w-[70px] h-[80px] flex items-center justify-center ">
+                                    <span id="score_blue" class="font-bold text-gray-100 text-[50px] font-['DSEG7_Classic']">0</span>
+                                </div>
+                                <div class="flex-auto">
+                                    <div id="time" class="text-[50px] text-center font-bold text-white bottom-0 top-0 ">
+                                        5:00
+                                    </div>
+                                </div>
+                                <div class="text-center w-[70px] h-[80px] flex items-center justify-center ">
+                                    <span id="score_orange" class="font-bold text-gray-100 text-[50px] font-['DSEG7_Classic']">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mx-5 w-[500px] flex items-center justify-center ">
+                            <div class="fit fit-team-name teamName teamName-div teamName_orange"><span id="orange_team_name">FAZE</span></div>
+                        </div>
+                        <!-- Dummy -->
+                        <div class="flex-auto"></div>
+                        <!-- Dummy -->
+                    </div>
+                    <div class="flex h-[44px]">
+                        <!-- Dummy -->
+                        <div class="flex-auto"></div>
+                        <!-- Dummy -->
+                        <div class="setPoint setPoint_blue w-[265px] ">
+                            <div class="flex justify-end setPointChild  mt-[10px]">
+                                <div id="setPoint_blue_1" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
+                                <div id="setPoint_blue_0" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
+                                <div class="w-[50px]"></div>
+                            </div>
+                        </div>
+                        <div class="w-[300px]"></div>
+                        <div class="setPoint setPoint_orange w-[265px] ">
+                            <div class="flex setPointChild mt-[10px]">
+                                <div class="w-[50px]"></div>
+                                <div id="setPoint_orange_0" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
+                                <div id="setPoint_orange_1" class="mx-2 w-[50px] bg-gray-500 h-3 rounded-lg"></div>
+                            </div>
+                        </div>
+                        <!-- Dummy -->
+                        <div class="flex-auto"></div>
+                        <!-- Dummy -->
+                    </div>
+                </div>
+                <div class="absolute w-full top-[100px]">
+                    <div class="flex justify-center items-center">
+                        <span id="bo" class="text-white text-[30px] font-bold ">Bo3</span>
+                    </div>
+                </div>
+                <div class="absolute w-full top-[0px]">
+                    <div class="flex justify-center">
+                        <div class="w-[300px] h-[16px] flex justify-center items-center ">
+                            <span id="title" class="text-white text-[20px] font-bold">TITLE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <img id="player_icon" class="-z-20 absolute" alt="">
+            </div>
+
+            <div class="flex z-10">
+                <div class="mt-32 w-[700px]">
+                    <div id="player_0" class="mt-32 w-[350px] h-[73px] rounded-r-[0.2rem]">
+                        <div id="player_frame0" class="ml-5 player_frame_blue">
+                            <div class="flex">
+                                <!-- <img id="player_icon0" class="player-img" alt=""> -->
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute top-0">
+                                        <div id="player_name0" class="mt-1 text-left text-[30px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Uni</div>
+                                        <div class="mt-2 w-full bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar0" class="blue_boost h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="player_1" class="mt-2 w-[350px] h-[73px] rounded-r-[0.2rem]">
+                        <div id="player_frame1" class="ml-5 player_frame_blue">
+                            <div class="flex">
+                                <!-- <img id="player_icon1" class="player-img" alt=""> -->
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute top-0">
+                                        <div id="player_name1" class="mt-1 fit-icon text-left text-[30px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kani</div>
+                                        <div class="mt-2 w-full bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar1" class="blue_boost h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="player_2" class="mt-2 w-[350px] h-[73px] rounded-r-[0.2rem]">
+                        <div id="player_frame2" class="ml-5 player_frame_blue">
+                            <div class="flex">
+                                <!-- <img id="player_icon2" class="player-img" alt=""> -->
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute top-0">
+                                        <div id="player_name2" class="mt-1 fit-icon text-left text-[30px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">天ノ川寝夢</div>
+                                        <div class="mt-2 w-full bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar2" class="blue_boost h-2 rounded-[0.2rem]" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dummy -->
+                <div class="mt-10 h-[70px] w-[1030px] "></div>
+
+                <!-- Dummy -->
+                <div class="flex-auto"></div>
+                <div class="mt-32 right-0 w-[700px] font-['Inter']">
+                    <div id="player_3" class="mt-32 mr-0 ml-auto w-[350px] h-[73px] rounded-r-[0.2rem]">
+                        <div id="player_frame3" class="mr-5 player_frame_orange">
+                            <div class="flex flex-row-reverse">
+                                <!-- <img id="player_icon3" class="player-img" alt=""> -->
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute top-0 right-0">
+                                        <div class="flex mt-1">
+                                            <!-- <div class="text-left pl-2 text-gray-300 font-bold text-[20px]">70</div> -->
+                                            <div id="player_name3" class="fit-icon text-right text-[30px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Inu</div>
+                                        </div>
+                                        <div class="mt-2 w-auto bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar3" class="orange_boost h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="player_4" class="mt-2 mr-0 ml-auto w-[350px] h-[73px] rounded-l-[0.2rem]">
+                        <div id="player_frame4" class="mr-5 player_frame_orange">
+                            <div class="flex flex-row-reverse">
+                                <!-- <img id="player_icon4" class="player-img" alt=""> -->
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute top-0">
+                                        <div id="player_name4" class="mt-1 fit-icon text-right text-[30px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Kaniiiiiiiiii</div>
+                                        <div class="mt-2 w-auto bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar4" class="orange_boost h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="player_5" class="mt-2 mr-0 ml-auto w-[350px] h-[73px] rounded-l-[0.2rem]">
+                        <div id="player_frame5" class="mr-5 player_frame_orange h-[150px] w-[330px]">
+                            <div class="flex flex-row-reverse">
+                                <!-- <img id="player_icon5" class="player-img" alt=""> -->
+                                <div class="ml-2 mr-2 w-full relative">
+                                    <div class="w-full absolute top-0">
+                                        <div id="player_name5" class="mt-1 fit-icon text-right text-[30px] text-gray-100 font-bold flex-auto" style="word-break: break-all;">Wani</div>
+                                        <div class="mt-2 w-auto bg-black h-2 rounded-[0.2rem]">
+                                            <div id="boost_bar5" class="orange_boost h-2 rounded-[0.2rem] ml-auto" style="width:33%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="boost_gauge" class="h-[250px] w-[500px] absolute right-[24px] bottom-[60px] -z-10">
+                <!-- -z-10 absolute bottom-[80px] right-[100px] -->
+                <div class="mt-[24px] ml-[224px] absolute">
+                        <div
+                        class="inline-flex items-center justify-center overflow-hidden rounded-full"
+                                >
+                        <!-- Building a Progress Ring: https://css-tricks.com/building-progress-ring-quickly/ -->
+                        <svg class="w-[200px] h-[200px] rotate-90">
+                            <circle
+                            class="text-gray-300"
+                            stroke-width="30"
+                            stroke="currentColor"
+                            fill="transparent"
+                            r="100"
+                            cx="100"
+                            cy="100"
+                            />
+                            <!--
+                            :stroke-dasharray="circumference"
+                            :stroke-dashoffset="circumference - percent / 100 * circumference"
+                            -->
+                            <circle
+                            id="inner-circle"
+                            class="text-blue-600"
+                            stroke-width="30"
+                            stroke-dasharray="628"
+                            stroke-dashoffset="628"
+                            stroke-linecap="butt"
+                            stroke="currentColor"
+                            fill="transparent"
+                            r="100"
+                            cx="100"
+                            cy="100"
+                            />
+                        </svg>
+                        <!-- font-['DSEG7_Classic'] -->
+                        <!--  style="-webkit-text-stroke: 0.2px #1F2937;" -->
+                        <span id="circle-text" class="font-['Inter'] absolute text-[80px] font-bold text-white">33</span>
+                    </div>
+                </div>
+                <img src="./assets/Boost_scale.png" class="absolute w-full h-full"></img>
+            </div>
+            <!-- <div id="sub_stats" class="-z-10 absolute h-[200px] w-[1200px] bottom-0"> -->
+
+                <div id="sub_stats" class="-z-10 absolute bottom-0">
+                    <div class="relative h-[200px] w-[1200px]">
+                        <div class="sub-stats absolute  ml-7 bottom-2">
+                            <div class="flex">
+                                <div class="pl-3 h-[130px]">
+                                    <div class="mb-3 flex h-[45px] w-[442px] ">
+                                        <!-- <div class="bg-gray-200 font-bold text-[30px] w-[100px] h-[45px] flex">
+                                            <span id="abbr" class="mx-auto my-auto justify-center items-center"></span>
+                                        </div> -->
+                                        <div class="fit-team-name mx-3 font-bold text-white text-[30px] flex items-center justify-center break-words">
+                                            <div id="team_name" class="w-[300px]"></div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute font-bold text-white  text-[50px] w-[442px] flex ">
+                                        <span id="player_name" class="my-auto"></span>
+                                    </div>
+                                    <!-- <div id="sub_stats_hr" class="h-[4px] bg-blue-600 w-full"></div> -->
+                                </div>
+                                <div class="pb-3 ml-8 flex items-end">
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mr-[30px] ">
+                                        <!-- <img class="w-[70px] h-[70px]" src="./assets/RL_icons/score.webp" alt=""> -->
+                                         <p>score</p>
+                                        <p id="score" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px] ">
+                                        <p>goals</p>
+                                        <p id="goals" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px] ">
+                                        <p>shots</p>
+                                        <p id="shots" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px] ">
+                                        <p>assists</p>
+                                        <p id="assists" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                    <div class="h-[105px] text-center font-bold text-white text-[30px] mx-[30px] ">
+                                        <p>saves</p>
+                                        <p id="saves" class="mt-1 text-[40px]">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.0/gsap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            const opa0 = (tar) => {
+                gsap.set(tar,{opacity:0});
+            }
+
+            const feedin = (tar,diffx,diffy,duration=2) => {
+                gsap.set(tar,{opacity:1});
+                if(diffx == null)gsap.from(tar,{y:diffy,duration:duration,opacity:0,ease:"expo.out"});
+                else gsap.from(tar,{x:diffx,duration:duration,opacity:0,ease:"expo.out"});
+            }
+
+            const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
+            const feedinFromTop = async() => {
+                ["#time"].forEach(tar => feedin(tar,null,-100,1));
+                // await sleep(1000);
+                ["#score_blue","#score_orange"].forEach(tar => feedin(tar,null,-100,1));
+                await sleep(1000);
+                ["#blue_team_name","#orange_team_name"].forEach(tar => feedin(tar,null,-500,1.5));
+            }
+            const feedinPlayers = async() => {
+                ["#player_0","#player_3"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
+                await sleep(300);
+                ["#player_1","#player_4"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
+                await sleep(300);
+                ["#player_2","#player_5"].forEach((tar,i) => feedin(tar,-1*((i+1)%2-0.5)*2*100,null,1));
+                // fit_icon();
+            } 
+            const feedinSubStats = async() => {
+                feedin("#sub_stats",null,100);
+                feedin("#boost_gauge",null,100);
+            }
+            const feedinit = async() => {
+                // await feedinFromTop();
+                fitInit();
+                gsap.to("#blue_team_name",{opacity:1});gsap.to("#orange_team_name",{opacity:1});
+                $(".teamName").addClass("fade");
+                $(".setPoint").addClass("fade");
+                await sleep(2000);
+                await feedinPlayers();
+                await sleep(1000);
+                await feedinSubStats();
+
+            }
+            const overlayInit = () => {
+                // const feedFromTopList = ["#blue_team_name","#orange_team_name","#time","#score_blue","#score_orange"];
+                const playerList = [...Array(6).keys()].map(i => `#player_${i}`);
+                const subStatsList = ["#sub_stats","#boost_gauge","#player_icon"];
+                // feedFromTopList.forEach((tar) => opa0(tar));
+                playerList.forEach(tar => opa0(tar));
+                subStatsList.forEach(tar => opa0(tar));
+
+                //ここで描画
+                $(".screen").removeClass("hidden");
+                const boost = 33;
+                setBoost(Number(boost));
+                gsap.delayedCall(1,feedinit);
+            }
+            const _fit = (className,defaultTextSize,divHeight) => {
+                let resizeText = document.getElementsByClassName(className);
+                for (let i = 0; i < resizeText.length; i++) {
+                    let textElm = resizeText[i];
+                    textElm.style.fontSize = `${defaultTextSize}px`;
+                    let size = defaultTextSize;
+                    for(;textElm.scrollHeight > divHeight && size > 1;size--){
+                        textElm.style.fontSize = size + "px";
+                    }
+                }
+            }
+
+            const fitInit = () => {
+                fit();
+                fit_icon();
+                fit_team_name();
+            }
+
+            const fit = () => {
+                _fit("fit",50,70);
+            }
+            const fit_icon = () => {
+                _fit("fit-icon",30,45);
+            }
+            const fit_team_name = () => {
+                _fit("fit-team-name",40,60);
+            }
+            const circle = async() => {
+                const r = 100;
+                let circumference = 2 * r * Math.PI;
+                let per = 0;
+                for(let i = 0;i<100;i++){
+                    per += 0.75;
+                    let offset = ((100.-per)/100) * circumference;
+                    $("#inner-circle").attr("stroke-dashoffset",Math.floor(offset));
+                    $("#inner-circle").attr("stroke-dasharray",circumference);
+                    $("#circle-text").text(`${Math.floor(i+1)}`);
+                    await sleep(10);
+                }
+            }
+
+            const setBoost = (per) => {
+                const r = 100;
+                let circumference = 2 * r * Math.PI;
+                //Max75%
+                let offset = ((100.-per*0.75)/100) * circumference;
+                $("#inner-circle").attr("stroke-dashoffset",Math.floor(offset));
+                $("#inner-circle").attr("stroke-dasharray",circumference);
+                $("#circle-text").text(`${Math.floor(per)}`);
+            }
+
+
+            const playTransition = (id) => {
+                $(id).show();
+                const v = $(id).get(0);
+                v.play();
+                $(id).on("ended",function(){
+                    $(this).hide();
+                });
+            }
+
+
+
+            let webSocket;
+            let playerTable = {};
+            let idTable = {};
+            let matchInfo = {};
+            let teamData = [];
+            let imgPath = "";
+            let _bo = "";
+            let _setPoint = {};
+            let preFocusIndex = 0;
+            // setImg用
+            let playerNames = [];
+            //右下のBoostゲージ Index
+            let watchingBoostIndex = null;
+            webSocket = new WebSocket("ws://localhost:8001/boost");
+
+            const setImg = () => {
+                if(imgPath == ""){console.log("imgPath is null");return;}
+                console.log("setImg");
+                const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                playerNames.forEach((name,i) => {
+                    $(`#player_icon${i}`).attr("src",path+`${name}.png`);
+                });
+            }
+            overlayInit();
+            webSocket.onmessage = async function(message){
+                
+                const msg = JSON.parse(message.data);
+                const cmd = msg["cmd"];
+                const data = msg["data"];
+                if(cmd != "boost" && cmd != "time")console.log(msg);
+                if(cmd == "start"){
+                    overlayInit();
+                }
+                else if(cmd == "imgPath"){
+                    imgPath = data;
+                    setImg();
+                }
+                else if(cmd == "boost"){// Boost
+                    // document.getElementById("boosts").style.visibility = "visible";
+                    const {boost,index} = data;
+                    if(index == watchingBoostIndex)setBoost(Number(boost));
+                    // document.getElementById("boost"+index).textContent = boost;
+                    document.getElementById("boost_bar"+index).style.width = boost+"%";
+                }
+                else if(cmd == "player"){
+                    const {playerIndex,playerName,team} = data;
+                    console.log(playerIndex,playerTable);
+                    watchingBoostIndex = playerIndex;
+                    const watchingPlayerId = playerTable[playerIndex];
+                    const spreadPlayerName = idTable[watchingPlayerId];
+                    document.getElementById("player_name").textContent = spreadPlayerName;
+                    const boost = document.getElementById("boost_bar"+playerIndex).style.width.slice(0,-1);
+                    setBoost(Number(boost));
+                    const teamName = matchInfo[team];
+                    const teamOb = teamData.find(t => t.teamName == teamName);
+                    console.log("teamOb"    ,teamOb);
+                    const teamAbbr = teamOb.teamAbbreviation;
+                    const boostColor = team == "blue" ? "text-blue-600" : "text-orange-600";
+                    const hrColor = team == "blue" ? "bg-blue-600" : "bg-orange-600";
+                    const boostTextColor = team == "blue" ? "text-blue-700" : "text-orange-700";
+                    $("#abbr").text(teamAbbr);
+                    $("#team_name").text(teamName);
+                    fit_team_name();
+
+                    //FoCus
+                    const currentFrameElm = document.getElementById(`player_frame${playerIndex}`);
+                    currentFrameElm.classList.remove(`player_frame_${team}`);currentFrameElm.classList.add(`focusing_player_frame_${team}`);
+                    const preFrameElm = document.getElementById(`player_frame${preFocusIndex}`);
+                    const preFrameTeam = preFocusIndex < 3 ? "blue" : "orange";
+                    preFrameElm.classList.remove(`focusing_player_frame_${preFrameTeam}`);preFrameElm.classList.add(`player_frame_${preFrameTeam}`);
+                    //Focus，背景変えるDOMと，margin追加するDOMが違うっぽい
+                    ////margin
+                    const currentFocusElm = document.getElementById(`player_${playerIndex}`);
+                    const preFocusElm = document.getElementById(`player_${preFocusIndex}`);
+                    const getMargin = (team) => {return(team == "blue" ? "ml-16" : "mr-16")};
+                    currentFocusElm.classList.remove(`closing_margin_${team}`);currentFocusElm.classList.add(`focusing_margin_${team}`);
+                    preFocusElm.classList.remove(`focusing_margin_${preFrameTeam}`);preFocusElm.classList.add(`closing_margin_${preFrameTeam}`);
+                    
+                    preFocusIndex = playerIndex;
+                    //images
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/images/` : `${imgPath}/images/`;
+                    console.log("player img set");
+                    $("#player_icon").attr("src",path+`${spreadPlayerName}.png`);
+                    gsap.to("#player_icon",{opacity:1});
+                    //Change Boost Color
+                    let circleElm = document.getElementById("inner-circle");
+                    circleElm.classList.remove("text-blue-600");circleElm.classList.remove("text-orange-600");
+                    circleElm.classList.add(boostColor);
+                    //画像変更
+                    $("#boost_gauge").css("background-image",`url('./assets/Boost_base_${team}.png')`);
+                    $("#sub_stats").css("background-image",`url('./assets/Focus_${team}.png')`);
+                    let textElm = document.getElementById("circle-text");
+                    textElm.classList.remove("text-blue-700");textElm.classList.remove("text-orange-700");
+                    // textElm.classList.add(boostTextColor);
+                    textElm.classList.add("text-white");
+                }
+                else if(cmd == "score"){
+                    const {score} = data;
+                    document.getElementById("score").textContent = score;
+                }
+                else if(cmd == "subScore"){
+                    const {goals,shots,assists,saves} = data;
+                    document.getElementById("goals").textContent = goals;
+                    document.getElementById("shots").textContent = shots;
+                    document.getElementById("assists").textContent = assists;
+                    document.getElementById("saves").textContent = saves;
+                }
+                else if(cmd == "matchInfo"){
+                    matchInfo = data;
+                    const blueTeamName = data.blue;
+                    const orangeTeamName = data.orange;
+                    const title = data.name;
+                    _bo = data.bo;
+                    const bo = data.bo;
+                    document.getElementById("blue_team_name").innerText = blueTeamName;
+                    document.getElementById("orange_team_name").innerText = orangeTeamName;
+                    document.getElementById("title").textContent = title;
+                    document.getElementById("bo").textContent = bo;
+                    if(bo == "Bo1"){
+                        document.getElementById("setPoint_blue_1").hidden = true;
+                        document.getElementById("setPoint_orange_1").hidden = true;
+                    }
+                    fit();
+                    // V用立ち絵のpreLoad
+                    const blueTeamMembers = teamData.find(t => t.teamName == blueTeamName).playerNames;
+                    const orangeTeamMembers = teamData.find(t => t.teamName == orangeTeamName).playerNames;
+                    console.log(blueTeamMembers,orangeTeamMembers);
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                    blueTeamMembers.forEach((name,i) => {
+                        $(`#player_icon${i}`).attr("src",path+`${name}.png`);
+                        $(`#player_name${i}`).text(name);
+                    });
+                    orangeTeamMembers.forEach((name,i) => {
+                        $(`#player_icon${i+3}`).attr("src",path+`${name}.png`);
+                        $(`#player_name${i+3}`).text(name);
+                    });
+                    fit_icon();
+                }
+                // ? ここバグってそう
+                /*
+                {"cmd":"playerTable","data":["49de3a89b8564d8dba3b2f9c994ac52f","76561198127881181","76561198174543701","b70cd508b0874599a0f8d36c8ce1088f","76561198241218630","76561198273898935"]}
+                */
+                else if(cmd == "playerTable"){// teamTable
+                    const ids = data;
+                    console.log(ids,idTable);
+                    playerTable = {...ids};
+                    for(let i = 0;i<6;i++){
+                        const id = ids[i];
+                        const name = idTable[id];
+                        const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/icons/` : `${imgPath}/icons/`;
+                        document.getElementById("player_name"+i).textContent = name;
+                        playerNames.push(name);
+                       $("#player_icon"+i).attr("src",path+`${name}.png`);
+                    }
+                }
+                else if(cmd == "time"){
+                    const {time,isOvertime} = data;
+                    // const time = data;
+                    const minutes = Math.floor(time/60);
+                    const seconds = time % 60;
+                    const sign = isOvertime ? "+" : "";
+                    document.getElementById("time").textContent = `${sign}${minutes}:${seconds < 10 ? "0"+seconds : seconds}`; 
+                }
+                else if(cmd == "setPoint"){
+                    //bluePoint,orangePoint
+                    _setPoint = JSON.parse(JSON.stringify(data));
+                    const {blue,orange} = data;
+                    if(blue == 0)[0,1].forEach(i => $(`#setPoint_blue_${i}`).addClass("bg-gray-500").removeClass("bg-blue-500"));
+                    if(orange == 0)[0,1].forEach(i => $(`#setPoint_orange_${i}`).addClass("bg-gray-500").removeClass("bg-orange-500"));
+                    for(let i = 0;i<blue;i++)$(`#setPoint_blue_${i}`).removeClass("bg-gray-500").addClass("bg-blue-500");
+                    for(let i = 0;i<orange;i++)$(`#setPoint_orange_${i}`).removeClass("bg-gray-500").addClass("bg-orange-500");
+                }
+                else if(cmd == "currentScore"){
+                    const {blue,orange} = data;
+                    document.getElementById("score_blue").textContent = blue;
+                    document.getElementById("score_orange").textContent = orange;
+                }
+                else if(cmd == "goals"){//onGoal
+                    //    string,string,blue|orange
+                    const {assistId,scoreId,team} = data;
+                    // const currentScore = Number(document.getElementById(`score_${team}`).textContent);
+                    // document.getElementById(`score_${team}`).textContent = currentScore + 1;
+                    setTimeout(() => {playTransition("#mv_goal")},3000);
+                }
+                else if(cmd == "endReplay"){
+                    // playTransition("#mv_2");
+                }
+                //RESET
+                else if(cmd == "END_GAME"){//旧endStats
+                    // $("#score_blue").text("0");
+                    // $("#score_orange").text("0");
+                    const score_blue = document.getElementById("score_blue").textContent;
+                    const score_orange = document.getElementById("score_orange").textContent;
+                    const playerElms = [...Array(6).keys()].map(i => `#player_${i}`);
+                    const opa0Table = [...playerElms,"#boost_gauge","#sub_stats","#player_icon"];
+                    opa0Table.map(id => opa0(id));
+
+                    $("#time").text("5:00");
+
+                    //勝利チームMV用
+                    //detect winner team
+                    const playTransitionWithNoHide = (id) => {
+                            $(id).show();
+                            const v = $(id).get(0);
+                            v.play();
+                    }
+                    const {blue,orange} = _setPoint;
+                    console.log(_setPoint);
+                    const biggerPoint = Math.max(blue,orange);
+                    const blueTeamScore = Number(document.getElementById("score_blue").textContent);
+                    const orangeTeamScore = Number(document.getElementById("score_orange").textContent);
+                    const winnerTeam = blueTeamScore > orangeTeamScore ? "blue" : "orange";
+                    const winnerTeamName = document.getElementById(`${winnerTeam}_team_name`).textContent;
+                    const path = window.obsstudio != undefined ? `http://absolute/${imgPath}/winner` : `${imgPath}/winner`;
+                    console.log("bo");
+                    if(_bo == "Bo1" && biggerPoint == 1){
+                        console.log("1");
+
+                        $("#mv_winner").attr("src",`${path}/${winnerTeamName}.mp4`);
+                        console.log("fire");
+                        setTimeout(() => playTransitionWithNoHide("#mv_winner"),8000);
+                    }else if(_bo == "Bo3" && biggerPoint == 2){
+                        $("#mv_winner").attr("src",`${path}/${winnerTeamName}.mp4`);
+                        setTimeout(() => playTransitionWithNoHide("#mv_winner"),8000);
+                    }
+                }
+                else if(cmd == "endStats"){
+
+                }
+                else if(cmd == "teamData"){
+                    teamData = data;
+                }
+                else if(cmd == "idTable"){
+                    idTable = data;
+                }
+            }
+
+        </script>
+        <style>
+            :root{
+                --asset-path: "";
+            }
+            @font-face{
+                font-family: "DSEG7 Classic";
+                src: url("./DSEG7Classic-Bold.woff2");
+            }
+
+
+            .player_frame_orange,
+            .player_frame_blue{
+                width: 330px;
+                height: 73px;
+            }
+
+            #sub_stats{
+                background-image: url("./assets/Focus_blue.png");
+            }
+            #boost_gauge{
+                background-image: url("./assets/Boost_base_blue.png");
+            }
+            #boost_scale{
+                background-image: url("./assets/Boost_scale.png");
+            }
+            .player_frame_blue{
+                /* background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10C0.5 4.75329 4.7533 0.5 10 0.5H140C145.247 0.5 149.5 4.7533 149.5 10V74C149.5 79.799 154.201 84.5 160 84.5H320C325.247 84.5 329.5 88.7533 329.5 94V140C329.5 145.247 325.247 149.5 320 149.5H150H10C4.75329 149.5 0.5 145.247 0.5 140V10Z" fill="rgb(31,41,58)" stroke="rgb(31,41,58)" stroke-width="5px"/></svg>'); */
+                /* background-image: url('data:image/svg+xml;utf8,<svg width="329" height="73" viewBox="0 0 329 73" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="329" height="73" rx="10" fill="#1F293A"/></svg>'); */
+                background-image: url('./player_frame_ascent.png');
+                background-repeat: no-repeat;
+                
+            }
+            .player_frame_orange{
+                /* background-image: url('data:image/svg+xml;utf8,<svg width="330" height="150" viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg"><path fill="rgb(31,41,58)" fill-rule="evenodd" clip-rule="evenodd" d="M180 10C180 4.47715 184.477 0 190 0H320C325.523 0 330 4.47715 330 10V140C330 145.523 325.523 150 320 150H180H10C4.47716 150 0 145.523 0 140V94C0 88.4771 4.47715 84 10 84H170C175.523 84 180 79.5229 180 74V10Z"/><path d="M190 -1C183.925 -1 179 3.92487 179 10H181C181 5.02944 185.029 1 190 1V-1ZM320 -1H190V1H320V-1ZM331 10C331 3.92487 326.075 -1 320 -1V1C324.971 1 329 5.02944 329 10H331ZM331 140V10H329V140H331ZM320 151C326.075 151 331 146.075 331 140H329C329 144.971 324.971 149 320 149V151ZM180 151H320V149H180V151ZM10 151H180V149H10V151ZM-1 140C-1 146.075 3.92487 151 10 151V149C5.02944 149 1 144.971 1 140H-1ZM-1 94V140H1V94H-1ZM10 83C3.92487 83 -1 87.9249 -1 94H1C1 89.0294 5.02944 85 10 85V83ZM170 83H10V85H170V83ZM170 85C176.075 85 181 80.0751 181 74H179C179 78.9706 174.971 83 170 83V85ZM179 10V74H181V10H179Z" fill="rgb(31,41,58)"/></svg>'); */
+                background-image: url("./player_frame_ascent.png");
+                background-repeat: no-repeat;
+                /* background-position: 150px 0px; */
+            }
+            .focusing_player_frame_blue{
+                background-image: url("./assets/focusing_player_frame_blue.gif");
+            }
+            .focusing_player_frame_orange{
+                background-image: url("./assets/focusing_player_frame_orange.gif");
+            }
+            .focusing_margin_blue{
+                margin-left: 4rem;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
+            }
+            .focusing_margin_orange{
+                margin-right: 4rem;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
+            }
+            .closing_margin_blue{
+                margin-left: 0;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
+            }
+            .closing_margin_orange{
+                margin-right: 0;
+                transition: all cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s;
+            }
+
+
+            .blue_boost{
+                background-image: linear-gradient(90deg, rgba(65, 164, 253, 1), rgba(14, 244, 255, 1));
+            }
+            .orange_boost{
+                background-image: linear-gradient(to left, #fc4a1a, #f7b733);
+            }
+
+
+            .teamName_blue{
+                overflow: hidden;
+                transform: translate(100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_blue span{
+                display: block;
+                transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_orange{
+                overflow: hidden;
+                transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName_orange span{
+                display: block;
+                transform: translate(100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .teamName.fade,
+            .teamName.fade span{
+                transform: translate(0,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s;
+            }
+            .player_frame_blue,.player_frame_orange{
+                backface-visibility: hidden;
+            }
+
+            .setPoint_blue{
+                overflow: hidden;
+                transform: translate(100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .setPoint_blue>.setPointChild{
+                /* display: block; */
+                transform: translate(-100%,0);
+                transform: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .setPoint_orange{
+                overflow: hidden;
+                transform: translate(-100%,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .setPoint_orange>.setPointChild{
+                /* display: block; */
+                transform: translate(100%,0);
+                transform: cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+            }
+            .setPoint.fade,
+            .setPoint.fade>.setPointChild{
+                transform: translate(0,0);
+                transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s;
+            }
+        </style>
+    </body>
+</html>

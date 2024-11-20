@@ -41,6 +41,9 @@ const common: Configuration = {
     ],
   },
   watch: isDev,
+  watchOptions:{
+    ignored:"/graphics/"
+  },
   devtool: isDev ? "source-map" : undefined,
 };
 

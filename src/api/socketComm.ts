@@ -49,7 +49,13 @@ export class socketComm {
       console.log(`UDP socket listening on ${addr.address}:${addr.port}`);
     });
 
-    const s = new WebSocketServer({ port: 8001 });
+    let s: WebSocketServer;
+    try{
+      s = new WebSocketServer({ port: 8001 });
+    }catch(e){
+      console.error(e);
+      return;
+    }
 
     this.socket.on('message', (msg, ) => {
       const data = msg.toString();
