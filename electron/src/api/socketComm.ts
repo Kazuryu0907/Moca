@@ -88,6 +88,17 @@ export class socketComm {
         }
         // console.log(clients);
       });
+
+      // *onMessage
+      // controllerからMessageが来た時，全てのBrowserに送信
+      ws.on("message",(msg) => {
+        if(req.url == "/controller"){
+          const data = msg.toString();
+          const json = JSON.parse(data);
+          this.sendData("/boost",json);
+          console.log(data);
+        }
+      })
     });
   }
 

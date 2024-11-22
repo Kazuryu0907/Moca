@@ -39,7 +39,7 @@ export const Topper = () => {
   return (
     <div>
       <ul className="flex border-b">
-        <Bar title="Overlay Browsers" relativePath="browser" />
+        <Bar title="Remote Controller" relativePath="browser" />
         <Bar title="SpreadSheet" relativePath="spread" />
         <Bar title="Google Drive" relativePath="drive" />
         <Bar title="Debug" relativePath="debug" />

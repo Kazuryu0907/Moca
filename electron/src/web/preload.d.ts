@@ -9,6 +9,8 @@ export interface IMainProcess {
   on: (channel: string, callback: any) => void;
   index2render: (cmd: string, data?: any) => any;
   render2index: (cmd: string, data?: any) => any;
+  openBrowser: (url: string) => Promise<void>;
+  getHostIp: () => Promise<string>;
   setMatchingScore: (score:{blue:number,orange:number}) => Promise<void>;
   setGameScore: (score:{blue:number,orange:number}) => Promise<void>;
   getTeamInfo: () => Promise<any>;

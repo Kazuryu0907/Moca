@@ -1,4 +1,6 @@
+import React from "react";
 import { Browser } from "./components/Brower";
+import { ControllerAccess } from "./components/ControllerAccess";
 import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
 // import { Start } from "./components/Start";
@@ -31,7 +33,7 @@ export const App = () => {
             {/* Topperと下のDynamicで分ける */}
             <Route path="/overlay" element={<Topper/>}>
               <Route index element={<Navigate to="/overlay/browser" replace/>}/>
-              <Route index path="browser" element={<Browser/>}/>
+              <Route index path="browser" element={<ControllerAccess/>}/>
               <Route path="spread" element={<Spread/>}/>
               <Route path="drive" element={<Overlay/>}/>
               <Route path="debug" element={<Debug/>}></Route>

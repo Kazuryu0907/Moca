@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { BrowserWindow, app, ipcMain,shell } from 'electron';
 import { DriveService } from './api/gdrive';
 import { SheetService } from './api/spread';
 import { unlink, mkdirSync, PathLike, readFileSync } from 'fs';
@@ -12,6 +12,8 @@ import { Caches } from "./api/caches"
 import { New_start } from "./api/new_start"
 import { setPointModule } from './api/setPointModule';
 
+import {start_server} from "./hono/main";
+import ip from "ip";
 // TODO env使わないようにしたい
 require('dotenv').config();
 
@@ -82,6 +84,8 @@ class Moca {
   };
 
   private setHandles = () => {
+    ipcMain.handle("openBrowser",(e,url) => shell.openExternal(url));
+    ipcMain.handle("getHostIp",(e) => ip.address());
 
     ipcMain.handle('setMatchingScore', (e, input) => {
       this.setPointModule.setMatchingScore = input;
@@ -187,5 +191,6 @@ class Moca {
     const moca = new Moca();
     moca.main();
   });
+  start_server();
   app.once('window-all-closed', () => app.quit());
 })();

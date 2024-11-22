@@ -525,6 +525,23 @@
                     document.getElementById("assists").textContent = assists;
                     document.getElementById("saves").textContent = saves;
                 }
+                else if(cmd == "ascent"){
+                    const {title,blue_teamName,orange_teamName,blue_setPoint,orange_setPoint,bo} = data;
+                    document.getElementById("blue_team_name").innerText = blue_teamName;
+                    document.getElementById("orange_team_name").innerText = orange_teamName;
+                    document.getElementById("title").textContent = title;
+                    document.getElementById("bo").textContent = bo;
+                    if(bo == "Bo1"){
+                        document.getElementById("setPoint_blue_1").hidden = true;
+                        document.getElementById("setPoint_orange_1").hidden = true;
+                    }
+                    fit();
+
+                    if(blue_setPoint == 0)[0,1].forEach(i => $(`#setPoint_blue_${i}`).addClass("bg-gray-500").removeClass("bg-blue-500"));
+                    if(orange_setPoint == 0)[0,1].forEach(i => $(`#setPoint_orange_${i}`).addClass("bg-gray-500").removeClass("bg-orange-500"));
+                    for(let i = 0;i<blue_setPoint;i++)$(`#setPoint_blue_${i}`).removeClass("bg-gray-500").addClass("bg-blue-500");
+                    for(let i = 0;i<orange_setPoint;i++)$(`#setPoint_orange_${i}`).removeClass("bg-gray-500").addClass("bg-orange-500");
+                }
                 else if(cmd == "matchInfo"){
                     matchInfo = data;
                     const blueTeamName = data.blue;
@@ -541,7 +558,7 @@
                         document.getElementById("setPoint_orange_1").hidden = true;
                     }
                     fit();
-                    // V用立ち絵のpreLoad
+                    V用立ち絵のpreLoad
                     const blueTeamMembers = teamData.find(t => t.teamName == blueTeamName).playerNames;
                     const orangeTeamMembers = teamData.find(t => t.teamName == orangeTeamName).playerNames;
                     console.log(blueTeamMembers,orangeTeamMembers);
@@ -560,6 +577,7 @@
                 /*
                 {"cmd":"playerTable","data":["49de3a89b8564d8dba3b2f9c994ac52f","76561198127881181","76561198174543701","b70cd508b0874599a0f8d36c8ce1088f","76561198241218630","76561198273898935"]}
                 */
+
                 else if(cmd == "playerTable"){// teamTable
                     const ids = data;
                     console.log(ids,idTable);
