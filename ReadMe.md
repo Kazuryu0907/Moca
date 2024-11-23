@@ -13,7 +13,7 @@ https://github.com/Kazuryu0907/Moca/assets/41988990/ddfe44ad-627e-456f-b152-b375
 アーカイブ
 [GracesBlazeCup#8 本配信【Vtuber限定ロケットリーグ大会】](https://www.youtube.com/watch?v=7LQ8lHAPrzM)
 
-## Todo
+<!-- ## Todo
 ### envファイルの編集
 | conifig | 説明 |
 | ---- | ---- |
@@ -40,7 +40,7 @@ Overlayは `./graphics/`の中にあり，それぞれ以下のよう．
 1. 自動で認証が走るので，エラーが出たら教えて下さい．
 2. Google Driveタブから，**Update**ボタンを押すと，`GOOGLEDRIVE_ID`で指定したファイルから画像をDLします．
 3. SpreadSheetタブは，SpreadSheetのフォーマットに依存するので追々．
-4. Overlayに関しては，特にMoca側での操作は必要ないです．
+4. Overlayに関しては，特にMoca側での操作は必要ないです． -->
 
 
 # Moca
