@@ -188,6 +188,14 @@ class Moca {
 }
 
 
+const kill_controller = (cmd:string) => {
+  try{
+      const e = execSync(`taskkill /f /im ${cmd}`);
+      console.log(e.toString());
+  }catch(e){
+    console.log(e);
+  }
+}
 
 (async () => {
   app.whenReady().then(() => {
@@ -197,8 +205,7 @@ class Moca {
   });
   console.log(fs.readdirSync("./"));
   const CONTROLLER_EXE_NAME = "mocaController.exe";
-  const e = execSync(`taskkill /f /im ${CONTROLLER_EXE_NAME}`);
-  console.log(e.toString());
+  kill_controller(CONTROLLER_EXE_NAME);
   const ps = exec(join("./",CONTROLLER_EXE_NAME),(error,stdout,stderr) => {if(error)throw error;console.log(stdout);console.log(stderr)});
   console.log(ps.pid);
   process.on("exit", () => {console.log("exit");(exec(["taskkill","/pid",`${ps.pid}`,"/f","/t"].join(" "),(error,stdout,stderr)=>{if(error)throw error;console.log(stdout);console.log(stderr)}));console.log(ps.pid);});
