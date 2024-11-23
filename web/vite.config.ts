@@ -1,14 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import {nodePolyfills} from "vite-plugin-node-polyfills"
+import {viteSingleFile} from "vite-plugin-singlefile"
 
 // https://vite.dev/config/
 export default defineConfig({
-  resolve:{
-    // alias:{            
-    //   os: 'rollup-plugin-node-polyfills/polyfills/os',
-    // }
-  },
+  base: "./",
+  // resolve:{
+  //   // alias:{            
+  //   //   os: 'rollup-plugin-node-polyfills/polyfills/os',
+  //   // }
+  // },
   // optimizeDeps:{
   //   esbuildOptions:{
   //     define:{
@@ -26,24 +27,25 @@ export default defineConfig({
   server:{
     host: true
   },
-  plugins: [react(),nodePolyfills({
-    include:["os"],
-    globals:{
-      Buffer: true,
-      process: true,
-      global: true,
-    },
-    protocolImports: true,
-  })],
-  build:{
-    outDir: "../electron/src/hono/dist"
-  }
+  plugins: [react(),viteSingleFile()],
+  // plugins: [react(),nodePolyfills({
+  //   include:["os"],
+  //   globals:{
+  //     Buffer: true,
+  //     process: true,
+  //     global: true,
+  //   },
+  //   protocolImports: true,
+  // })],
   // build:{
-  //   rollupOptions:{
-  //     plugins:[
-  //       // nodePolyfills(),
-  //       polyfillNode(),
-  //     ]
-  //   }
+    // outDir: "../webserver/"
   // }
+  build:{
+    // outDir: "../electron/src/hono/dist",
+    // outDir: "../actix/dist",
+    // outDir: "./src/dist",
+    rollupOptions:{
+      external: ["react-router","react-router-dom"],
+    }
+  }
 })

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useControllerStore } from "./store/useStore";
 import ReconnectingWebSocket from "reconnecting-websocket";
+// import ip from "ip";
 
 const Input = (label: string, id:string, value:string, ref:React.RefObject<HTMLInputElement>) => {
   return (
@@ -68,8 +69,10 @@ const Controller = () => {
   const socketRef = useRef<ReconnectingWebSocket>();
   // const title = useStore(controllerStore,(state) => state.title);
   // const updateTitle = useStore(controllerStore,(state) => state.updateTitle);
-  const address = "192.168.2.124"
+  // console.log(ip.address());
   useEffect(() => {
+    // urlのhost名からwsの接続先を取得
+    const address = location.hostname;
     const websocket = new ReconnectingWebSocket(`ws://${address}:8001/controller`);
     socketRef.current = websocket;
 
@@ -112,8 +115,8 @@ const Controller = () => {
           {[1,2,3,4,5].map((i)=><div key={i} className="bg-cyan-300 h-12 opacity-60 border border-black"></div>)}
         </div> */}
       </div>
-      <div className="mt-1">
-        <h1 className="font-bold text-3xl">Controller</h1>
+      <div className="mt-10 w-[95vw]">
+        <div className="w-full flex justify-center font-bold text-3xl">Controller</div>
         <div>
           <div className="mx-auto">
             <div className="w-[30vw] mx-auto">{Input("Title","title",title,ref_title)}</div>
@@ -128,8 +131,10 @@ const Controller = () => {
             <div className="mx-auto mt-2 w-[30vw] flex items-center justify-center">
               {Select("bo","bo",["Bo1","Bo3"],bo,ref_bo)}
             </div>
+            <div className="flex justify-center">
+              <button type="button" onClick={submit} className="mt-10  focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Submit</button>
+            </div>
           </div>
-          <button type="button" onClick={submit} className="mt-10 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Submit</button>
         </div>
       </div>
     </div>

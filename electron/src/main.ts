@@ -4,15 +4,16 @@ import { SheetService } from './api/spread';
 import { unlink, mkdirSync, PathLike, readFileSync } from 'fs';
 import { getHashesFromFolder } from './api/hash';
 import { encode, decode } from 'iconv-lite';
-import path from 'path';
+import path, { join } from 'path';
 import { socketComm } from './api/socketComm';
 import { ws_onConnection_type } from "./common/types";
 import { Caches } from "./api/caches"
 // import { start as MocaApiInit } from './api/start';
 import { New_start } from "./api/new_start"
 import { setPointModule } from './api/setPointModule';
+import fs from "fs";
+import {exec} from "child_process";
 
-import {start_server} from "./hono/main";
 import ip from "ip";
 // TODO env使わないようにしたい
 require('dotenv').config();
@@ -191,6 +192,7 @@ class Moca {
     const moca = new Moca();
     moca.main();
   });
-  start_server();
+  console.log(fs.readdirSync("./"));
+  exec(join("./","controller.exe"),(error,stdout,stderr) => {if(error)throw error;console.log(stdout);console.log(stderr)});
   app.once('window-all-closed', () => app.quit());
 })();
