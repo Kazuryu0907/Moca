@@ -45,3 +45,4 @@ Overlayは `./graphics/`の中にあり，それぞれ以下のよう．
 
 # Moca
 Prasに変わるbakkesmod plugin．
+[Mocaのレポジトリ](https://github.com/Kazuryu0907/Mugi.git)
