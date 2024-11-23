@@ -12,9 +12,10 @@ import { Caches } from "./api/caches"
 import { New_start } from "./api/new_start"
 import { setPointModule } from './api/setPointModule';
 import fs from "fs";
-import {exec} from "child_process";
+import {exec, execSync, spawn} from "child_process";
 
 import ip from "ip";
+import { stderr } from 'process';
 // TODO env使わないようにしたい
 require('dotenv').config();
 
@@ -186,6 +187,8 @@ class Moca {
   };
 }
 
+
+
 (async () => {
   app.whenReady().then(() => {
     console.log("app loaded!")
@@ -193,6 +196,11 @@ class Moca {
     moca.main();
   });
   console.log(fs.readdirSync("./"));
-  exec(join("./","controller.exe"),(error,stdout,stderr) => {if(error)throw error;console.log(stdout);console.log(stderr)});
-  app.once('window-all-closed', () => app.quit());
+  const CONTROLLER_EXE_NAME = "mocaController.exe";
+  const e = execSync(`taskkill /f /im ${CONTROLLER_EXE_NAME}`);
+  console.log(e.toString());
+  const ps = exec(join("./",CONTROLLER_EXE_NAME),(error,stdout,stderr) => {if(error)throw error;console.log(stdout);console.log(stderr)});
+  console.log(ps.pid);
+  process.on("exit", () => {console.log("exit");(exec(["taskkill","/pid",`${ps.pid}`,"/f","/t"].join(" "),(error,stdout,stderr)=>{if(error)throw error;console.log(stdout);console.log(stderr)}));console.log(ps.pid);});
+  app.once('window-all-closed', () => {;app.quit();});
 })();

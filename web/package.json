@@ -9,7 +9,7 @@
     "build:unsafe": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "publish:win": "vite build --emptyOutDir && bun ./src/scripts/prepare.ts && bun build --compile --minify ./src/scripts/entry.ts --target=bun-windows-x64-modern --outfile controller"
+    "publish:win": "vite build --emptyOutDir && bun ./src/scripts/prepare.ts && bun build --compile --minify ./src/scripts/entry.ts --target=bun-windows-x64-modern --outfile mocaController"
   },
   "dependencies": {
     "esbuild-plugin-polyfill-node": "^0.3.0",

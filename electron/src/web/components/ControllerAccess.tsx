@@ -16,7 +16,7 @@ export const ControllerAccess = () => {
       };;
       getIp();
     },[]);
-    const url = `http://${ip_address}:5174/controller`;
+    const url = `http://${ip_address}:5174`;
   
     return (
       <div className="m-6 max-w-sm p-6  border-gray-200 bg-white border rounded-lg shadow">

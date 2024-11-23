@@ -1,11 +1,11 @@
 {
-  "name": "electron-react-ts",
+  "name": "moca",
   "productName": "Moca",
-  "description": "electron-react-ts",
+  "description": "RL overlay for GracesBlaze ",
   "version": "0.1.0",
   "license": "MIT",
   "author": {
-    "name": "kazum"
+    "name": "kazuryu"
   },
   "build": {
     "extraMetadata": {
@@ -16,10 +16,13 @@
     ],
     "win": {
       "icon": "./moca.png"
+    },
+    "electronDownload":{
+      "mirror": "https://npmmirror.com/mirrors/electron/"
     }
   },
   "repository": {
-    "url": "https://github.com/kazum/electron-react-ts.git"
+    "url": "https://github.com/Kazuryu0907/Moca.git"
   },
   "main": "dist/main.js",
   "scripts": {
@@ -28,12 +31,9 @@
     "build": "rimraf dist && cross-env NODE_ENV=\"production\" webpack --progress",
     "dev:webpack": "cross-env NODE_ENV=\"development\" webpack --progress",
     "dev:electron": "wait-on dist/main.js dist/index.html && electronmon  . --trace-warnings",
-    "pack": "electron-builder --dir --win --x64 -c.electronVersion",
+    "pack": "electron-builder --dir --win --x64 -c.electronVersion=25.9.8",
     "dist": "electron-builder -c.electronVersion",
-    "debug": "webpack-dev-server --config webpack.debug.config.js ",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "debug": "webpack-dev-server --config webpack.debug.config.js "
   },
   "electronmon": {
     "patterns": [
@@ -73,6 +73,7 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.5.0",
+    "@electron/packager": "^18.3.6",
     "@eslint/js": "^9.14.0",
     "@types/electron-load-devtool": "^1.2.3",
     "@types/google-spreadsheet": "^3.3.2",
@@ -91,6 +92,7 @@
     "electron-builder": "^25.1.8",
     "electron-load-devtool": "^1.2.0",
     "electron-packager": "^17.1.2",
+    "electron-squirrel-startup": "^1.0.1",
     "electronmon": "^2.0.3",
     "esbuild-loader": "^3.2.0",
     "eslint": "^9.14.0",

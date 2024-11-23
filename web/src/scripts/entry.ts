@@ -2,8 +2,6 @@ import routes from './routes.json';
 import path from "path";
 const PORT = 5174;
 const appUrl = `http://localhost:${PORT}`;
-import ip from "ip";
-console.log(ip.address());
 
 // Bunを使ってHTTPサーバーを立ち上げる
 Bun.serve({
