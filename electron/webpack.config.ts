@@ -63,20 +63,4 @@ const preload: Configuration = {
   },
 };
 
-const renderer: Configuration = {
-  ...common,
-  target: "electron-renderer",
-  entry: {
-    app: "./src/web/index.tsx",
-  },
-  plugins: [
-    new MiniCssExtractPlugin(),
-    new HtmlWebpackPlugin({
-      inject: "body",
-      template: "./src/web/index.html",
-    }),
-  ],
-};
-
-
-export default [main, preload, renderer];
+export default [main, preload];
