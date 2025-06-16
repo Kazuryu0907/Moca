@@ -1,0 +1,31 @@
+NextMatchで，チームの勝率，戦績を表示する
+>チーム名は調整がだるいので，画像にするべきかもしれない
+>重要度
+>>チーム名-- Vアイコン-- V名-- Match名-- bo-- チーム勝率
+
+画像縦並びにするか，横並びにするか
+三人斜めに並べるでもいい https://www.pinterest.jp/pin/684617580878825281/
+>縦にずらすのもいい
+名刺とか，ドッグタグもいいね
+ロケリ感も出せていけたらいいなぁ->Masterなら車体とか
+Vのテーマからーとか抜き出してワンポイントにしたい
+kawaii~:https://dribbble.com/shots/6013675-Cyber-Robot-Game-UX-UI
+いいプレイはダイジェストにしたいよねぇ
+
+//botでdebugできるように0~5.pngを導入するべきか
+
+Focus，背景変えるDOMと，margin追加するDOMが違うっぽい
+
+{"cmd":"endReplay"}
+
+DEbug Tabで，socketをLoggingして外部出力する機能
+driveのtoken.json自動削除機能
+/Boostイレギュラー時のMugiの自動リロード機能
+まだ試合中のとき，playerTableをcacheしておいて，自動送信
+/browserの再レンダリング問題
+statsのprogress bar実装
+nextMatchのレイアウト微調整と，画像，名前の機能
+graphic dirをexplorerで起動する機能
+statsをcacheしておく機能
+なんかbotのidと色が違うんだが...
+https://zenn.dev/itosho/articles/git-commit-message-2023#%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%83%E3%83%88
