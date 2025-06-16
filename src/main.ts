@@ -54,10 +54,14 @@ class Moca {
       width: 995,
       height: 514+100,
       webPreferences: {
-        preload: path.resolve(__dirname, 'preload.js')
+        preload: path.resolve(__dirname, '../preload/index.js')
       }
     });
-    mainWindow.loadFile('dist/index.html');
+    if (process.env.NODE_ENV === 'development') {
+      mainWindow.loadURL('http://localhost:5173');
+    } else {
+      mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+    }
     // mainWindow.webContents.openDevTools({ mode: "detach" });
     return mainWindow;
   };

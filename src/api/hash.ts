@@ -74,7 +74,7 @@ export async function getHashesFromFolder(basePath: string, patt: RegExp) {
 if (require.main === module) {
   console.log(
     glob2(
-      String.raw`C:\Users\kazum\Desktop\programings\GBC_dev\graphics`,
+      path.join(__dirname, '..', '..', 'graphics'),
       /.*\.(jpg|png)$/
     )
   );

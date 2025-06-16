@@ -40,7 +40,7 @@ const DebugSocket = () => {
   // const sleep = (ms: number) =>
   //   new Promise((resolve) => setTimeout(resolve, ms));
   const loadLog = async () => {
-    const path = String.raw`C:\Users\kazum\Desktop\4DebugLog.txt`;
+    const path = './debug.log';
     const file = await window.app.readFile(path);
     const lines = file.split('\n');
     for (const line of lines) {
