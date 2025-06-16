@@ -9,37 +9,29 @@
   },
   "build": {
     "extraMetadata": {
-      "main": "./dist/main.js"
+      "main": "./out/main/index.js"
     },
     "files": [
-      "dist/**/*"
+      "out/**/*"
     ],
     "win": {
       "icon": "./moca.png"
     },
-    "electronDownload":{
+    "electronDownload": {
       "mirror": "https://npmmirror.com/mirrors/electron/"
     }
   },
   "repository": {
     "url": "https://github.com/Kazuryu0907/Moca.git"
   },
-  "main": "dist/main.js",
+  "main": "out/main/index.js",
   "scripts": {
-    "dev": "rimraf dist && run-p dev:webpack dev:electron",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
     "check": "tsc --noEmit",
-    "build": "rimraf dist && cross-env NODE_ENV=\"production\" webpack --progress",
-    "dev:webpack": "cross-env NODE_ENV=\"development\" webpack --progress",
-    "dev:electron": "wait-on dist/main.js dist/index.html && electronmon  . --trace-warnings",
     "pack": "electron-builder --dir --win --x64 -c.electronVersion=25.9.8",
-    "dist": "electron-builder -c.electronVersion",
-    "debug": "webpack-dev-server --config webpack.debug.config.js "
-  },
-  "electronmon": {
-    "patterns": [
-      "!graphics/**/*",
-      "dist/**/*"
-    ]
+    "dist": "electron-builder -c.electronVersion"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -86,15 +78,15 @@
     "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
+    "@vitejs/plugin-react": "^4.5.2",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.11.0",
     "electron": "^25.9.8",
     "electron-builder": "^25.1.8",
     "electron-load-devtool": "^1.2.0",
     "electron-packager": "^17.1.2",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-vite": "^3.1.0",
     "electronmon": "^2.0.3",
-    "esbuild-loader": "^4.2.2",
     "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
@@ -104,22 +96,15 @@
     "eslint-plugin-promise": "^7.1.0",
     "eslint-plugin-react": "^7.37.2",
     "globals": "^15.12.0",
-    "html-webpack-plugin": "^5.6.3",
-    "mini-css-extract-plugin": "^2.9.2",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.49",
-    "postcss-loader": "^8.1.1",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.15",
-    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "tsconfig-paths-webpack-plugin": "^4.2.0",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.14.0",
-    "wait-on": "^8.0.1",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.1.0"
+    "vite": "^6.3.5",
+    "wait-on": "^8.0.1"
   }
 }
