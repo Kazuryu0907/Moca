@@ -4,7 +4,7 @@ import { SheetService } from './api/spread';
 import { unlink, mkdirSync, PathLike, readFileSync } from 'fs';
 import { getHashesFromFolder } from './api/hash';
 import { encode, decode } from 'iconv-lite';
-import path, { join } from 'path';
+import path from 'path';
 import { socketComm } from './api/socketComm';
 import { ws_onConnection_type } from "./common/types";
 import { Caches } from "./api/caches"
@@ -12,7 +12,6 @@ import { Caches } from "./api/caches"
 import { New_start } from "./api/new_start"
 import { setPointModule } from './api/setPointModule';
 import fs from "fs";
-import {exec, execSync, spawn} from "child_process";
 
 import ip from "ip";
 import { stderr } from 'process';
@@ -54,10 +53,14 @@ class Moca {
       width: 995,
       height: 514+100,
       webPreferences: {
-        preload: path.resolve(__dirname, 'preload.js')
+        preload: path.resolve(__dirname, '../preload/index.js')
       }
     });
-    mainWindow.loadFile('dist/index.html');
+    if (process.env.NODE_ENV === 'development') {
+      mainWindow.loadURL('http://localhost:5173');
+    } else {
+      mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+    }
     // mainWindow.webContents.openDevTools({ mode: "detach" });
     return mainWindow;
   };
@@ -188,26 +191,13 @@ class Moca {
 }
 
 
-const kill_controller = (cmd:string) => {
-  try{
-      const e = execSync(`taskkill /f /im ${cmd}`);
-      console.log(e.toString());
-  }catch(e){
-    console.log(e);
-  }
-}
-
 (async () => {
   app.whenReady().then(() => {
     console.log("app loaded!")
     const moca = new Moca();
     moca.main();
   });
-  console.log(fs.readdirSync("./"));
-  const CONTROLLER_EXE_NAME = "mocaController.exe";
-  kill_controller(CONTROLLER_EXE_NAME);
-  const ps = exec(join("./",CONTROLLER_EXE_NAME),(error,stdout,stderr) => {if(error)throw error;console.log(stdout);console.log(stderr)});
-  console.log(ps.pid);
-  process.on("exit", () => {console.log("exit");(exec(["taskkill","/pid",`${ps.pid}`,"/f","/t"].join(" "),(error,stdout,stderr)=>{if(error)throw error;console.log(stdout);console.log(stderr)}));console.log(ps.pid);});
-  app.once('window-all-closed', () => {;app.quit();});
+  app.once('window-all-closed', () => {
+    app.quit();
+  });
 })();
