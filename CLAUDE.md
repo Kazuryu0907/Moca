@@ -7,14 +7,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Moca is a Rocket League overlay application for VTuber tournaments, specifically designed for GracesBlaze. It provides real-time match overlays with player statistics, scores, and team information integrated with Google Sheets and Google Drive for asset management.
 
 ## Development Commands
-
 ### Main Application
 ```bash
-npm run dev          # Development with hot reload
-npm run build        # Production build  
-npm run check        # TypeScript type checking
-npm run pack         # Package as executable
-npm run dist         # Create distributable
+bun run dev          # Development with hot reload
+bun run build        # Production build  
+bun run check        # TypeScript type checking
+bun run pack         # Package as executable
+bun run dist         # Create distributable
 ```
 
 ## Architecture Overview
@@ -65,7 +64,9 @@ The application requires Google Sheets and Drive API access:
 
 ## Development Notes
 
-- Uses npm as package manager
+- 開発環境はLinuxではなく，Windowsでbuildとdevelopmentを行う．
+- よってすべてのコマンドはWindowsのコマンドを使用する.
+- Uses bun as package manager
 - TypeScript with strict type checking enabled
 - ESLint configuration for code quality
 - Webpack for Electron app bundling
@@ -77,3 +78,8 @@ The application requires Google Sheets and Drive API access:
 - `src/api/`: Core API and service modules
 - `src/web/`: React components for Electron UI
 - Asset management through Google Drive integration for player images and videos
+
+## アプリケーション
+- 認証
+  - `credential.json`からGoogle Service Accountの認証を行う
+
