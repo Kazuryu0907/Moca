@@ -3,6 +3,7 @@ publish/
 *.exe
 # Logs
 
+env/credential.json
 logs
 _.log
 npm-debug.log_
