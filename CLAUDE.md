@@ -83,3 +83,5 @@ The application requires Google Sheets and Drive API access:
 - 認証
   - `credential.json`からGoogle Service Accountの認証を行う
 
+## Language Preference
+- このレポジトリでは日本語で話して
