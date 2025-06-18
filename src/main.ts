@@ -10,6 +10,16 @@ import { SetPointModule } from './api/set_point';
 import { SocketComm } from './api/socket_communication';
 import { SheetService } from './api/google_spreadsheet';
 import { WsOnConnectionType } from './common/types';
+import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
+
+updateElectronApp({
+  updateSource: {
+    type: UpdateSourceType.ElectronPublicUpdateService,
+    repo: "Kazuryu0907/Moca"
+  },
+  updateInterval: "1 hour",
+  logger: console
+});
 
 class Moca {
   ss = new SheetService();
