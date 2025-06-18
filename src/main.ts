@@ -6,22 +6,22 @@ import { AuthManager } from "./api/auth/AuthManager";
 import { Caches } from "./api/caches";
 import { DriveService } from "./api/gdrive";
 import { getHashesFromFolder } from "./api/hash";
-import { setPointModule } from "./api/setPointModule";
-import { socketComm } from "./api/socketComm";
+import { SetPointModule } from "./api/setPointModule";
+import { SocketComm } from "./api/socketComm";
 import { SheetService } from "./api/spread";
-import { ws_onConnection_type } from "./common/types";
+import { WsOnConnectionType } from "./common/types";
 
 class Moca {
   ss = new SheetService();
   ds = new DriveService();
-  setPointModule = new setPointModule();
+  setPointModule = new SetPointModule();
   mainWindow: BrowserWindow;
-  socket: socketComm;
+  socket: SocketComm;
   caches: Caches = new Caches();
   authManager: AuthManager | undefined = undefined;
   constructor() {
     this.mainWindow = this.createWindow();
-    this.socket = new socketComm();
+    this.socket = new SocketComm();
   }
   main() {
     // あとでDIみたいにする
@@ -70,8 +70,8 @@ class Moca {
     this.socket.add_onConnection_listener(this.setPointModule.create_onConnection_function());
   };
 
-  createSocketOnConnectionCallback = (): ws_onConnection_type => {
-    const onConnection: ws_onConnection_type = (ws) => {
+  createSocketOnConnectionCallback = (): WsOnConnectionType => {
+    const onConnection: WsOnConnectionType = (ws) => {
       ws.send(
         JSON.stringify({ cmd: "imgPath", data: this.authManager?.downloadDirectory }),
       );
@@ -126,52 +126,27 @@ class Moca {
     ipcMain.handle("cachedMatchInfo", () => {
       return this.ss.matchInfo;
     });
-
-    // ipcMain.handle('SPREADSHEET_ID', () => {
-    //   return process.env.SPREADSHEET_ID;
-    // });
-
     ipcMain.handle("GOOGLEDRIVE_ID", () => {
       return this.authManager?.driveId || "";
     });
-
     ipcMain.handle("getDrive", async (e, d: string) => {
       return await this.ds.filesFromFolderID(d).catch(console.error);
     });
-
     ipcMain.handle("glob", async () => {
       return await getHashesFromFolder(
         this.authManager?.downloadDirectory || "",
         /.*\.(jpg|png|mp4)$/,
       );
     });
-
     ipcMain.handle("download", (e, data: string[]) => {
       const [id, path] = data;
       console.log(id, path);
       return this.ds.downloadFileFromID(id, path).catch(console.error);
     });
     ipcMain.handle("mkdir", (e, path: PathLike) => mkdirSync(path));
-
     ipcMain.handle("path.join", (e, data: string[]) => path.join(...data));
     ipcMain.handle("iconv", (e, d: string) => decode(encode(d, "utf8"), "utf8"));
     ipcMain.handle("removeFile", (e, d: string) => unlink(d, (e) => console.error(e)));
-    // ipcMain.handle('spread:setSheetID', (e, d: string) =>
-    //   this.ss.setSheetID(d)
-    // );
-    // ipcMain.handle('spread:auth', () =>
-    //   this.ss.auth().catch((e) => {
-    //     console.log(e);
-    //     return false;
-    //   })
-    // );
-    // ipcMain.handle('spread:hasPrivateKey', () => this.ss.hasPrivateKey());
-    // ipcMain.handle('gdrive:auth', (e, d: string) =>
-    //   this.ds.clientCheck(d).catch((e) => {
-    //     console.log(e);
-    //     return false;
-    //   })
-    // );
     ipcMain.handle("graphics_dir", () => this.authManager?.downloadDirectory);
   };
 }

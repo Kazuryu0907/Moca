@@ -1,4 +1,4 @@
-import { ws_onConnection_type } from "@/common/types";
+import { WsOnConnectionType } from "@/common/types";
 import { JWT } from "google-auth-library";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import type {
@@ -14,7 +14,7 @@ export class TeamType {
   accountIds: string[] = [];
 }
 
-export type sheet_credential_type = {
+export type SheetCredentialType = {
   client_email: string;
   private_key: string;
 };
@@ -49,7 +49,7 @@ export class SheetService {
    * @return void
    */
   // auth Run this first
-  async auth({ client_email, private_key }: sheet_credential_type) {
+  async auth({ client_email, private_key }: SheetCredentialType) {
     this.client_email = client_email;
     this.private_key = private_key;
     this.serviceAccountAuth = new JWT({
@@ -78,7 +78,7 @@ export class SheetService {
 
   // ws接続時にこれを送りつける
   create_onConnection_function() {
-    const func: ws_onConnection_type = (ws) => {
+    const func: WsOnConnectionType = (ws) => {
       ws.send(JSON.stringify({ cmd: "idTable", data: this.idTable }));
       ws.send(JSON.stringify({ cmd: "teamData", data: this.teamData }));
       ws.send(JSON.stringify({ cmd: "matchInfo", data: this.matchInfo }));

@@ -1,8 +1,8 @@
 import * as dgram from "dgram";
 import { WebSocket, WebSocketServer } from "ws";
 import { Browsers, BrowserType } from "../common/types";
-import { socket_command_type, ws_onConnection_type } from "../common/types";
-import { ws_add_cmd_listener_type, ws_cmd_func_type, ws_cmd_type } from "../common/types";
+import { SocketCommandType, WsOnConnectionType } from "../common/types";
+import { WsAddCmdListenerType, WsCmdFuncType, WsCmdType } from "../common/types";
 
 export type DataType = {
   cmd: string;
@@ -18,7 +18,7 @@ function initRecord<Y>(arr: readonly string[], defaultVal: Y) {
   return toReturn;
 }
 
-export class socketComm {
+export class SocketComm {
   connectedBrowsers: Record<BrowserType, boolean> = initRecord<boolean>(
     Browsers,
     false,
@@ -28,8 +28,8 @@ export class socketComm {
     null,
   );
   socket: dgram.Socket = dgram.createSocket("udp4");
-  event_cmds: ws_cmd_func_type[] = [];
-  onConnection_cmds: ws_onConnection_type[] = [];
+  event_cmds: WsCmdFuncType[] = [];
+  onConnection_cmds: WsOnConnectionType[] = [];
 
   // setPointModuleはDebugで使用できるように外で宣言
   constructor() {
@@ -121,7 +121,7 @@ export class socketComm {
       this.clients[path]?.send(JSON.stringify(data));
     });
   }
-  add_cmd_listener(input: ws_add_cmd_listener_type) {
+  add_cmd_listener(input: WsAddCmdListenerType) {
     if (Array.isArray(input)) {
       input.forEach((func) => this.event_cmds.push(func));
     } else {
@@ -129,14 +129,14 @@ export class socketComm {
     }
   }
 
-  add_onConnection_listener(func: ws_onConnection_type) {
+  add_onConnection_listener(func: WsOnConnectionType) {
     this.onConnection_cmds.push(func);
   }
-  private run_cmd_listener(input: { cmd: socket_command_type; data: any }) {
+  private run_cmd_listener(input: { cmd: SocketCommandType; data: any }) {
     this.event_cmds.forEach((func) => func(input));
   }
   private create_cmd_function() {
-    const cmd_func = (input: ws_cmd_type) => {
+    const cmd_func = (input: WsCmdType) => {
       const cmd = input.cmd;
       const data = input.data;
       // 全cmdそのまま送信

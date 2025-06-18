@@ -1,9 +1,8 @@
 import * as fs from "fs";
 import { GoogleAuth } from "google-auth-library";
 import { drive_v3, google } from "googleapis";
-import type {} from "googleapis";
 
-export type drive_credential_type = {
+export type DriveCredentialType = {
   credential_full_path: string;
 };
 
@@ -16,7 +15,7 @@ export class DriveService {
   }
 
   // auth Run this first
-  auth({ credential_full_path }: drive_credential_type) {
+  auth({ credential_full_path }: DriveCredentialType) {
     this.google_auth = new google.auth.GoogleAuth({
       keyFile: credential_full_path,
       scopes: [

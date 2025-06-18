@@ -24,7 +24,6 @@ contextBridge.exposeInMainWorld("app", {
   cachedMatchInfo: () => ipcRenderer.invoke("cachedMatchInfo"),
   getIdTable: () => ipcRenderer.invoke("getIdTable"),
   GOOGLEDRIVE_ID: () => ipcRenderer.invoke("GOOGLEDRIVE_ID"),
-  SPREADSHEET_ID: () => ipcRenderer.invoke("SPREADSHEET_ID"),
   loadTeams: () => ipcRenderer.invoke("spread:loadTeams"),
   getMatchInfo: () => ipcRenderer.invoke("spread:getMatchInfo"),
   sendSocket: (data: any) => ipcRenderer.invoke("sendSocket", data),
@@ -37,12 +36,9 @@ contextBridge.exposeInMainWorld("app", {
   path_join: (...data: string[]) => ipcRenderer.invoke("path.join", data),
   encodeString: (data: string) => ipcRenderer.invoke("iconv", data),
   removeFile: (data: string) => ipcRenderer.invoke("removeFile", data),
-  setSheetID: (data: string) => ipcRenderer.invoke("spread:setSheetID", data),
-  spreadAuth: () => ipcRenderer.invoke("spread:auth"),
-  spreadHasPrivateKey: () => ipcRenderer.invoke("spread:hasPrivateKey"),
-  driveAuth: (folderID: string) => ipcRenderer.invoke("gdrive:auth", folderID),
   graphicsDir: () => ipcRenderer.invoke("graphics_dir"),
   mkdir: (path: string) => ipcRenderer.invoke("mkdir", path),
 
-  send_to_main: (value: any) => ipcRenderer.send("start:send_to_main", value),
+  // 認証関連の新しいIPC
+  invoke: (channel: string, ...args: any[]) => ipcRenderer.invoke(channel, ...args),
 });

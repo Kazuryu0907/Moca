@@ -4,7 +4,7 @@ declare global {
   }
 }
 declare module "*.json";
-import { BrowserType, dataType, spreadMatchInfoType } from "./components/types";
+import { dataType, spreadMatchInfoType } from "./components/types";
 export interface IMainProcess {
   on: (channel: string, callback: any) => void;
   removeListener: (channel: string, listener: (...args: any[]) => void) => void;

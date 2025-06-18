@@ -5,7 +5,7 @@ import { join } from "path";
 import { ZodError } from "zod";
 import { ErrorHandleType, handle_error_async2, return_error } from "../../common/handle_error";
 import { AuthStatusMessage, AuthStatusMessageType } from "../../common/types";
-import { drive_credential_type, DriveService } from "../gdrive";
+import { DriveCredentialType, DriveService } from "../gdrive";
 import { SheetService } from "../spread";
 import {
   AuthConfig,
@@ -257,7 +257,7 @@ export class AuthManager {
 
   private async authenticateDrive(): Promise<ErrorHandleType<void>> {
     try {
-      const driveCredentials: drive_credential_type = {
+      const driveCredentials: DriveCredentialType = {
         credential_full_path: this.credentialsPath,
       };
       this.driveService.auth(driveCredentials);

@@ -78,6 +78,9 @@ The application requires Google Sheets and Drive API access:
 - ESLint configuration for code quality
 - Webpack for Electron app bundling
 - TailwindCSS for styling
+- class / interface / type / enum / decorator / type parameters / component functions in TSX / JSXElement type parameterは`UpperCamelCase`
+- variable / parameter / function / method / property / module aliasは`lowerCamelCase`
+- global constant values, including enum valuesは`CONSTANT_CASE`で記術する．
 
 ## File Structure Context
 

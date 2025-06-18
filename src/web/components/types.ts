@@ -7,13 +7,6 @@ export type gdriveFile = {
   name: string;
 };
 
-// export class spreadTeamType{
-//   teamName: string = "";
-//   teamAbbrevitation: string = "";
-//   playerNames: string[] = [];
-//   accountIds: string[] = [];
-// }
-
 export type dataType = {
   cmd: string;
   data: any;

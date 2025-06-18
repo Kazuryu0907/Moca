@@ -1,7 +1,7 @@
-import { ws_cmd_func_type, ws_onConnection_type } from "../common/types";
-import { socketComm } from "./socketComm";
+import { WsCmdFuncType, WsOnConnectionType } from "../common/types";
+import { SocketComm } from "./socketComm";
 
-export class setPointModule {
+export class SetPointModule {
   // GameScoreはsetPointの方の数字
   matchingScore = { blue: 0, orange: 0 };
   gameScore = { blue: 0, orange: 0 };
@@ -11,8 +11,8 @@ export class setPointModule {
   preMatchId = "";
 
   // cmd:goalsが来たら点数をincrement
-  create_cmd_function(ws: socketComm) {
-    const func: ws_cmd_func_type = (input) => {
+  create_cmd_function(ws: SocketComm) {
+    const func: WsCmdFuncType = (input) => {
       const { cmd, data } = input;
       if (cmd === "teamNames") {
         const teamNamesData: { blue: string; orange: string; matchId: string } = data;
@@ -58,7 +58,7 @@ export class setPointModule {
 
   // /boostに再接続したときにscoreリセット
   create_onConnection_function() {
-    const func: ws_onConnection_type = (ws, path) => {
+    const func: WsOnConnectionType = (ws, path) => {
       ws.send(JSON.stringify({ cmd: "setPoint", data: this.gameScore }));
       ws.send(JSON.stringify({ cmd: "preMatchId", data: this.preMatchId }));
       ws.send(JSON.stringify({ cmd: "currentScore", data: this.matchingScore }));
