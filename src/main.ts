@@ -29,23 +29,14 @@ class Moca {
   main() {
     // あとでDIみたいにする
     this.mainWindow.webContents.on("did-finish-load", async () => {
-      this.authManager = new AuthManager(this.ss, this.ds);
+      this.authManager = new AuthManager(this.ss, this.ds, this.mainWindow);
       const authResult = await this.authManager.authenticate();
-
       if (!authResult.success) {
         console.error("認証に失敗しました:");
         authResult.errors.forEach(error => console.error(" -", error));
         return;
       }
-
       console.log("認証が完了しました。アプリケーションを開始します。");
-      // 認証情報をメインウィンドウに送信
-      const authData: auth_process_connection_type = {
-        auth_type: "success",
-        text: "Welcome to back!",
-      };
-      this.mainWindow.webContents.send("start:send_from_main", authData);
-
       this.socket.bind();
       // Cacheのイベントリスナー設置
       this.set_cmd_listener();

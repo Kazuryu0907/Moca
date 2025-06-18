@@ -7,6 +7,7 @@ declare module "*.json";
 import { BrowserType, dataType, spreadMatchInfoType } from "./components/types";
 export interface IMainProcess {
   on: (channel: string, callback: any) => void;
+  removeListener: (channel: string, listener: (...args: any[]) => void) => void;
   index2render: (cmd: string, data?: any) => any;
   render2index: (cmd: string, data?: any) => any;
   openBrowser: (url: string) => Promise<void>;

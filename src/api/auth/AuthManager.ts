@@ -1,8 +1,10 @@
+import { BrowserWindow } from "electron";
 import { promises as fs } from "fs";
 import { existsSync } from "fs";
 import { join } from "path";
 import { ZodError } from "zod";
 import { ErrorHandleType, handle_error_async2, return_error } from "../../common/handle_error";
+import { AuthStatusMessage, AuthStatusMessageType } from "../../common/types";
 import { drive_credential_type, DriveService } from "../gdrive";
 import { sheet_credential_type, SheetService } from "../spread";
 import {
@@ -29,84 +31,114 @@ export class AuthManager {
   private driveService: DriveService;
   private config: AuthConfig | null = null;
   private credentials: Credentials | null = null;
+  private browserWindow: BrowserWindow;
 
-  constructor(sheetService: SheetService, driveService: DriveService) {
+  constructor(sheetService: SheetService, driveService: DriveService, browserWindow: BrowserWindow) {
     this.configPath = join(process.cwd(), "./env/auth_config.json");
     this.credentialsPath = join(process.cwd(), "./env/credential.json");
     this.sheetService = sheetService;
     this.driveService = driveService;
+    this.browserWindow = browserWindow;
+  }
+
+  private sendStatusMessage(type: AuthStatusMessageType, step: string, message: string, details?: string[]): void {
+    const statusMessage: AuthStatusMessage = {
+      type,
+      step,
+      message,
+      details,
+    };
+
+    this.browserWindow.webContents.send("auth:status", statusMessage);
+
+    // コンソールにも出力（デバッグ用）
+    const emoji = type === "error" ? "❌" : type === "success" ? "✅" : type === "warning" ? "⚠️" : "🔄";
+    console.log(`${emoji} [${step}] ${message}`);
+    if (details && details.length > 0) {
+      details.forEach(detail => console.log(`  - ${detail}`));
+    }
   }
 
   async authenticate(): Promise<AuthResult> {
-    console.log("🚀 認証プロセスを開始します...");
+    this.sendStatusMessage("progress", "start", "認証プロセスを開始します...");
     const errors: string[] = [];
 
     try {
       // 1. 認証情報読み込み
+      this.sendStatusMessage("progress", "credentials", "認証情報を読み込んでいます...");
       const [credentials, credentialsError] = await this.loadAndValidateCredentials();
       if (credentialsError) {
-        console.error("❌ 認証情報の読み込みに失敗しました:", credentialsError);
-        return { success: false, errors: [credentialsError], config: null };
+        this.sendStatusMessage("error", "credentials", "認証情報の読み込みに失敗しました", [
+          credentialsError.error_message,
+        ]);
+        return { success: false, errors: [credentialsError.error_message], config: null };
       }
 
       this.credentials = credentials;
-      console.log("✅ 認証情報の読み込み・検証が完了しました");
+      this.sendStatusMessage("success", "credentials", "認証情報の読み込み・検証が完了しました");
 
       // 2. 設定ファイル読み込み
+      this.sendStatusMessage("progress", "config", "アプリケーション設定を読み込んでいます...");
       const [config, configError] = await this.loadAndValidateConfig();
       if (configError) {
-        console.error("❌ 設定ファイルの読み込みに失敗しました:", configError);
-        return { success: false, errors: [configError], config: null };
+        this.sendStatusMessage("error", "config", "設定ファイルの読み込みに失敗しました", [configError.error_message]);
+        return { success: false, errors: [configError.error_message], config: null };
       }
 
       this.config = config;
-      console.log("✅ 設定ファイルの読み込み・検証が完了しました");
+      this.sendStatusMessage("success", "config", "アプリケーション設定の読み込み・検証が完了しました");
 
       // 3. Google Sheets認証
+      this.sendStatusMessage("progress", "sheets", "Google Sheetsに接続しています...");
       const [, sheetError] = await this.authenticateSheets(credentials);
       if (sheetError) {
-        errors.push(`Google Sheets認証失敗: ${sheetError}`);
-        console.error("❌ Google Sheets認証に失敗しました");
+        const errorMsg = `Google Sheets認証失敗: ${sheetError.error_message}`;
+        errors.push(errorMsg);
+        this.sendStatusMessage("error", "sheets", "Google Sheets認証に失敗しました", [sheetError.error_message]);
       } else {
-        console.log("✅ Google Sheets認証が完了しました");
+        this.sendStatusMessage("success", "sheets", "Google Sheets認証が完了しました");
       }
 
       // 4. Google Drive認証
+      this.sendStatusMessage("progress", "drive", "Google Driveに接続しています...");
       const [, driveError] = await this.authenticateDrive();
       if (driveError) {
-        errors.push(`Google Drive認証失敗: ${driveError}`);
-        console.error("❌ Google Drive認証に失敗しました");
+        const errorMsg = `Google Drive認証失敗: ${driveError.error_message}`;
+        errors.push(errorMsg);
+        this.sendStatusMessage("error", "drive", "Google Drive認証に失敗しました", [driveError.error_message]);
       } else {
-        console.log("✅ Google Drive認証が完了しました");
+        this.sendStatusMessage("success", "drive", "Google Drive認証が完了しました");
       }
 
+      // 5. サービステスト
       if (errors.length === 0) {
+        this.sendStatusMessage("progress", "services", "サービス接続をテストしています...");
         const serviceErrors = await this.testServices(config.services);
         errors.push(...serviceErrors);
       }
 
+      // 6. ダウンロードディレクトリ確認
+      this.sendStatusMessage("progress", "directory", "ダウンロードディレクトリを確認しています...");
       if (!existsSync(config.services.download_directory)) {
         const error = `ダウンロードディレクトリが存在しません: ${config.services.download_directory}`;
         errors.push(error);
-        console.error("❌", error);
+        this.sendStatusMessage("error", "directory", "ダウンロードディレクトリが見つかりません", [error]);
       } else {
-        console.log("✅ ダウンロードディレクトリの確認が完了しました");
+        this.sendStatusMessage("success", "directory", "ダウンロードディレクトリの確認が完了しました");
       }
 
-      // 設定ファイルは変更されないので保存不要
-
+      // 最終結果
       const success = errors.length === 0;
       if (success) {
-        console.log("🎉 認証プロセスが正常に完了しました");
+        this.sendStatusMessage("success", "complete", "認証プロセスが正常に完了しました");
       } else {
-        console.error("⚠️ 認証プロセスはエラーありで完了しました:");
-        errors.forEach(error => console.error("  -", error));
+        this.sendStatusMessage("error", "complete", "認証プロセスでエラーが発生しました", errors);
       }
 
       return { success, errors, config };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "不明なエラー";
-      console.error("💥 認証プロセス中に予期しないエラーが発生しました:", errorMessage);
+      this.sendStatusMessage("error", "fatal", "認証プロセス中に予期しないエラーが発生しました", [errorMessage]);
       return { success: false, errors: [errorMessage], config: null };
     }
   }
@@ -124,7 +156,7 @@ export class AuthManager {
       let jsonData: unknown;
       try {
         jsonData = JSON.parse(data);
-      } catch (parseError) {
+      } catch {
         return return_error("認証情報ファイルのJSON形式が正しくありません");
       }
 
@@ -155,7 +187,7 @@ export class AuthManager {
       let jsonData: unknown;
       try {
         jsonData = JSON.parse(data);
-      } catch (parseError) {
+      } catch {
         return return_error("設定ファイルのJSON形式が正しくありません");
       }
 
@@ -238,24 +270,26 @@ export class AuthManager {
   private async testServices(services: AuthConfig["services"]): Promise<string[]> {
     const errors: string[] = [];
 
+    // Google Sheetsテスト
     try {
       await this.sheetService.setSheetID(services.sheet_id);
       await this.sheetService.getMatchInfo();
       await this.sheetService.loadTeams();
-      console.log("✅ Google Sheetsサービステストが完了しました");
+      this.sendStatusMessage("success", "sheets-test", "Google Sheetsサービステストが完了しました");
     } catch (error) {
       const errorMsg = `Google Sheetsサービステスト失敗: ${error}`;
       errors.push(errorMsg);
-      console.error("❌", errorMsg);
+      this.sendStatusMessage("error", "sheets-test", "Google Sheetsサービステストに失敗しました", [String(error)]);
     }
 
+    // Google Driveテスト
     try {
       await this.driveService.clientCheck(services.drive_id);
-      console.log("✅ Google Driveサービステストが完了しました");
+      this.sendStatusMessage("success", "drive-test", "Google Driveサービステストが完了しました");
     } catch (error) {
       const errorMsg = `Google Driveサービステスト失敗: ${error}`;
       errors.push(errorMsg);
-      console.error("❌", errorMsg);
+      this.sendStatusMessage("error", "drive-test", "Google Driveサービステストに失敗しました", [String(error)]);
     }
 
     return errors;

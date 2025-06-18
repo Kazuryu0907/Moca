@@ -2,6 +2,8 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("app", {
   on: (channel: string, callback: any) => ipcRenderer.on(channel, (event, argv) => callback(event, argv)),
+  removeListener: (channel: string, listener: (...args: any[]) => void) =>
+    ipcRenderer.removeListener(channel, listener),
   // async外したけど大丈夫かな
   index2render: (cmd: string, data?: any) => {
     if (data === undefined) {

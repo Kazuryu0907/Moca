@@ -1,6 +1,15 @@
 import { WebSocket } from "ws";
 export type auth_type = "credential" | "sheet_id" | "drive_id" | "download_directory" | "success";
 
+export type AuthStatusMessageType = "progress" | "error" | "success" | "warning";
+
+export interface AuthStatusMessage {
+  type: AuthStatusMessageType;
+  step: string;
+  message: string;
+  details?: string[];
+}
+
 export type auth_process_connection_type = {
   auth_type: auth_type;
   text: string;

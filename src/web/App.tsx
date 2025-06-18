@@ -5,6 +5,7 @@ import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
 // import { Start } from "./components/Start";
 import { MemoryRouter as Router, Navigate, Route, Routes } from "react-router-dom";
+import { AuthStatus } from "./components/AuthStatus";
 import { Debug } from "./components/Debug";
 import { IdTable } from "./components/IdTable";
 import { Topper } from "./components/Main";
@@ -29,7 +30,8 @@ export const App = () => {
       <Router>
         <Routes>
           {/* <Route path="/" element={<Start/>} /> */}
-          <Route path="/" element={<New_start />} />
+          <Route path="/" element={<AuthStatus />} />
+          <Route path="/legacy" element={<New_start />} />
           {/* Topperと下のDynamicで分ける */}
           <Route path="/overlay" element={<Topper />}>
             <Route index element={<Navigate to="/overlay/browser" replace />} />
