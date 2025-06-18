@@ -1,71 +1,80 @@
-import { AuthStatusMessage } from "@/common/types";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { AuthStatusMessage } from '@/common/types';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router';
 
 export const AuthStatus = () => {
   const [messages, setMessages] = useState<AuthStatusMessage[]>([]);
-  const [currentStep, setCurrentStep] = useState<string>("");
+  const [currentStep, setCurrentStep] = useState<string>('');
   const [isComplete, setIsComplete] = useState(false);
   const [hasErrors, setHasErrors] = useState(false);
   const navigate = useNavigate();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     const handleAuthStatus = (_event: unknown, message: AuthStatusMessage) => {
-      console.log("Auth Status:", message);
+      console.log('Auth Status:', message);
 
-      setMessages(prev => [...prev, message]);
+      setMessages((prev) => [...prev, message]);
       setCurrentStep(message.step);
 
-      if (message.type === "error") {
+      if (message.type === 'error') {
         setHasErrors(true);
       }
 
-      if (message.step === "complete") {
+      if (message.step === 'complete') {
         setIsComplete(true);
-        if (message.type === "success") {
+        if (message.type === 'success') {
           // 成功時は2秒後にメイン画面に遷移
-          setTimeout(() => navigate("/overlay/spread"), 2000);
+          setTimeout(() => navigate('/overlay/spread'), 2000);
         }
       }
     };
 
-    window.app.on("auth:status", handleAuthStatus);
+    window.app.on('auth:status', handleAuthStatus);
 
     return () => {
-      window.app.removeListener?.("auth:status", handleAuthStatus);
+      window.app.removeListener?.('auth:status', handleAuthStatus);
     };
   }, [navigate]);
 
-  const getStepIcon = (type: AuthStatusMessage["type"]) => {
+  const getStepIcon = (type: AuthStatusMessage['type']) => {
     switch (type) {
-      case "success":
-        return "✅";
-      case "error":
-        return "❌";
-      case "warning":
-        return "⚠️";
-      case "progress":
-        return "🔄";
+      case 'success':
+        return '✅';
+      case 'error':
+        return '❌';
+      case 'warning':
+        return '⚠️';
+      case 'progress':
+        return '🔄';
       default:
-        return "📝";
+        return '📝';
     }
   };
 
   const getStepStatus = (step: string) => {
-    const stepMessage = messages.find(m => m.step === step);
-    if (!stepMessage) return "pending";
+    const stepMessage = messages.find((m) => m.step === step);
+    if (!stepMessage) return 'pending';
     return stepMessage.type;
   };
 
   const authSteps = [
-    { key: "start", label: "認証開始" },
-    { key: "credentials", label: "認証情報読み込み" },
-    { key: "config", label: "設定ファイル読み込み" },
-    { key: "sheets", label: "Google Sheets接続" },
-    { key: "drive", label: "Google Drive接続" },
-    { key: "services", label: "サービステスト" },
-    { key: "directory", label: "ディレクトリ確認" },
-    { key: "complete", label: "完了" },
+    { key: 'start', label: '認証開始' },
+    { key: 'credentials', label: '認証情報読み込み' },
+    { key: 'config', label: '設定ファイル読み込み' },
+    { key: 'sheets', label: 'Google Sheets接続' },
+    { key: 'drive', label: 'Google Drive接続' },
+    { key: 'services', label: 'サービステスト' },
+    { key: 'directory', label: 'ディレクトリ確認' },
+    { key: 'complete', label: '完了' }
   ];
 
   return (
@@ -82,17 +91,17 @@ export const AuthStatus = () => {
             return (
               <div
                 key={step.key}
-                className={`flex flex-col items-center ${isActive ? "scale-110" : ""} transition-transform`}
+                className={`flex flex-col items-center ${isActive ? 'scale-110' : ''} transition-transform`}
               >
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mb-1 ${
-                    status === "success"
-                      ? "bg-green-500 text-white"
-                      : status === "error"
-                      ? "bg-red-500 text-white"
-                      : status === "progress"
-                      ? "bg-blue-500 text-white animate-pulse"
-                      : "bg-gray-300 text-gray-600"
+                    status === 'success'
+                      ? 'bg-green-500 text-white'
+                      : status === 'error'
+                        ? 'bg-red-500 text-white'
+                        : status === 'progress'
+                          ? 'bg-blue-500 text-white animate-pulse'
+                          : 'bg-gray-300 text-gray-600'
                   }`}
                 >
                   {index + 1}
@@ -109,10 +118,9 @@ export const AuthStatus = () => {
           <div
             className="absolute top-0 left-0 h-1 bg-blue-500 rounded transition-all duration-500"
             style={{
-              width: `${(authSteps.findIndex(s => s.key === currentStep) + 1) / authSteps.length * 100}%`,
+              width: `${((authSteps.findIndex((s) => s.key === currentStep) + 1) / authSteps.length) * 100}%`
             }}
-          >
-          </div>
+          ></div>
         </div>
       </div>
 
@@ -122,13 +130,13 @@ export const AuthStatus = () => {
           <div
             key={index}
             className={`p-3 rounded-lg border-l-4 ${
-              message.type === "success"
-                ? "bg-green-50 border-green-500"
-                : message.type === "error"
-                ? "bg-red-50 border-red-500"
-                : message.type === "warning"
-                ? "bg-yellow-50 border-yellow-500"
-                : "bg-blue-50 border-blue-500"
+              message.type === 'success'
+                ? 'bg-green-50 border-green-500'
+                : message.type === 'error'
+                  ? 'bg-red-50 border-red-500'
+                  : message.type === 'warning'
+                    ? 'bg-yellow-50 border-yellow-500'
+                    : 'bg-blue-50 border-blue-500'
             }`}
           >
             <div className="flex items-start space-x-2">
@@ -138,7 +146,10 @@ export const AuthStatus = () => {
                 {message.details && message.details.length > 0 && (
                   <div className="mt-2 space-y-1">
                     {message.details.map((detail, detailIndex) => (
-                      <div key={detailIndex} className="text-sm text-gray-600 bg-white/50 p-2 rounded">
+                      <div
+                        key={detailIndex}
+                        className="text-sm text-gray-600 bg-white/50 p-2 rounded"
+                      >
                         {detail}
                       </div>
                     ))}
@@ -148,6 +159,7 @@ export const AuthStatus = () => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* エラー時のガイダンス */}
@@ -159,7 +171,8 @@ export const AuthStatus = () => {
           </p>
           <ul className="text-sm text-red-600 space-y-1">
             <li>
-              • <code>./env/credential.json</code> - Google Service Accountの認証情報
+              • <code>./env/credential.json</code> - Google Service
+              Accountの認証情報
             </li>
             <li>
               • <code>./env/auth_config.json</code> - アプリケーション設定
@@ -177,7 +190,9 @@ export const AuthStatus = () => {
       {/* 成功時のメッセージ */}
       {isComplete && !hasErrors && (
         <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg text-center">
-          <h3 className="font-bold text-green-800 mb-2">🎉 認証が完了しました！</h3>
+          <h3 className="font-bold text-green-800 mb-2">
+            🎉 認証が完了しました！
+          </h3>
           <p className="text-green-700">まもなくメイン画面に移動します...</p>
         </div>
       )}
