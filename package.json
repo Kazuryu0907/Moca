@@ -17,7 +17,7 @@
     "win": {
       "icon": "./moca.png"
     },
-    "electronDownload":{
+    "electronDownload": {
       "mirror": "https://npmmirror.com/mirrors/electron/"
     }
   },

@@ -1,6 +1,6 @@
-import { Configuration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import { Configuration } from "webpack";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -24,14 +24,13 @@ const common: Configuration = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader",
-        {
-          loader:"postcss-loader",
-          options:{
-            postcssOptions:{
-              plugins:[require("tailwindcss")]
-            }
-          }
+        use: [MiniCssExtractPlugin.loader, "css-loader", {
+          loader: "postcss-loader",
+          options: {
+            postcssOptions: {
+              plugins: [require("tailwindcss")],
+            },
+          },
         }],
       },
       {
@@ -41,8 +40,8 @@ const common: Configuration = {
     ],
   },
   watch: isDev,
-  watchOptions:{
-    ignored:"/graphics/"
+  watchOptions: {
+    ignored: "/graphics/",
   },
   devtool: isDev ? "source-map" : undefined,
 };
@@ -77,6 +76,5 @@ const renderer: Configuration = {
     }),
   ],
 };
-
 
 export default [main, preload, renderer];

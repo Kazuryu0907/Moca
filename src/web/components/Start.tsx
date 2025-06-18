@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { Loading, Checked ,Failed} from "./Loading";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Checked, Failed, Loading } from "./Loading";
 
 type stateType = "loading" | "success" | "fail" | "none";
 
@@ -10,7 +10,6 @@ type propsType = {
   fetch: stateType;
   errorText: String;
 };
-
 
 const loadingCss = "w-7 h-7 text-gray-200 animate-spin fill-blue-600";
 const checkedCss = "w-7 h-7 text-green-500 flex-shrink-0";
@@ -40,17 +39,13 @@ const Step: FC<stepProps> = ({ title, description, status, logo }) => {
         </h2>
         <p className="leading-relaxed">{description}</p>
       </div>
-      {status === "loading" ? (
-        <Loading css={loadingCss} className="my-auto" />
-      ) : (
+      {status === "loading" ? <Loading css={loadingCss} className="my-auto" /> : (
         false
       )}
-      {status === "success" ? (
-        <Checked css={checkedCss} className="my-auto" />
-      ) : (
+      {status === "success" ? <Checked css={checkedCss} className="my-auto" /> : (
         false
       )}
-      {status === "fail" ? <Failed css={failedCss} className="my-auto"/> : false}
+      {status === "fail" ? <Failed css={failedCss} className="my-auto" /> : false}
     </div>
   );
 };
@@ -67,13 +62,13 @@ export const Start = () => {
     "startStepper",
     (e: Electron.IpcRendererEvent, data: propsType) => {
       console.log(data);
-      setTimeout(function(){
+      setTimeout(function() {
         setEnvStatus(data);
       }, 1000);
-      if(data.fetch === "success"){
-        setTimeout(() => navi("/overlay"),2000);
+      if (data.fetch === "success") {
+        setTimeout(() => navi("/overlay"), 2000);
       }
-    }
+    },
   );
 
   const logoFile = () => {

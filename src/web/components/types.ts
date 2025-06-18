@@ -14,7 +14,6 @@ export type gdriveFile = {
 //   accountIds: string[] = [];
 // }
 
-
 export type dataType = {
   cmd: string;
   data: any;

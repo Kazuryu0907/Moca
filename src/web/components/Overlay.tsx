@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Loading, Checked } from "./Loading";
-import {gdriveFile, gdriveGlobType, localGlobType} from "./types";
+import { Checked, Loading } from "./Loading";
+import { gdriveFile, gdriveGlobType, localGlobType } from "./types";
 
 // import {} from "@heroicons/react/solid";
 const loading = () => {
@@ -84,29 +84,32 @@ const renderFolderIDError = (inputError: InputErrorType) => {
   if (inputError === "none") return false;
   if (inputError === "empty") return folderIDError("Field is Empty!");
   if (inputError === "error") return folderIDError("Folder ID Error!");
-  if (inputError === "success")
+  if (inputError === "success") {
     return <p className="mt-2 text-sm text-green-600">Well Done!</p>;
+  }
 };
 
-
-const calcFilesDiff = (drive: gdriveFile[],localFiles: Map<string, string>): [string[], string[], Map<string, string>] => {
+const calcFilesDiff = (
+  drive: gdriveFile[],
+  localFiles: Map<string, string>,
+): [string[], string[], Map<string, string>] => {
   let diffPlusFiles = drive.filter((d) => !localFiles.has(d.name)).map((d) => d.name);
-  //local && drive
+  // local && drive
   const existedFiles = drive.filter((d) => localFiles.has(d.name));
-  //ハッシュが違うname取得
+  // ハッシュが違うname取得
   const changedHashes = existedFiles.filter((d) => d.md5Checksum !== localFiles.get(d.name)).map((d) => d.name);
-  //name => idテーブル
+  // name => idテーブル
   const name2IdTable: Map<string, string> = new Map();
   drive.map((d) => name2IdTable.set(d.name, d.id));
-  //drive && localFiles(ベン図) からname取り出したやつ
+  // drive && localFiles(ベン図) からname取り出したやつ
   const localAndDriveNames = drive.filter((d) => localFiles.has(d.name)).map((d) => d.name);
-  //localFilesと↑のdiff（計算済み）
+  // localFilesと↑のdiff（計算済み）
   const diffMinusFiles = Array.from(localFiles.keys()).filter(lf => localAndDriveNames.indexOf(lf) === -1);
   diffPlusFiles = diffPlusFiles.concat(changedHashes);
   return [diffPlusFiles, diffMinusFiles, name2IdTable];
 };
 
-//function componentのほうがいいかお gdrive:isAuthedが複数セットされる
+// function componentのほうがいいかお gdrive:isAuthedが複数セットされる
 export const Overlay = () => {
   const [props, setProps] = useState<PropsType>({
     isAuthed: true,
@@ -117,78 +120,78 @@ export const Overlay = () => {
   const [diffMinusState, setDiffMinusState] = useState<string[]>([]);
 
   const onclick = async () => {
-    //Loading表示
+    // Loading表示
     setProps({ ...props, isLoading: true });
     // const folderElm = document.getElementById("folder_id") as HTMLInputElement;
     // const folderID = folderElm.value as string | undefined;
     const folderID = await window.app.GOOGLEDRIVE_ID();
-    //Empty input
+    // Empty input
     if (!folderID) {
       setProps({ ...props, inputError: "empty", isLoading: false });
       return;
     }
-    const gdriveFolders:gdriveGlobType[] = await window.app.getDrive(folderID);
+    const gdriveFolders: gdriveGlobType[] = await window.app.getDrive(folderID);
     console.log("getDrive");
     console.log(gdriveFolders);
-    //Error処理だよ
+    // Error処理だよ
     if (!gdriveFolders) {
       setProps({ ...props, inputError: "error", isLoading: false });
       return;
     }
 
-    //Successのときだよ
+    // Successのときだよ
     setProps({ ...props, inputError: "success", isLoading: false });
-    //localFileh取得するよ
-    //Error処理しつぉいて console.errorのところを独自関数にして，pタグとかで表示させるのはどうでしょう
-    //これは再帰あり
-    const localFiles:localGlobType[] = await window.app.glob().catch(console.error);
+    // localFileh取得するよ
+    // Error処理しつぉいて console.errorのところを独自関数にして，pタグとかで表示させるのはどうでしょう
+    // これは再帰あり
+    const localFiles: localGlobType[] = await window.app.glob().catch(console.error);
     console.log("glob");
     console.log(localFiles);
     const downloadPromise: Promise<any>[] = [];
-    const removePromise:Promise<void>[] = [];
-    const allDiffPlusFiles:string[] = [];
-    const allDiffMinusFiles:string[] = [];
+    const removePromise: Promise<void>[] = [];
+    const allDiffPlusFiles: string[] = [];
+    const allDiffMinusFiles: string[] = [];
     const graphicsPath = await window.app.graphicsDir();
-    //Diff計算するよ
-    for(const dg of gdriveFolders){
-      let map:Map<string,string>;
+    // Diff計算するよ
+    for (const dg of gdriveFolders) {
+      let map: Map<string, string>;
       const dir = dg.dir;
       const local = localFiles.filter(f => f.dir === dir);
-      
-      if(local.length > 0){//存在したら
+
+      if (local.length > 0) { // 存在したら
         map = local[0].map;
-      }else{//localにフォルダが存在しなかったら
-        const dirPath = await window.app.path_join(graphicsPath,dir);
-        //ファイル作成
+      } else { // localにフォルダが存在しなかったら
+        const dirPath = await window.app.path_join(graphicsPath, dir);
+        // ファイル作成
         await window.app.mkdir(dirPath);
-        //空Map
-        map = new Map<string,string>();
+        // 空Map
+        map = new Map<string, string>();
       }
 
-      const [diffPlusFiles, diffMinusFiles, name2IdTable] = calcFilesDiff(dg.files,map);
-      //Display用
-      //to Relative Path
+      const [diffPlusFiles, diffMinusFiles, name2IdTable] = calcFilesDiff(dg.files, map);
+      // Display用
+      // to Relative Path
       allDiffPlusFiles.push(...diffPlusFiles.map(name => `${dir}/${name}`));
       allDiffMinusFiles.push(...diffMinusFiles.map(name => `${dir}/${name}`));
-      //-----------Plus
+      // -----------Plus
       diffPlusFiles.forEach(async fileName => {
-        const savePath = await window.app.path_join(graphicsPath,dir,fileName);
+        const savePath = await window.app.path_join(graphicsPath, dir, fileName);
         const id = name2IdTable.get(fileName);
-        //DLのPromiseをArrayに入れる
-        downloadPromise.push(window.app.download([id,savePath]));
+        // DLのPromiseをArrayに入れる
+        downloadPromise.push(window.app.download([id, savePath]));
       });
-      //----------Minus
+      // ----------Minus
       diffMinusFiles.forEach(async fileName => {
         const graphicsPath = await window.app.graphicsDir();
-        const rmPath = await window.app.path_join(graphicsPath,dir,fileName);
+        const rmPath = await window.app.path_join(graphicsPath, dir, fileName);
         removePromise.push(window.app.removeFile(rmPath));
       });
     }
-    //並列処理
+    // 並列処理
     await Promise.all(downloadPromise);
-    await Promise.all(removePromise);    
+    await Promise.all(removePromise);
 
-    //state更新
+    // state更新
     setDiffPlusState(allDiffPlusFiles);
     setDiffMinusState(allDiffMinusFiles);
   };
@@ -220,9 +223,7 @@ export const Overlay = () => {
             <p>{`+${diffPlusState.length} files`}</p>
           </div>
           <div className="bg-green-100 border-green-400 overflow-y-auto mt-1 ml-1 max-w-sm border rounded-lg h-28">
-            {diffPlusState.map((fileName) =>
-              renderDiffFiles(fileName, "green")
-            )}
+            {diffPlusState.map((fileName) => renderDiffFiles(fileName, "green"))}
           </div>
         </div>
         <div>

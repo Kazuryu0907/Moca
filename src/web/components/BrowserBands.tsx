@@ -1,4 +1,4 @@
-import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export type Props = {
   connection: boolean;

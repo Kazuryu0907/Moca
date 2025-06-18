@@ -1,55 +1,57 @@
 import * as fs from "fs";
-import { google, drive_v3 } from "googleapis";
 import { GoogleAuth } from "google-auth-library";
+import { drive_v3, google } from "googleapis";
 import type {} from "googleapis";
 
 export type drive_credential_type = {
-    credential_full_path:string
+  credential_full_path: string;
 };
 
 export class DriveService {
   // Need Debug
-  google_auth : GoogleAuth | undefined;
+  google_auth: GoogleAuth | undefined;
   drive: drive_v3.Drive | undefined;
 
   constructor() {
   }
 
-  //auth Run this first
-  auth({credential_full_path}:drive_credential_type){
+  // auth Run this first
+  auth({ credential_full_path }: drive_credential_type) {
     this.google_auth = new google.auth.GoogleAuth({
       keyFile: credential_full_path,
-      scopes: ['https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/drive.metadata.readonly'],
+      scopes: [
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive",
+        "https://www.googleapis.com/auth/drive.metadata.readonly",
+      ],
     });
-    this.drive = google.drive({version:'v3',auth:this.google_auth});
+    this.drive = google.drive({ version: "v3", auth: this.google_auth });
   }
 
   async clientCheck(folderID: string) {
     const params: drive_v3.Params$Resource$Files$List = {
       pageSize: 1,
-      //フォルダ除外
+      // フォルダ除外
       q: `'${folderID}' in parents and trashed = false`,
-      fields:
-        "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)",
+      fields: "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)",
     };
     await this.drive?.files.list(params);
     return true;
   }
-  //再帰あり
+  // 再帰あり
   async filesFromFolderID(folderID: string, base = "") {
-    //フォルダ特定
-    //and mimeType != 'application/vnd.google-apps.folder'
-    //\'${folderID}\' in parents and
+    // フォルダ特定
+    // and mimeType != 'application/vnd.google-apps.folder'
+    // \'${folderID}\' in parents and
     type globType = {
       dir: string;
       files: drive_v3.Schema$File[];
     };
     const filesArray: globType[] = [];
     const params: drive_v3.Params$Resource$Files$List = {
-      //フォルダ除外
+      // フォルダ除外
       q: `'${folderID}' in parents and trashed = false`,
-      fields:
-        "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)",
+      fields: "nextPageToken,files(kind,mimeType,id,name,modifiedTime,md5Checksum)",
     };
     if (this.drive === undefined) return [];
     const res = await this.drive.files.list(params);
@@ -57,16 +59,16 @@ export class DriveService {
       (f) => f.mimeType === "video/mp4" || f.mimeType === "image/png",
     );
 
-    //確定したのを格納
+    // 確定したのを格納
     if (files) filesArray.push({ dir: base, files: files });
     const folders = res.data.files?.filter(
       (f) => f.mimeType === "application/vnd.google-apps.folder",
     );
-    if(!folders)return;
+    if (!folders) return;
     for (const f of folders) {
       if (f.id && f.name) {
         const dir = base + "/" + f.name;
-        //再帰
+        // 再帰
         const subFiles = await this.filesFromFolderID(f.id, dir);
 
         if (subFiles) filesArray.push(...subFiles);
@@ -76,13 +78,13 @@ export class DriveService {
   }
 
   async downloadFileFromID(fileId: string, outName: string) {
-    //DL用に alt=media
+    // DL用に alt=media
     const params: drive_v3.Params$Resource$Files$Get = {
       fileId: fileId,
       alt: "media",
     };
     if (this.drive === undefined) return;
-    //streamでbuffer溢れに対応
+    // streamでbuffer溢れに対応
     const res = await this.drive.files.get(params, { responseType: "stream" }).catch(console.error);
     // sheet Downloadしないように条件分岐
     if (res === undefined) return;

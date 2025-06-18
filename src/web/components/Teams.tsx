@@ -1,6 +1,6 @@
-import { FC, useState } from "react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Loading, Checked } from "./Loading";
+import { FC, useState } from "react";
+import { Checked, Loading } from "./Loading";
 import { dataType, spreadMatchInfoType as matchInfoType } from "./types";
 // export type matchInfoType = {
 //   blue: string;
@@ -13,13 +13,13 @@ export type Props = {
   tableLen: number;
 };
 
-let teamName: matchInfoType = {blue: "None", orange: "None", name: "None", bo: "None"};
+let teamName: matchInfoType = { blue: "None", orange: "None", name: "None", bo: "None" };
 
 window.app.on(
   "cachedMatchInfo",
   (e: Electron.IpcRendererEvent, d: matchInfoType) => {
     teamName = d;
-  }
+  },
 );
 
 const defaultProps = (): Props => ({
@@ -28,13 +28,11 @@ const defaultProps = (): Props => ({
   tableLen: 0,
 });
 
-
 export const Teams = () => {
   const [team, setTeam] = useState(defaultProps());
-  
 
   const getMatchInfo = async () => {
-    //ロードのフラグを立てる
+    // ロードのフラグを立てる
     setTeam({ ...team, authStatus: "loading" });
     try {
       teamName = await window.app.getMatchInfo();

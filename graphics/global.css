@@ -1,24 +1,24 @@
 @font-face {
-    font-family: "Soukou";
-    src: url("./assets/fonts/SoukouMincho.ttf");
+  font-family: "Soukou";
+  src: url("./assets/fonts/SoukouMincho.ttf");
 }
 
 @font-face {
-    font-family: "Inter";
-    src: url("./assets/fonts/Inter-VariableFont_slnt\,wght.ttf");
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter-VariableFont_slnt\,wght.ttf");
 }
 
 @font-face {
-    font-family: "Ryaku";
-    src: url("./assets/fonts/rycsminStencily.ttf");
+  font-family: "Ryaku";
+  src: url("./assets/fonts/rycsminStencily.ttf");
 }
 
 @font-face {
-    font-family: "IseGo";
-    src: url("./assets/fonts/Isego.otf") format("opentype");
+  font-family: "IseGo";
+  src: url("./assets/fonts/Isego.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "IseMin";
-    src: url("./assets/fonts/Isemin.otf") format("opentype");
+  font-family: "IseMin";
+  src: url("./assets/fonts/Isemin.otf") format("opentype");
 }

@@ -15,11 +15,11 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true
   },
-  "include": ["src","src/**/*.json"],
+  "include": ["src", "src/**/*.json"],
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"
     }
   }
 }
-// 
+//

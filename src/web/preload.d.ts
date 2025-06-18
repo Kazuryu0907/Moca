@@ -4,15 +4,15 @@ declare global {
   }
 }
 declare module "*.json";
-import { dataType, spreadMatchInfoType, BrowserType } from "./components/types";
+import { BrowserType, dataType, spreadMatchInfoType } from "./components/types";
 export interface IMainProcess {
   on: (channel: string, callback: any) => void;
   index2render: (cmd: string, data?: any) => any;
   render2index: (cmd: string, data?: any) => any;
   openBrowser: (url: string) => Promise<void>;
   getHostIp: () => Promise<string>;
-  setMatchingScore: (score:{blue:number,orange:number}) => Promise<void>;
-  setGameScore: (score:{blue:number,orange:number}) => Promise<void>;
+  setMatchingScore: (score: { blue: number; orange: number }) => Promise<void>;
+  setGameScore: (score: { blue: number; orange: number }) => Promise<void>;
   getTeamInfo: () => Promise<any>;
   getIdTable: () => Promise<Record<string, string>>;
   connectedBrowsers: () => Promise<Record<string, boolean>>;
@@ -38,5 +38,5 @@ export interface IMainProcess {
   driveAuth: (id: string) => Promise<boolean>;
   graphicsDir: () => Promise<string>;
   mkdir: (path: string) => Promise<void>;
-  send_to_main: (value:any) => Promise<void>;
+  send_to_main: (value: any) => Promise<void>;
 }

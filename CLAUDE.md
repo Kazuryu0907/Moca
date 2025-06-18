@@ -7,7 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Moca is a Rocket League overlay application for VTuber tournaments, specifically designed for GracesBlaze. It provides real-time match overlays with player statistics, scores, and team information integrated with Google Sheets and Google Drive for asset management.
 
 ## Development Commands
+
 ### Main Application
+
 ```bash
 bun run dev          # Development with hot reload
 bun run build        # Production build  
@@ -21,6 +23,7 @@ bun run dist         # Create distributable
 The application is an Electron desktop app that serves as both a control interface and overlay generation system.
 
 ### Core Communication Pattern
+
 ```
 Rocket League Game → UDP (port 12345) → WebSocket Server (port 8001) → Browser Overlays
 ```
@@ -29,7 +32,7 @@ Rocket League Game → UDP (port 12345) → WebSocket Server (port 8001) → Bro
 
 - **Main Process** (`src/main.ts`): Orchestrates all services via the `Moca` class
 - **Socket Communication** (`src/api/socketComm.ts`): WebSocket and UDP server handling
-- **Google Integration**: 
+- **Google Integration**:
   - `src/api/spread.ts`: Google Sheets integration for team data
   - `src/api/gdrive.ts`: Google Drive asset management
 - **Match Logic** (`src/api/setPointModule.ts`): Score tracking and match state
@@ -38,11 +41,13 @@ Rocket League Game → UDP (port 12345) → WebSocket Server (port 8001) → Bro
 ### Overlay System
 
 HTML overlays in `graphics/` use WebSocket for real-time updates:
+
 - `matching.html`: Main match overlay (boost, scores, players)
-- `nextMatch.html`: Match lineup display  
+- `nextMatch.html`: Match lineup display
 - `stats.html`: Post-match statistics
 
 Browser source endpoints:
+
 - `/boost` - Main match overlay
 - `/stats` - Statistics overlay
 - `/score` - Score display only
@@ -52,6 +57,7 @@ Browser source endpoints:
 ## Google Services Integration
 
 The application requires Google Sheets and Drive API access:
+
 - Credentials stored in `./env/credential.json`
 - Configuration in `./env/config.json`
 - Service account authentication for Sheets
@@ -80,8 +86,10 @@ The application requires Google Sheets and Drive API access:
 - Asset management through Google Drive integration for player images and videos
 
 ## アプリケーション
+
 - 認証
   - `credential.json`からGoogle Service Accountの認証を行う
 
 ## Language Preference
+
 - このレポジトリでは日本語で話して

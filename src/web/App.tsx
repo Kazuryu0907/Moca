@@ -4,47 +4,49 @@ import { ControllerAccess } from "./components/ControllerAccess";
 import { Overlay } from "./components/Overlay";
 import { Teams } from "./components/Teams";
 // import { Start } from "./components/Start";
-import { New_start } from "./components/New_start";
-import { IdTable } from "./components/IdTable";
+import { MemoryRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import { Debug } from "./components/Debug";
-import {MemoryRouter as Router,Routes,Route,Navigate} from "react-router-dom";
+import { IdTable } from "./components/IdTable";
 import { Topper } from "./components/Main";
-
+import { New_start } from "./components/New_start";
 
 const Spread = () => {
-  return(
+  return (
     <div className="flex">
-      <Teams/><IdTable/>
+      <Teams />
+      <IdTable />
     </div>
-  )
-}
+  );
+};
 
 export const App = () => {
-  //Websocket更新時にState更新
+  // Websocket更新時にState更新
   console.log(window.location.pathname);
   return (
     <div>
       {/* Browserは内部にupdateもってるよ */}
       {/* {useLocation().pathname !== "/" ?? <Topper/>} */}
-        <Router>
-          <Routes>
-            {/* <Route path="/" element={<Start/>} /> */}
-            <Route path="/" element={<New_start/>} />
-            {/* Topperと下のDynamicで分ける */}
-            <Route path="/overlay" element={<Topper/>}>
-              <Route index element={<Navigate to="/overlay/browser" replace/>}/>
-              <Route index path="browser" element={<ControllerAccess/>}/>
-              <Route path="spread" element={<Spread/>}/>
-              <Route path="drive" element={<Overlay/>}/>
-              <Route path="debug" element={<Debug/>}></Route>
-              <Route path="*" element={<Navigate to="/overlay/browser" replace/>}/>
-            </Route>
-          </Routes>
-        </Router>
-        {/* <Browser />
+      <Router>
+        <Routes>
+          {/* <Route path="/" element={<Start/>} /> */}
+          <Route path="/" element={<New_start />} />
+          {/* Topperと下のDynamicで分ける */}
+          <Route path="/overlay" element={<Topper />}>
+            <Route index element={<Navigate to="/overlay/browser" replace />} />
+            <Route index path="browser" element={<ControllerAccess />} />
+            <Route path="spread" element={<Spread />} />
+            <Route path="drive" element={<Overlay />} />
+            <Route path="debug" element={<Debug />}></Route>
+            <Route path="*" element={<Navigate to="/overlay/browser" replace />} />
+          </Route>
+        </Routes>
+      </Router>
+      {
+        /* <Browser />
         <Teams />
-        <Overlay /> */}
-        
+        <Overlay /> */
+      }
+
       {/* Teamは内部にupdateもってるよ */}
     </div>
   );

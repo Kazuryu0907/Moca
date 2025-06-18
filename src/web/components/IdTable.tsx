@@ -8,7 +8,7 @@ window.app.on(
   (e: Electron.IpcRendererEvent, d: matchInfoType) => {
     console.log(d);
     idTable = d;
-  }
+  },
 );
 
 const createColum = (name: string, id: string) => {
@@ -43,9 +43,9 @@ export const IdTable = () => {
 
   return (
     <div className="m-6 p-6 max-w-md bg-white border border-gray-200 rounded-lg shadow">
-        <h1 className="font-bold text-lg">
-            Colums:{Object.keys(idTable).length}
-        </h1>
+      <h1 className="font-bold text-lg">
+        Colums:{Object.keys(idTable).length}
+      </h1>
       <div className="m-3 max-h-[300px] overflow-y-auto">
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
