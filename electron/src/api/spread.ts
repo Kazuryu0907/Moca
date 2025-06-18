@@ -4,8 +4,14 @@ import type {
   GoogleSpreadsheetWorksheet as GoogleSpreadsheetWorksheetType,
   GoogleSpreadsheet as GoogleSpreadsheetType
 } from 'google-spreadsheet';
-import { spreadMatchInfoType as matchInfoType } from '../web/components/types';
 import { ws_onConnection_type } from '@/common/types';
+
+export type spreadMatchInfoType = {
+  blue: string;
+  orange: string;
+  name: string;
+  bo: string;
+};
 
 export class TeamType {
   teamName: string = '';
@@ -26,7 +32,7 @@ export class SheetService {
   isAuthorized: boolean;
   teamData: TeamType[];
   idTable: Record<string, string>;
-  matchInfo: matchInfoType;
+  matchInfo: spreadMatchInfoType;
   sheetId: string;
   client_email: string;
   private_key: string;
