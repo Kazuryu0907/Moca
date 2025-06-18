@@ -1,56 +1,69 @@
-import { WsCmdFuncType, WsOnConnectionType } from "../common/types";
-import { SocketComm } from "./socketComm";
+import { WsCmdFuncType, WsOnConnectionType } from '../common/types';
+import { SocketComm } from './socket_communication';
 
 export class SetPointModule {
   // GameScoreはsetPointの方の数字
   matchingScore = { blue: 0, orange: 0 };
   gameScore = { blue: 0, orange: 0 };
-  preMatchingTeams: { blue: string | undefined; orange: string | undefined } = { blue: "", orange: "" };
-  matchingTeams = { blue: "", orange: "" };
-  matchId = "";
-  preMatchId = "";
+  preMatchingTeams: { blue: string | undefined; orange: string | undefined } = {
+    blue: '',
+    orange: ''
+  };
+  matchingTeams = { blue: '', orange: '' };
+  matchId = '';
+  preMatchId = '';
 
   // cmd:goalsが来たら点数をincrement
   create_cmd_function(ws: SocketComm) {
     const func: WsCmdFuncType = (input) => {
       const { cmd, data } = input;
-      if (cmd === "teamNames") {
-        const teamNamesData: { blue: string; orange: string; matchId: string } = data;
+      if (cmd === 'teamNames') {
+        const teamNamesData: { blue: string; orange: string; matchId: string } =
+          data;
         this.matchId = teamNamesData.matchId;
-        this.matchingTeams = { blue: teamNamesData.blue, orange: teamNamesData.orange };
+        this.matchingTeams = {
+          blue: teamNamesData.blue,
+          orange: teamNamesData.orange
+        };
         // スコアリセット
         this.resetScore();
         // チーム名が違うプラベに入ったとき
         if (!this.is_same_teams()) {
           this.resetGameScore();
-          console.log("teamNames changed");
+          console.log('teamNames changed');
           // 更新
-          ws.sendData("/boost", { cmd: "currentScore", data: this.matchingScore });
-          ws.sendData("/boost", { cmd: "setPoint", data: this.gameScore });
+          ws.sendData('/boost', {
+            cmd: 'currentScore',
+            data: this.matchingScore
+          });
+          ws.sendData('/boost', { cmd: 'setPoint', data: this.gameScore });
         }
         // pre系更新
         this.preMatchingTeams.blue = teamNamesData.blue;
         this.preMatchingTeams.orange = teamNamesData.orange;
         this.preMatchId = this.matchId;
-      } else if (cmd === "goals") {
+      } else if (cmd === 'goals') {
         const goal_data: {
           assistId: string;
           scoreId: string;
-          team: "blue" | "orange";
+          team: 'blue' | 'orange';
         } = data;
         const scoredTeam = goal_data.team;
         this.matchingScore[scoredTeam]++;
-        ws.sendData(["/boost", "/stats"], {
-          cmd: "currentScore",
-          data: this.matchingScore,
+        ws.sendData(['/boost', '/stats'], {
+          cmd: 'currentScore',
+          data: this.matchingScore
         });
         // Match終了時
-      } else if (cmd === "end") {
-        const winnerTeam = this.matchingScore.blue > this.matchingScore.orange ? "blue" : "orange";
+      } else if (cmd === 'end') {
+        const winnerTeam =
+          this.matchingScore.blue > this.matchingScore.orange
+            ? 'blue'
+            : 'orange';
         this.gameScore[winnerTeam]++;
         // setPoint送信
-        ws.sendData("/boost", { cmd: "setPoint", data: this.gameScore });
-        ws.sendData("/boost", { cmd: "END_GAME", data: "" });
+        ws.sendData('/boost', { cmd: 'setPoint', data: this.gameScore });
+        ws.sendData('/boost', { cmd: 'END_GAME', data: '' });
       }
     };
     return func;
@@ -59,23 +72,29 @@ export class SetPointModule {
   // /boostに再接続したときにscoreリセット
   create_onConnection_function() {
     const func: WsOnConnectionType = (ws, path) => {
-      ws.send(JSON.stringify({ cmd: "setPoint", data: this.gameScore }));
-      ws.send(JSON.stringify({ cmd: "preMatchId", data: this.preMatchId }));
-      ws.send(JSON.stringify({ cmd: "currentScore", data: this.matchingScore }));
+      ws.send(JSON.stringify({ cmd: 'setPoint', data: this.gameScore }));
+      ws.send(JSON.stringify({ cmd: 'preMatchId', data: this.preMatchId }));
+      ws.send(
+        JSON.stringify({ cmd: 'currentScore', data: this.matchingScore })
+      );
 
-      if (path === "/boost") {
-        ws.send(JSON.stringify({ cmd: "currentScore", data: this.matchingScore }));
+      if (path === '/boost') {
+        ws.send(
+          JSON.stringify({ cmd: 'currentScore', data: this.matchingScore })
+        );
       }
     };
     return func;
   }
 
   private is_same_teams() {
-    console.log("is_same_teams");
+    console.log('is_same_teams');
     console.log(this.matchingTeams, this.preMatchingTeams);
     if (this.preMatchingTeams.blue === undefined) return true;
-    return this.matchingTeams.blue === this.preMatchingTeams.blue
-      && this.matchingTeams.orange === this.preMatchingTeams.orange;
+    return (
+      this.matchingTeams.blue === this.preMatchingTeams.blue &&
+      this.matchingTeams.orange === this.preMatchingTeams.orange
+    );
   }
 
   resetScore() {
