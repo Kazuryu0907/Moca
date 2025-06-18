@@ -1,0 +1,36 @@
+
+// 認証設定ファイル
+// 以下の項目をすべて設定してください
+
+{
+  "credentials": {
+    // Google Service AccountのJSON認証情報から取得
+    "client_email": "your-service-account@project.iam.gserviceaccount.com",
+    "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+  },
+  "services": {
+    // Google SheetsのスプレッドシートID
+    "sheet_id": "1ABC...xyz",
+    // Google DriveのフォルダID  
+    "drive_id": "1DEF...abc",
+    // アセットをダウンロードするローカルディレクトリ
+    "download_directory": "C:\\path\\to\\download\\folder"
+  }
+}
+
+{
+  "credentials": {
+    "client_email": "",
+    "private_key": ""
+  },
+  "services": {
+    "sheet_id": "",
+    "drive_id": "",
+    "download_directory": ""
+  },
+  "auth_status": {
+    "sheets_authorized": false,
+    "drive_authorized": false,
+    "last_check": ""
+  }
+}

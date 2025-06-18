@@ -9,12 +9,10 @@ import { socketComm } from "./api/socketComm";
 import { SheetService } from "./api/spread";
 import { ws_onConnection_type } from "./common/types";
 // import { start as MocaApiInit } from './api/start';
-import { New_start } from "./api/new_start";
-import { setPointModule } from "./api/setPointModule";
-
+import type { auth_process_connection_type } from "@/common/types";
 import ip from "ip";
-// TODO env使わないようにしたい
-require("dotenv").config();
+import { AuthManager } from "./api/auth/AuthManager";
+import { setPointModule } from "./api/setPointModule";
 
 class Moca {
   ss = new SheetService();
@@ -23,7 +21,7 @@ class Moca {
   mainWindow: BrowserWindow;
   socket: socketComm;
   caches: Caches = new Caches();
-  new_start: New_start | undefined = undefined;
+  authManager: AuthManager | undefined = undefined;
   constructor() {
     this.mainWindow = this.createWindow();
     this.socket = new socketComm();
@@ -31,8 +29,22 @@ class Moca {
   main() {
     // あとでDIみたいにする
     this.mainWindow.webContents.on("did-finish-load", async () => {
-      this.new_start = new New_start(this.ss, this.ds, this.mainWindow);
-      await this.new_start.authorization();
+      this.authManager = new AuthManager(this.ss, this.ds);
+      const authResult = await this.authManager.authenticate();
+
+      if (!authResult.success) {
+        console.error("認証に失敗しました:");
+        authResult.errors.forEach(error => console.error(" -", error));
+        return;
+      }
+
+      console.log("認証が完了しました。アプリケーションを開始します。");
+      // 認証情報をメインウィンドウに送信
+      const authData: auth_process_connection_type = {
+        auth_type: "success",
+        text: "Welcome to back!",
+      };
+      this.mainWindow.webContents.send("start:send_from_main", authData);
 
       this.socket.bind();
       // Cacheのイベントリスナー設置
@@ -73,7 +85,7 @@ class Moca {
   createSocketOnConnectionCallback = (): ws_onConnection_type => {
     const onConnection: ws_onConnection_type = (ws) => {
       ws.send(
-        JSON.stringify({ cmd: "imgPath", data: this.new_start?.download_directory_path }),
+        JSON.stringify({ cmd: "imgPath", data: this.authManager?.downloadDirectory }),
       );
     };
     return onConnection;
@@ -133,7 +145,7 @@ class Moca {
     // });
 
     ipcMain.handle("GOOGLEDRIVE_ID", () => {
-      return this.new_start?.drive_id || "";
+      return this.authManager?.driveId || "";
     });
 
     ipcMain.handle("getDrive", async (e, d: string) => {
@@ -142,7 +154,7 @@ class Moca {
 
     ipcMain.handle("glob", async () => {
       return await getHashesFromFolder(
-        this.new_start?.download_directory_path || "",
+        this.authManager?.downloadDirectory || "",
         /.*\.(jpg|png|mp4)$/,
       );
     });
@@ -173,7 +185,7 @@ class Moca {
     //     return false;
     //   })
     // );
-    ipcMain.handle("graphics_dir", () => this.new_start?.download_directory_path);
+    ipcMain.handle("graphics_dir", () => this.authManager?.downloadDirectory);
   };
 }
 

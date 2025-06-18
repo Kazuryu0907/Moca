@@ -16,6 +16,7 @@ bun run build        # Production build
 bun run check        # TypeScript type checking
 bun run pack         # Package as executable
 bun run dist         # Create distributable
+bun run fmt          # format
 ```
 
 ## Architecture Overview
@@ -93,3 +94,7 @@ The application requires Google Sheets and Drive API access:
 ## Language Preference
 
 - このレポジトリでは日本語で話して
+
+## Memory
+
+- Claude Codeのユーザーの入力待ちや，処理が終わった場合にpowershell.exe -Command '[System.Media.SystemSounds]::Hand.Play()'を実行する

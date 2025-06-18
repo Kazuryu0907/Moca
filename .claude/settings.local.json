@@ -4,7 +4,8 @@
       "Bash(bun run:*)",
       "Bash(bun install:*)",
       "Bash(mkdir:*)",
-      "Bash(npm run check:*)"
+      "Bash(npm run check:*)",
+      "Bash(bun.exe add:*)"
     ],
     "deny": []
   }
