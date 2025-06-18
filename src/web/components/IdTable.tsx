@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { spreadMatchInfoType as matchInfoType } from "./types";
 
 let idTable: Record<string, string> = {};
@@ -26,13 +26,7 @@ const createColum = (name: string, id: string) => {
 };
 
 export const IdTable = () => {
-  const [Ids, setIds] = useState({});
-  const createdTable: JSX.Element[] = [];
-  Object.keys(idTable).forEach((id) => {
-    const name = idTable[id];
-    createdTable.push(createColum(name, id));
-  });
-
+  const [ids, setIds] = useState<Record<string, string>>({});
   const getIdsANDStream = async () => {
     await window.app.loadTeams().catch(console.log);
     idTable = await window.app.getIdTable();
@@ -40,6 +34,14 @@ export const IdTable = () => {
     await window.app.stream({ cmd: "idTable", data: idTable });
     setIds({ ...idTable });
   };
+  useEffect(() => {
+    getIdsANDStream();
+  }, []);
+  const createdTable: JSX.Element[] = [];
+  Object.keys(ids).forEach((id) => {
+    const name = ids[id];
+    createdTable.push(createColum(name, id));
+  });
 
   return (
     <div className="m-6 p-6 max-w-md bg-white border border-gray-200 rounded-lg shadow">

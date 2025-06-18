@@ -6,7 +6,7 @@ import { ZodError } from "zod";
 import { ErrorHandleType, handle_error_async2, return_error } from "../../common/handle_error";
 import { AuthStatusMessage, AuthStatusMessageType } from "../../common/types";
 import { drive_credential_type, DriveService } from "../gdrive";
-import { sheet_credential_type, SheetService } from "../spread";
+import { SheetService } from "../spread";
 import {
   AuthConfig,
   AuthConfigSchema,

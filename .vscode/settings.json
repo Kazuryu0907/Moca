@@ -4,5 +4,5 @@
   ],
   "liveServer.settings.port": 5501,
   "editor.defaultFormatter": "dprint.dprint",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": true
 }

@@ -1,18 +1,15 @@
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 import { mkdirSync, PathLike, readFileSync, unlink } from "fs";
 import { decode, encode } from "iconv-lite";
-import path, { join } from "path";
+import path from "path";
+import { AuthManager } from "./api/auth/AuthManager";
 import { Caches } from "./api/caches";
 import { DriveService } from "./api/gdrive";
 import { getHashesFromFolder } from "./api/hash";
+import { setPointModule } from "./api/setPointModule";
 import { socketComm } from "./api/socketComm";
 import { SheetService } from "./api/spread";
 import { ws_onConnection_type } from "./common/types";
-// import { start as MocaApiInit } from './api/start';
-import type { auth_process_connection_type } from "@/common/types";
-import ip from "ip";
-import { AuthManager } from "./api/auth/AuthManager";
-import { setPointModule } from "./api/setPointModule";
 
 class Moca {
   ss = new SheetService();
@@ -84,7 +81,6 @@ class Moca {
 
   private setHandles = () => {
     ipcMain.handle("openBrowser", (e, url) => shell.openExternal(url));
-    ipcMain.handle("getHostIp", (e) => ip.address());
 
     ipcMain.handle("setMatchingScore", (e, input) => {
       this.setPointModule.setMatchingScore = input;

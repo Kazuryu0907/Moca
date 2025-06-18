@@ -1,11 +1,5 @@
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { FC, useState } from "react";
-import { Checked, Loading } from "./Loading";
-import { dataType, spreadMatchInfoType as matchInfoType } from "./types";
-// export type matchInfoType = {
-//   blue: string;
-//   orange: string;
-// };
+import React, { useEffect, useState } from "react";
+import { spreadMatchInfoType as matchInfoType } from "./types";
 
 export type Props = {
   authStatus: "loading" | "success" | "failed" | "none";
@@ -13,18 +7,18 @@ export type Props = {
   tableLen: number;
 };
 
-let teamName: matchInfoType = { blue: "None", orange: "None", name: "None", bo: "None" };
+// let teamName: matchInfoType = { blue: "None", orange: "None", name: "None", bo: "None" };
 
-window.app.on(
-  "cachedMatchInfo",
-  (e: Electron.IpcRendererEvent, d: matchInfoType) => {
-    teamName = d;
-  },
-);
+// window.app.on(
+//   "cachedMatchInfo",
+//   (e: Electron.IpcRendererEvent, d: matchInfoType) => {
+//     console.log(d)
+//   },
+// );
 
 const defaultProps = (): Props => ({
   authStatus: "none",
-  teamNames: teamName,
+  teamNames: { blue: "None", orange: "None", name: "None", bo: "None" },
   tableLen: 0,
 });
 
@@ -35,15 +29,25 @@ export const Teams = () => {
     // ロードのフラグを立てる
     setTeam({ ...team, authStatus: "loading" });
     try {
-      teamName = await window.app.getMatchInfo();
+      const teamName = await window.app.getMatchInfo();
       setTeam({ ...team, teamNames: teamName, authStatus: "success" });
-    } catch (e) {
+    } catch {
       setTeam({ ...team, authStatus: "failed" });
     }
   };
+  console.log(team);
+  useEffect(() => {
+    (async () => {
+      const matchInfo = await window.app.cachedMatchInfo();
+      console.log("Cached Match Info:", matchInfo);
+      setTeam((team) => {
+        return ({ ...team, teamNames: matchInfo });
+      });
+    })();
+  }, []);
 
   const sendMatchInfo = async () => {
-    await window.app.stream({ cmd: "matchInfo", data: teamName });
+    await window.app.stream({ cmd: "matchInfo", data: team.teamNames });
   };
 
   return (

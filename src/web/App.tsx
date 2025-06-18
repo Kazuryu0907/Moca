@@ -31,12 +31,12 @@ export const App = () => {
         <Routes>
           {/* <Route path="/" element={<Start/>} /> */}
           <Route path="/" element={<AuthStatus />} />
-          <Route path="/legacy" element={<New_start />} />
+          {/* <Route path="/legacy" element={<New_start />} /> */}
           {/* Topperと下のDynamicで分ける */}
           <Route path="/overlay" element={<Topper />}>
             <Route index element={<Navigate to="/overlay/browser" replace />} />
-            <Route index path="browser" element={<ControllerAccess />} />
-            <Route path="spread" element={<Spread />} />
+            {/* <Route index path="browser" element={<ControllerAccess />} /> */}
+            <Route index path="spread" element={<Spread />} />
             <Route path="drive" element={<Overlay />} />
             <Route path="debug" element={<Debug />}></Route>
             <Route path="*" element={<Navigate to="/overlay/browser" replace />} />

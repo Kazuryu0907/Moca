@@ -10,7 +10,7 @@ export const AuthStatus = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleAuthStatus = (_event: any, message: AuthStatusMessage) => {
+    const handleAuthStatus = (_event: unknown, message: AuthStatusMessage) => {
       console.log("Auth Status:", message);
 
       setMessages(prev => [...prev, message]);
@@ -24,7 +24,7 @@ export const AuthStatus = () => {
         setIsComplete(true);
         if (message.type === "success") {
           // 成功時は2秒後にメイン画面に遷移
-          setTimeout(() => navigate("/overlay"), 2000);
+          setTimeout(() => navigate("/overlay/spread"), 2000);
         }
       }
     };

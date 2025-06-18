@@ -1,4 +1,4 @@
-import { Navigate, NavLink, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import React, { NavLink, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { Browser } from "./Brower";
 import { IdTable } from "./IdTable";
 import { Overlay } from "./Overlay";
@@ -30,7 +30,7 @@ export const Topper = () => {
   return (
     <div>
       <ul className="flex border-b">
-        <Bar title="Remote Controller" relativePath="browser" />
+        {/* <Bar title="Remote Controller" relativePath="browser" /> */}
         <Bar title="SpreadSheet" relativePath="spread" />
         <Bar title="Google Drive" relativePath="drive" />
         <Bar title="Debug" relativePath="debug" />
